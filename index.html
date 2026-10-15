@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>BrickForge Pro - Classroom Edition</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%230a0a1a'/%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%2300d4ff'/%3E%3Cstop offset='100%25' stop-color='%237c44ff'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect x='18' y='18' width='64' height='64' rx='6' fill='none' stroke='url(%23g)' stroke-width='6'/%3E%3Crect x='30' y='30' width='40' height='40' fill='url(%23g)'/%3E%3C/svg%3E" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;800;900&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
@@ -693,6 +694,58 @@
 <!-- VIGNETTE -->
 <div id="vignette"></div>
 
+<!-- CONFIRM DIALOG (custom, replaces native confirm()) -->
+<div id="confirm-dialog" style="display:none; position:fixed; inset:0; z-index:99998; background:rgba(5,5,16,0.7); backdrop-filter:blur(8px); display:none; align-items:center; justify-content:center;">
+    <div style="max-width:380px; width:90%; background:rgba(15,15,30,0.96); border:1px solid rgba(0,212,255,0.35); border-radius:18px; padding:28px; box-shadow:0 12px 50px rgba(0,212,255,0.2), 0 0 40px rgba(0,212,255,0.1);">
+        <div id="confirm-msg" style="font-family:'Inter',sans-serif; font-size:15px; color:#fff; line-height:1.5; margin-bottom:22px;"></div>
+        <div style="display:flex; gap:10px; justify-content:flex-end;">
+            <button id="confirm-cancel" style="font-family:'Inter',sans-serif; font-size:13px; font-weight:600; padding:10px 20px; border-radius:10px; background:rgba(255,255,255,0.06); color:#aab; border:1px solid rgba(255,255,255,0.1); cursor:pointer; transition:all 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.12)'" onmouseout="this.style.background='rgba(255,255,255,0.06)'">Cancel</button>
+            <button id="confirm-ok" style="font-family:'Inter',sans-serif; font-size:13px; font-weight:700; padding:10px 20px; border-radius:10px; background:linear-gradient(135deg,#ef4444,#dc2626); color:#fff; border:none; cursor:pointer; box-shadow:0 4px 14px rgba(239,68,68,0.35);" onmouseover="this.style.filter='brightness(1.15)'" onmouseout="this.style.filter='none'">Confirm</button>
+        </div>
+    </div>
+</div>
+
+<!-- CONTROLS HELP MODAL (toggle with ? key) -->
+<div id="help-modal" style="display:none; position:fixed; inset:0; z-index:99998; background:rgba(5,5,16,0.7); backdrop-filter:blur(8px); align-items:center; justify-content:center;">
+    <div style="max-width:520px; width:92%; max-height:85vh; overflow-y:auto; background:rgba(15,15,30,0.96); border:1px solid rgba(0,212,255,0.35); border-radius:18px; padding:32px; box-shadow:0 12px 50px rgba(0,212,255,0.2);">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:18px;">
+            <h3 style="font-family:'Orbitron',monospace; font-size:20px; font-weight:800; color:var(--accent); letter-spacing:0.05em; text-shadow:0 0 12px var(--accent-glow);">KEYBOARD SHORTCUTS</h3>
+            <button id="help-close" style="background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.1); color:#fff; width:32px; height:32px; border-radius:8px; cursor:pointer; font-size:16px; transition:all 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.12)'" onmouseout="this.style.background='rgba(255,255,255,0.06)'">✕</button>
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px 18px; font-family:'Inter',sans-serif; font-size:13px; color:#cbd5e1;">
+            <div><span style="display:inline-block; min-width:24px; padding:2px 8px; background:rgba(0,212,255,0.15); color:var(--accent); border:1px solid rgba(0,212,255,0.3); border-radius:6px; font-family:monospace; font-weight:700; margin-right:8px;">B</span>Build mode</div>
+            <div><span style="display:inline-block; min-width:24px; padding:2px 8px; background:rgba(0,212,255,0.15); color:var(--accent); border:1px solid rgba(0,212,255,0.3); border-radius:6px; font-family:monospace; font-weight:700; margin-right:8px;">E</span>Erase mode</div>
+            <div><span style="display:inline-block; min-width:24px; padding:2px 8px; background:rgba(0,212,255,0.15); color:var(--accent); border:1px solid rgba(0,212,255,0.3); border-radius:6px; font-family:monospace; font-weight:700; margin-right:8px;">R</span>Rotate block</div>
+            <div><span style="display:inline-block; min-width:48px; padding:2px 8px; background:rgba(0,212,255,0.15); color:var(--accent); border:1px solid rgba(0,212,255,0.3); border-radius:6px; font-family:monospace; font-weight:700; margin-right:8px;">Ctrl+Z</span>Undo</div>
+            <div><span style="display:inline-block; min-width:48px; padding:2px 8px; background:rgba(0,212,255,0.15); color:var(--accent); border:1px solid rgba(0,212,255,0.3); border-radius:6px; font-family:monospace; font-weight:700; margin-right:8px;">Ctrl+Y</span>Redo</div>
+            <div><span style="display:inline-block; min-width:48px; padding:2px 8px; background:rgba(0,212,255,0.15); color:var(--accent); border:1px solid rgba(0,212,255,0.3); border-radius:6px; font-family:monospace; font-weight:700; margin-right:8px;">Ctrl+S</span>Save scene</div>
+            <div><span style="display:inline-block; min-width:24px; padding:2px 8px; background:rgba(0,212,255,0.15); color:var(--accent); border:1px solid rgba(0,212,255,0.3); border-radius:6px; font-family:monospace; font-weight:700; margin-right:8px;">T</span>Toggle toolbar</div>
+            <div><span style="display:inline-block; min-width:24px; padding:2px 8px; background:rgba(0,212,255,0.15); color:var(--accent); border:1px solid rgba(0,212,255,0.3); border-radius:6px; font-family:monospace; font-weight:700; margin-right:8px;">G</span>Toggle snap</div>
+            <div><span style="display:inline-block; min-width:24px; padding:2px 8px; background:rgba(0,212,255,0.15); color:var(--accent); border:1px solid rgba(0,212,255,0.3); border-radius:6px; font-family:monospace; font-weight:700; margin-right:8px;">P</span>Screenshot</div>
+            <div><span style="display:inline-block; min-width:24px; padding:2px 8px; background:rgba(0,212,255,0.15); color:var(--accent); border:1px solid rgba(0,212,255,0.3); border-radius:6px; font-family:monospace; font-weight:700; margin-right:8px;">M</span>Mute sounds</div>
+            <div><span style="display:inline-block; min-width:24px; padding:2px 8px; background:rgba(0,212,255,0.15); color:var(--accent); border:1px solid rgba(0,212,255,0.3); border-radius:6px; font-family:monospace; font-weight:700; margin-right:8px;">N</span>Day/night cycle</div>
+            <div><span style="display:inline-block; min-width:24px; padding:2px 8px; background:rgba(0,212,255,0.15); color:var(--accent); border:1px solid rgba(0,212,255,0.3); border-radius:6px; font-family:monospace; font-weight:700; margin-right:8px;">F</span>Toggle fog</div>
+            <div><span style="display:inline-block; min-width:48px; padding:2px 8px; background:rgba(0,212,255,0.15); color:var(--accent); border:1px solid rgba(0,212,255,0.3); border-radius:6px; font-family:monospace; font-weight:700; margin-right:8px;">Right-drag</span>Rotate camera</div>
+            <div><span style="display:inline-block; min-width:48px; padding:2px 8px; background:rgba(0,212,255,0.15); color:var(--accent); border:1px solid rgba(0,212,255,0.3); border-radius:6px; font-family:monospace; font-weight:700; margin-right:8px;">Middle-drag</span>Pan camera</div>
+        </div>
+        <div style="margin-top:18px; padding-top:14px; border-top:1px solid rgba(255,255,255,0.08); font-family:'Inter',sans-serif; font-size:11px; color:#64748b; text-align:center;">
+            Press <span style="display:inline-block; padding:1px 7px; background:rgba(0,212,255,0.15); color:var(--accent); border:1px solid rgba(0,212,255,0.3); border-radius:4px; font-family:monospace; font-weight:700;">?</span> any time to open this help.
+        </div>
+    </div>
+</div>
+
+<!-- FIRST-TIME HINT (auto-shows on first visit, dismissible) -->
+<div id="firsthint" style="display:none; position:fixed; bottom:20px; left:50%; transform:translateX(-50%); z-index:99990; max-width:480px; width:92%; background:rgba(15,15,30,0.95); backdrop-filter:blur(10px); border:1px solid rgba(0,212,255,0.3); border-radius:14px; padding:16px 20px; box-shadow:0 8px 32px rgba(0,212,255,0.18);">
+    <div style="display:flex; gap:14px; align-items:center;">
+        <div style="font-size:24px; flex-shrink:0;">💡</div>
+        <div style="flex:1; font-family:'Inter',sans-serif; font-size:13px; color:#cbd5e1; line-height:1.5;">
+            <strong style="color:#fff;">Click anywhere on the ground to place a block.</strong><br>
+            <span style="font-size:11px; color:#8899aa;">Switch tools above, or press <span style="display:inline-block; padding:1px 6px; background:rgba(0,212,255,0.15); color:var(--accent); border:1px solid rgba(0,212,255,0.3); border-radius:4px; font-family:monospace; font-weight:700;">?</span> for all shortcuts.</span>
+        </div>
+        <button id="firsthint-close" style="background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.1); color:#fff; width:26px; height:26px; border-radius:7px; cursor:pointer; font-size:13px; flex-shrink:0; transition:all 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.12)'" onmouseout="this.style.background='rgba(255,255,255,0.06)'">✕</button>
+    </div>
+</div>
+
 <!-- SPLASH SCREEN -->
 <div id="splash-screen">
     <div class="splash-particles" id="splash-particles"></div>
@@ -1193,7 +1246,7 @@
             <button onclick="undo()" class="glass-btn" style="font-size:10px; padding:7px 12px; justify-content:center;">
                 <i class="fas fa-undo"></i> Undo
             </button>
-            <button onclick="if(confirm('Clear all?')) clearAll()" class="glass-btn" style="font-size:10px; padding:7px 12px; border-color:rgba(239,68,68,0.35); color:#ef4444; justify-content:center;">
+            <button onclick="confirmDialog('Clear all blocks?', (ok) => { if (ok) clearAll(); })" class="glass-btn" style="font-size:10px; padding:7px 12px; border-color:rgba(239,68,68,0.35); color:#ef4444; justify-content:center;">
                 <i class="fas fa-trash"></i> Clear All
             </button>
         </div>
@@ -1234,6 +1287,8 @@
             <span class="block-counter-label">Blocks</span>
             <span class="block-counter-num" id="block-count">0</span>
         </div>
+        <div style="width:1px; height:26px; background:rgba(255,255,255,0.1);"></div>
+        <button onclick="toggleHelpModal(true)" title="Keyboard shortcuts (?)" class="tool-pill-btn" id="tool-help" style="font-family:monospace; font-weight:800; letter-spacing:0;">? Help</button>
         <div style="width:1px; height:26px; background:rgba(255,255,255,0.1);"></div>
         <div style="flex-direction:column; align-items:center; display:flex; flex-shrink:0;">
             <span style="font-size:8px; font-family:'Orbitron',monospace; color:rgba(255,255,255,0.35); letter-spacing:0.12em; text-transform:uppercase; margin-bottom:3px;">Rotate</span>
@@ -1326,8 +1381,9 @@ function selectRole(el, role) {
 }
 
 // ==================== GLOBAL STATE ====================
-let currentTool = null, currentBlock = 'cube', currentSize = 1, currentColor = '#CCCCCC', ghostRotation = 0;
+let currentTool = 'build', currentBlock = 'cube', currentSize = 1, currentColor = '#CCCCCC', ghostRotation = 0;
 let scene, camera, renderer, ground, ghost, skyMesh, cloudMesh;
+let terrainMesh = null; // alias for ground; used by raycasters for terrain-snapping
 let raycaster, mouse, placedBlocks = [];
 let undoStack = [], redoStack = [];
 let lastTouchMoveTime = 0;
@@ -2543,6 +2599,9 @@ function createGround(type, matType) {
     ground.receiveShadow = true;
     ground.userData = { isGround: true, type, material: matType };
     scene.add(ground);
+    // terrainMesh is the same as ground; raycasters check both names
+    // for backwards compatibility with the terrain-snapping code.
+    terrainMesh = ground;
 
     // Scene preset texture override (keeps vertex colors, swaps diffuse map)
     if (currentScene && SCENE_PRESETS && SCENE_PRESETS[currentScene]) {
@@ -4091,6 +4150,37 @@ function toggleMute() {
 }
 
 // ==================== TOAST ====================
+// Custom confirm dialog — replaces native confirm() so we get a styled
+// glass modal instead of the ugly browser one.
+// Usage: confirmDialog('Clear all?', (confirmed) => { if (confirmed) clearAll(); });
+function confirmDialog(message, onConfirm) {
+    const dlg = document.getElementById('confirm-dialog');
+    const msgEl = document.getElementById('confirm-msg');
+    const okBtn = document.getElementById('confirm-ok');
+    const cancelBtn = document.getElementById('confirm-cancel');
+    if (!dlg || !msgEl || !okBtn || !cancelBtn) {
+        // Fallback to native confirm if modal missing
+        if (confirm(message)) onConfirm(true);
+        return;
+    }
+    msgEl.textContent = message;
+    dlg.style.display = 'flex';
+    const cleanup = () => {
+        dlg.style.display = 'none';
+        okBtn.removeEventListener('click', okHandler);
+        cancelBtn.removeEventListener('click', cancelHandler);
+        document.removeEventListener('keydown', escHandler);
+    };
+    const okHandler = () => { cleanup(); onConfirm(true); };
+    const cancelHandler = () => { cleanup(); onConfirm(false); };
+    const escHandler = (e) => { if (e.key === 'Escape') cancelHandler(); };
+    okBtn.addEventListener('click', okHandler);
+    cancelBtn.addEventListener('click', cancelHandler);
+    document.addEventListener('keydown', escHandler);
+    // Focus OK button so Enter can confirm
+    setTimeout(() => okBtn.focus(), 50);
+}
+
 function toast(msg, type) {
     let icon = 'fa-check-circle', toastType = type || 'info';
     if (!type) {
@@ -4900,7 +4990,7 @@ function joinRoom() {
     const name = document.getElementById('mp-name').value.trim();
     const room = document.getElementById('mp-room').value.trim().toUpperCase();
     const role = document.getElementById('mp-role').value;
-    if (!name || !room) { alert('Please enter both name and room code'); return; }
+    if (!name || !room) { toast('Please enter both name and room code', 'error'); return; }
     mpState.userName = name; mpState.roomId = room; mpState.role = role; mpState.userColor = currentColor;
     document.getElementById('mp-join-dialog').style.display = 'none';
     if (role === 'teacher') {
@@ -4979,9 +5069,12 @@ function lockRoom() {
 
 function resetAllMultiplayer() {
     if (mpState.role !== 'teacher' || !mpState.db) return;
-    if (!confirm('Clear ALL blocks for everyone?')) return;
-    mpState.db.ref('brickforge-rooms/' + mpState.roomId + '/blocks').remove();
-    clearAll(); mpState.blockCount = 0; updateMyProgress();
+    confirmDialog('Clear ALL blocks for everyone?', (ok) => {
+        if (!ok) return;
+        mpState.db.ref('brickforge-rooms/' + mpState.roomId + '/blocks').remove();
+        clearAll(); mpState.blockCount = 0; updateMyProgress();
+        toast('Cleared all blocks for everyone', 'success');
+    });
 }
 
 function openAssignmentModal() {
@@ -4994,7 +5087,7 @@ function saveAssignment() {
     const desc = document.getElementById('mp-assign-desc').value;
     const reqText = document.getElementById('mp-assign-req').value;
     const due = document.getElementById('mp-assign-due').value;
-    if (!title) return alert('Please enter a title');
+    if (!title) return toast('Please enter a title', 'error');
     const assignment = { title, description: desc, requirements: reqText.split('\n').filter(r => r.trim()), dueDate: due, createdBy: mpState.userId, createdAt: Date.now() };
     if (mpState.db) { mpState.db.ref('brickforge-rooms/' + mpState.roomId + '/assignment').set(assignment); }
     document.getElementById('mp-assignment-modal').style.display = 'none';
@@ -5093,6 +5186,43 @@ buildThemeGrid();
 initTheme();
 renderFavorites();
 buildTemplateGrid();
+// Set initial active state on the Build tool button and cursor (currentTool defaults to 'build')
+(function(){const b=document.getElementById('tool-build');if(b)b.classList.add('active');document.body.style.cursor='crosshair';})();
+
+// ===== HELP MODAL + FIRST-TIME HINT =====
+(function(){
+    function toggleHelp(forceShow){
+        const m=document.getElementById('help-modal');
+        if(!m)return;
+        if(forceShow===true){m.style.display='flex';return;}
+        if(forceShow===false){m.style.display='none';return;}
+        m.style.display = (m.style.display==='flex') ? 'none' : 'flex';
+    }
+    window.toggleHelpModal=toggleHelp;
+    const helpClose=document.getElementById('help-close');
+    if(helpClose)helpClose.addEventListener('click',()=>toggleHelp(false));
+    // Click outside the inner panel also closes
+    const helpModal=document.getElementById('help-modal');
+    if(helpModal)helpModal.addEventListener('click',e=>{if(e.target===helpModal)toggleHelp(false)});
+    // Add ? key (and Shift+/) to toggle the help modal
+    document.addEventListener('keydown',e=>{
+        // Don't intercept when typing in input/textarea
+        const tag=(e.target.tagName||'').toLowerCase();
+        if(tag==='input'||tag==='textarea')return;
+        if(e.key==='?'||(e.shiftKey&&e.key==='/')){e.preventDefault();toggleHelp();}
+    });
+    // First-time hint: show only if user hasn't dismissed it before
+    const hintSeen=safeStorage.getItem('brickforge_hint_seen');
+    const hint=document.getElementById('firsthint');
+    if(hint && !hintSeen){
+        setTimeout(()=>{
+            hint.style.display='block';
+            setTimeout(()=>{if(hint)hint.style.display='none';safeStorage.setItem('brickforge_hint_seen','1');},8000);
+        },2500);
+    }
+    const hintClose=document.getElementById('firsthint-close');
+    if(hintClose)hintClose.addEventListener('click',()=>{if(hint)hint.style.display='none';safeStorage.setItem('brickforge_hint_seen','1');});
+})();
 </script>
 <script data-pplx-inline-edit>
 (function(){

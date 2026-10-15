@@ -2,7 +2,42 @@
 
 A collaborative 3D building platform designed for schools to facilitate digital building projects and team-based learning.
 
-## 🚀 Quick Start
+**Live site:** https://cmckhmer.github.io/brainbuilder/
+
+## 🎮 Quick Start — Play Offline
+
+You don't need a server to start building. Open the live site or `index.html` locally and start placing blocks immediately.
+
+1. Visit https://cmckhmer.github.io/brainbuilder/ or run a static server:
+   ```bash
+   python3 -m http.server 8000
+   # then open http://localhost:8000
+   ```
+2. When the multiplayer dialog appears, click **Continue Offline**.
+3. Click anywhere on the ground to place a block. The Build tool is active by default.
+4. Press `?` any time to see all keyboard shortcuts (or click the `? Help` button in the toolbar).
+
+## 🔑 Keyboard Shortcuts
+
+| Key | Action |
+|---|---|
+| `B` | Build mode (default) |
+| `E` | Erase mode |
+| `R` | Rotate block |
+| `Ctrl+Z` | Undo |
+| `Ctrl+Y` | Redo |
+| `Ctrl+S` | Save scene |
+| `T` | Toggle toolbar |
+| `G` | Toggle grid snap |
+| `P` | Screenshot |
+| `M` | Mute sounds |
+| `N` | Day/night cycle |
+| `F` | Toggle fog |
+| `?` | Toggle this help modal |
+| Right-drag | Rotate camera |
+| Middle-drag | Pan camera |
+
+## 🚀 Quick Start — Multiplayer Classroom
 
 ### For Teachers
 
@@ -14,6 +49,7 @@ A collaborative 3D building platform designed for schools to facilitate digital 
 
 2. **Open Browser**
    Navigate to `http://localhost:3000`
+
 
 3. **Login as Teacher**
    - Enter your name
