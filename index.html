@@ -746,6 +746,119 @@
     </div>
 </div>
 
+<!-- ==================== LEVEL SELECT MODAL ==================== -->
+<div id="level-select-modal" style="display:none; position:fixed; inset:0; z-index:99989; background:linear-gradient(180deg, #7EC0EE 0%, #9ED8F8 50%, #B8E5FF 100%); overflow-y:auto;">
+    <div style="max-width:1100px; margin:0 auto; padding:40px 24px 60px;">
+        <!-- Header -->
+        <div style="text-align:center; margin-bottom:32px;">
+            <div style="font-family:'Syne','Plus Jakarta Sans',sans-serif; font-size:42px; font-weight:800; color:#1d3318; letter-spacing:-0.02em; margin-bottom:6px;">BrickForge Pro</div>
+            <div style="font-family:'Space Grotesk','Inter',sans-serif; font-size:13px; color:#4d6e3d; letter-spacing:0.05em; text-transform:uppercase;">Build & Conquer — 20 Levels</div>
+        </div>
+        <!-- Stats bar -->
+        <div style="display:flex; gap:14px; justify-content:center; flex-wrap:wrap; margin-bottom:30px;">
+            <div style="background:rgba(255,255,255,0.4); backdrop-filter:blur(10px); border:1px solid rgba(91,170,63,0.3); border-radius:14px; padding:12px 22px;">
+                <div style="font-family:'Inter',sans-serif; font-size:9px; text-transform:uppercase; letter-spacing:0.15em; color:#4d6e3d; font-weight:700;">Stars</div>
+                <div style="font-family:'Inter',sans-serif; font-size:22px; font-weight:800; color:#1d3318;">⭐ <span id="level-total-stars">0</span>/60</div>
+            </div>
+            <div style="background:rgba(255,255,255,0.4); backdrop-filter:blur(10px); border:1px solid rgba(91,170,63,0.3); border-radius:14px; padding:12px 22px;">
+                <div style="font-family:'Inter',sans-serif; font-size:9px; text-transform:uppercase; letter-spacing:0.15em; color:#4d6e3d; font-weight:700;">Completed</div>
+                <div style="font-family:'Inter',sans-serif; font-size:22px; font-weight:800; color:#1d3318;"><span id="level-completed-count">0</span>/20</div>
+            </div>
+            <div style="background:rgba(255,255,255,0.4); backdrop-filter:blur(10px); border:1px solid rgba(91,170,63,0.3); border-radius:14px; padding:12px 22px;">
+                <div style="font-family:'Inter',sans-serif; font-size:9px; text-transform:uppercase; letter-spacing:0.15em; color:#4d6e3d; font-weight:700;">Sandbox</div>
+                <div style="font-family:'Inter',sans-serif; font-size:14px; font-weight:700; padding-top:4px;" id="sandbox-status"><span style="color:#888;">🔒 Complete level 5</span></div>
+            </div>
+        </div>
+        <!-- Sandbox button (visible once unlocked) -->
+        <div style="text-align:center; margin-bottom:30px;">
+            <button id="enter-sandbox-btn" onclick="enterSandbox()" style="display:none; font-family:'Inter',sans-serif; font-size:14px; font-weight:700; padding:12px 32px; border-radius:12px; background:linear-gradient(135deg, #5BAA3F, #3d7a2c); color:#fff; border:none; cursor:pointer; box-shadow:0 8px 24px rgba(91,170,63,0.3); transition:all 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform=''">
+                🎨 Enter Free Build Sandbox
+            </button>
+        </div>
+        <!-- Level grid -->
+        <div id="level-grid"></div>
+        <!-- Footer -->
+        <div style="text-align:center; margin-top:40px; font-family:'Inter',sans-serif; font-size:11px; color:#4d6e3d; opacity:0.7;">
+            Press <kbd style="padding:1px 6px; background:rgba(255,255,255,0.5); border:1px solid rgba(91,170,63,0.3); border-radius:4px; font-family:monospace;">Esc</kbd> any time during a level to abandon it.
+        </div>
+    </div>
+</div>
+
+<!-- ==================== LEVEL INTRO CARD ==================== -->
+<div id="level-intro-card" style="display:none; position:fixed; inset:0; z-index:99987; background:rgba(0,0,0,0.5); backdrop-filter:blur(8px); align-items:center; justify-content:center;">
+    <div style="max-width:440px; width:90%; background:rgba(15,30,20,0.96); border:1px solid rgba(91,170,63,0.4); border-radius:20px; padding:32px; box-shadow:0 12px 50px rgba(0,0,0,0.4), 0 0 40px rgba(91,170,63,0.15);">
+        <div style="font-family:'Space Grotesk',sans-serif; font-size:10px; text-transform:uppercase; letter-spacing:0.2em; color:#5BAA3F; font-weight:700; margin-bottom:6px;" id="level-intro-chapter">Chapter</div>
+        <div style="font-family:'Syne','Inter',sans-serif; font-size:26px; font-weight:800; color:#fff; margin-bottom:14px;" id="level-intro-title">Level Title</div>
+        <div style="font-family:'Inter',sans-serif; font-size:15px; color:#cbd5e1; line-height:1.5; margin-bottom:14px;" id="level-intro-prompt">Prompt</div>
+        <div style="background:rgba(91,170,63,0.08); border-left:3px solid #5BAA3F; padding:10px 14px; border-radius:6px; margin-bottom:18px;">
+            <div style="font-family:'Inter',sans-serif; font-size:9px; text-transform:uppercase; letter-spacing:0.15em; color:#5BAA3F; font-weight:700; margin-bottom:4px;">Hint</div>
+            <div style="font-family:'Inter',sans-serif; font-size:13px; color:#cbd5e1; line-height:1.5;" id="level-intro-hint">Hint text</div>
+        </div>
+        <div style="display:flex; gap:14px; margin-bottom:24px;">
+            <div style="flex:1; background:rgba(255,255,255,0.04); border-radius:10px; padding:10px 14px;">
+                <div style="font-family:'Inter',sans-serif; font-size:9px; text-transform:uppercase; letter-spacing:0.15em; color:#8899aa; font-weight:700;">Budget</div>
+                <div style="font-family:'Inter',sans-serif; font-size:14px; font-weight:700; color:#fff;" id="level-intro-budget">15 blocks</div>
+            </div>
+            <div style="flex:1; background:rgba(255,255,255,0.04); border-radius:10px; padding:10px 14px;">
+                <div style="font-family:'Inter',sans-serif; font-size:9px; text-transform:uppercase; letter-spacing:0.15em; color:#8899aa; font-weight:700;">Time limit</div>
+                <div style="font-family:'Inter',sans-serif; font-size:14px; font-weight:700; color:#fff;" id="level-intro-time">60s</div>
+            </div>
+        </div>
+        <button onclick="dismissLevelIntro()" style="font-family:'Inter',sans-serif; font-size:14px; font-weight:700; padding:12px 24px; border-radius:10px; background:linear-gradient(135deg, #5BAA3F, #3d7a2c); color:#fff; border:none; cursor:pointer; box-shadow:0 4px 14px rgba(91,170,63,0.3); transition:all 0.2s; width:100%;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform=''">
+            ▶ Start Building
+        </button>
+    </div>
+</div>
+
+<!-- ==================== LEVEL HUD (in-game overlay) ==================== -->
+<div id="level-hud" style="display:none; position:fixed; top:14px; left:50%; transform:translateX(-50%); z-index:99986; pointer-events:none; max-width:calc(100vw - 32px); width:600px;">
+    <div style="display:flex; gap:10px; align-items:stretch; background:rgba(15,30,20,0.92); backdrop-filter:blur(12px); border:1px solid rgba(91,170,63,0.35); border-radius:14px; padding:10px 14px; box-shadow:0 8px 32px rgba(0,0,0,0.4);">
+        <div style="flex:1; min-width:0;">
+            <div style="font-family:'Space Grotesk',sans-serif; font-size:8px; text-transform:uppercase; letter-spacing:0.15em; color:#5BAA3F; font-weight:700; margin-bottom:3px;">Mission</div>
+            <div style="font-family:'Inter',sans-serif; font-size:11px; color:#fff; line-height:1.35; max-height:30px; overflow:hidden;" id="hud-prompt">Build a tree</div>
+        </div>
+        <div style="display:flex; gap:10px; align-items:center; flex-shrink:0;">
+            <div style="text-align:center;">
+                <div style="font-family:'Inter',sans-serif; font-size:8px; text-transform:uppercase; letter-spacing:0.1em; color:#8899aa; font-weight:700;">Blocks</div>
+                <div style="font-family:'Inter',sans-serif; font-size:13px; font-weight:800; color:#fff; white-space:nowrap;" id="hud-budget">0/15</div>
+            </div>
+            <div style="text-align:center;">
+                <div style="font-family:'Inter',sans-serif; font-size:8px; text-transform:uppercase; letter-spacing:0.1em; color:#8899aa; font-weight:700;">Time</div>
+                <div style="font-family:'Inter',sans-serif; font-size:13px; font-weight:800; color:#fff; white-space:nowrap;" id="hud-time">60s</div>
+            </div>
+            <div style="text-align:center;">
+                <div style="font-family:'Inter',sans-serif; font-size:8px; text-transform:uppercase; letter-spacing:0.1em; color:#8899aa; font-weight:700;">Score</div>
+                <div style="font-family:'Inter',sans-serif; font-size:13px; font-weight:800; color:#fff; white-space:nowrap;" id="hud-score">0</div>
+            </div>
+            <div style="text-align:center; padding-left:6px; border-left:1px solid rgba(255,255,255,0.1);">
+                <div style="font-family:'Inter',sans-serif; font-size:8px; text-transform:uppercase; letter-spacing:0.1em; color:#8899aa; font-weight:700;">Combo</div>
+                <div style="font-family:'Inter',sans-serif; font-size:13px; font-weight:800; color:#fbbf24; white-space:nowrap;" id="hud-combo">×1</div>
+            </div>
+        </div>
+    </div>
+    <!-- Done button -->
+    <div style="text-align:center; margin-top:8px;">
+        <button onclick="finishLevel()" style="font-family:'Inter',sans-serif; font-size:12px; font-weight:700; padding:8px 22px; border-radius:10px; background:linear-gradient(135deg, #5BAA3F, #3d7a2c); color:#fff; border:none; cursor:pointer; box-shadow:0 4px 14px rgba(91,170,63,0.3); transition:all 0.2s; pointer-events:auto;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform=''">
+            ✓ I'm Done
+        </button>
+    </div>
+</div>
+
+<!-- ==================== LEVEL RESULTS MODAL ==================== -->
+<div id="level-results-modal" style="display:none; position:fixed; inset:0; z-index:99988; background:rgba(0,0,0,0.6); backdrop-filter:blur(8px); align-items:center; justify-content:center;">
+    <div style="max-width:420px; width:92%; background:rgba(15,30,20,0.96); border:1px solid rgba(91,170,63,0.35); border-radius:20px; padding:32px; box-shadow:0 12px 50px rgba(0,0,0,0.4), 0 0 40px rgba(91,170,63,0.15); text-align:center;">
+        <div style="font-family:'Space Grotesk',sans-serif; font-size:10px; text-transform:uppercase; letter-spacing:0.2em; color:#5BAA3F; font-weight:700; margin-bottom:6px;">Level Complete</div>
+        <div style="font-family:'Syne','Inter',sans-serif; font-size:22px; font-weight:800; color:#fff; margin-bottom:14px;" id="results-title">Level Name</div>
+        <div style="font-family:'Inter',sans-serif; font-size:36px; font-weight:800; letter-spacing:6px; margin-bottom:20px;" id="results-stars">★★★</div>
+        <div id="results-breakdown" style="text-align:left; background:rgba(255,255,255,0.03); border-radius:12px; padding:14px 18px; margin-bottom:24px;"></div>
+        <div style="display:flex; gap:8px; justify-content:center; flex-wrap:wrap;">
+            <button id="results-retry-btn" style="font-family:'Inter',sans-serif; font-size:13px; font-weight:700; padding:10px 20px; border-radius:10px; background:rgba(255,255,255,0.06); color:#fff; border:1px solid rgba(255,255,255,0.1); cursor:pointer; transition:all 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.12)'" onmouseout="this.style.background='rgba(255,255,255,0.06)'">🔄 Retry</button>
+            <button id="results-next-btn" style="font-family:'Inter',sans-serif; font-size:13px; font-weight:700; padding:10px 22px; border-radius:10px; background:linear-gradient(135deg, #5BAA3F, #3d7a2c); color:#fff; border:none; cursor:pointer; box-shadow:0 4px 14px rgba(91,170,63,0.3); transition:all 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform=''">Next Level →</button>
+            <button id="results-menu-btn" style="font-family:'Inter',sans-serif; font-size:13px; font-weight:700; padding:10px 20px; border-radius:10px; background:rgba(255,255,255,0.06); color:#fff; border:1px solid rgba(255,255,255,0.1); cursor:pointer; transition:all 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.12)'" onmouseout="this.style.background='rgba(255,255,255,0.06)'">Menu</button>
+        </div>
+    </div>
+</div>
+
 <!-- SPLASH SCREEN -->
 <div id="splash-screen">
     <div class="splash-particles" id="splash-particles"></div>
@@ -1381,7 +1494,7 @@ function selectRole(el, role) {
 }
 
 // ==================== GLOBAL STATE ====================
-let currentTool = 'build', currentBlock = 'cube', currentSize = 1, currentColor = '#CCCCCC', ghostRotation = 0;
+let currentTool = 'build', currentBlock = 'cube', currentSize = 1, currentColor = '#8B7355', ghostRotation = 0;
 let scene, camera, renderer, ground, ghost, skyMesh, cloudMesh;
 let terrainMesh = null; // alias for ground; used by raycasters for terrain-snapping
 let raycaster, mouse, placedBlocks = [];
@@ -1692,7 +1805,7 @@ function init() {
     createSkybox();
     setupLighting();
     createMoon();
-    createGround('flat', 'tan');
+    createGround('flat', 'grass');
 
     // Grid is now invisible - terrain provides visual reference
     // No visible grid overlay - clean professional look
@@ -1918,6 +2031,13 @@ function eraseBlock(target) {
     updateBlockCounter(--blockCount);
     playSound('erase');
     toast('Block erased', 'error');
+    // Level mode: decrement counter and reset combo
+    if (levelState.active && !levelState.completed) {
+        if (levelState.blocksPlaced > 0) levelState.blocksPlaced--;
+        levelState.comboCount = 0;
+        levelState.combo = 1;
+        updateLevelHUD();
+    }
 }
 
 // Select mode: highlight a block for inspection/info
@@ -4009,12 +4129,22 @@ function undo() {
         updateBlockCounter(--blockCount);
         redoStack.push({action: 'redo_place', mesh});
         toast('Undo: block removed', 'warning');
+        // Level mode: also decrement counter
+        if (levelState.active && !levelState.completed && levelState.blocksPlaced > 0) {
+            levelState.blocksPlaced--;
+            updateLevelHUD();
+        }
     } else if (entry.action === 'erase') {
         scene.add(entry.mesh);
         placedBlocks.push(entry.mesh);
         updateBlockCounter(++blockCount);
         redoStack.push({action: 'redo_erase', mesh: entry.mesh});
         toast('Undo: block restored', 'success');
+        // Level mode: re-increment counter (but only if under budget)
+        if (levelState.active && !levelState.completed && levelState.blocksPlaced < levelState.currentLevel.budget) {
+            levelState.blocksPlaced++;
+            updateLevelHUD();
+        }
     }
     if (mpState.roomId && mpState.db) {
         mpState.blockCount = placedBlocks.filter(b => b.userData && b.userData.ownerId === mpState.userId).length;
@@ -5115,7 +5245,8 @@ const THEMES = {
     sakura:   { name:'Sakura',   desc:'Cherry blossom',   accent:'#ff69b4', glassBg:'rgba(30,10,20,0.82)', glassBorder:'rgba(255,105,180,0.35)',bgGrad1:'#1e0a14', bgGrad2:'#2e1020', bgGrad3:'#1e0818', gridColor:0x882244, bgColor:0x1e0a14, fogColor:0x2e1020, hemiSky:0xff99bb, hemiGround:0x441122, glowColor:'rgba(255,105,180,0.4)', textPrimary:'#fff0f5', textSecondary:'#cc88aa', gridLineColor:'rgba(255,105,180,0.03)', accentGlow:'rgba(255,105,180,0.5)' },
     neon:     { name:'Neon',     desc:'Magenta overdrive',accent:'#ff00ff', glassBg:'rgba(10,0,20,0.9)',   glassBorder:'rgba(255,0,255,0.35)', bgGrad1:'#0a0014', bgGrad2:'#14002e', bgGrad3:'#0a0020', gridColor:0x660066, bgColor:0x0a0014, fogColor:0x14002e, hemiSky:0x880088, hemiGround:0x220033, glowColor:'rgba(255,0,255,0.5)', textPrimary:'#ffffff', textSecondary:'#cc44cc', gridLineColor:'rgba(255,0,255,0.04)', accentGlow:'rgba(255,0,255,0.6)' },
     arctic:   { name:'Arctic',   desc:'Ice and snow',     accent:'#88ccff', glassBg:'rgba(200,220,240,0.15)',glassBorder:'rgba(136,204,255,0.4)',bgGrad1:'#0a1520', bgGrad2:'#0f2030', bgGrad3:'#0a1828', gridColor:0x3399bb, bgColor:0x0a1520, fogColor:0x0f2030, hemiSky:0xaaddff, hemiGround:0x336688, glowColor:'rgba(136,204,255,0.4)', textPrimary:'#e8f4ff', textSecondary:'#99bbcc', gridLineColor:'rgba(136,204,255,0.04)', accentGlow:'rgba(136,204,255,0.5)' },
-    volcanic: { name:'Volcanic', desc:'Lava and fire',    accent:'#ff4400', glassBg:'rgba(15,5,0,0.92)',   glassBorder:'rgba(255,68,0,0.35)', bgGrad1:'#0f0500', bgGrad2:'#1a0800', bgGrad3:'#0f0300', gridColor:0x661100, bgColor:0x0f0500, fogColor:0x1a0800, hemiSky:0x441100, hemiGround:0x220500, glowColor:'rgba(255,68,0,0.5)', textPrimary:'#fff0e0', textSecondary:'#cc6633', gridLineColor:'rgba(255,68,0,0.04)', accentGlow:'rgba(255,68,0,0.6)' }
+    volcanic: { name:'Volcanic', desc:'Lava and fire',    accent:'#ff4400', glassBg:'rgba(15,5,0,0.92)',   glassBorder:'rgba(255,68,0,0.35)', bgGrad1:'#0f0500', bgGrad2:'#1a0800', bgGrad3:'#0f0300', gridColor:0x661100, bgColor:0x0f0500, fogColor:0x1a0800, hemiSky:0x441100, hemiGround:0x220500, glowColor:'rgba(255,68,0,0.5)', textPrimary:'#fff0e0', textSecondary:'#cc6633', gridLineColor:'rgba(255,68,0,0.04)', accentGlow:'rgba(255,68,0,0.6)' },
+    voxel:    { name:'Voxel',    desc:'Minecraft daylight',accent:'#5BAA3F', glassBg:'rgba(15,30,20,0.85)',  glassBorder:'rgba(91,170,63,0.35)', bgGrad1:'#7EC0EE', bgGrad2:'#9ED8F8', bgGrad3:'#B8E5FF', gridColor:0x558833, bgColor:0x87CEEB, fogColor:0xC8E8F8, hemiSky:0x9ED8F8, hemiGround:0x558833, glowColor:'rgba(91,170,63,0.3)', textPrimary:'#1d3318', textSecondary:'#4d6e3d', gridLineColor:'rgba(60,100,40,0.06)', accentGlow:'rgba(91,170,63,0.3)' }
 };
 
 function setTheme(themeName) {
@@ -5148,7 +5279,7 @@ function closeThemePicker() { document.getElementById('theme-modal').style.displ
 function initTheme() {
     const saved = safeStorage.getItem('brickforge_theme');
     if (saved && THEMES[saved]) setTheme(saved);
-    else setTheme('cyber');
+    else setTheme('voxel');
 }
 
 function buildThemeGrid() {
@@ -5189,6 +5320,463 @@ buildTemplateGrid();
 // Set initial active state on the Build tool button and cursor (currentTool defaults to 'build')
 (function(){const b=document.getElementById('tool-build');if(b)b.classList.add('active');document.body.style.cursor='crosshair';})();
 
+// ==================== LEVEL CAMPAIGN SYSTEM ====================
+// 20 levels across 4 chapters. Free-build prompts with block budget
+// and optional time limit. Points + combo scoring. Sandbox unlocks
+// after the player completes level 5.
+
+const LEVELS = [
+  // Chapter 1 — Forest
+  {id:1, chapter:'Forest', name:'First Tree',         prompt:'Build a tree with a brown trunk and green leaves.',     hint:'Place 1 brown trunk block, then stack green leaves on top.',           budget:15, time:60,  block:'tree',   color:'#4a8c2f', stars:0},
+  {id:2, chapter:'Forest', name:'Bush Garden',         prompt:'Build three small bushes in a row.',                  hint:'Use the bush block. Place 3 in a horizontal line.',                   budget:10, time:75,  block:'bush',   color:'#3d7a2c', stars:0},
+  {id:3, chapter:'Forest', name:'Forest Path',         prompt:'Lay a path of 5 dirt blocks across the grass.',        hint:'Switch to dirt color. Place 5 blocks in a straight line.',            budget:8,  time:45,  block:'cube',   color:'#6b3f1e', stars:0},
+  {id:4, chapter:'Forest', name:'Tall Pines',          prompt:'Build two tall pine trees side by side.',              hint:'Use the pine block. Place them a few blocks apart.',                 budget:20, time:120, block:'pine',   color:'#2d5a1d', stars:0},
+  {id:5, chapter:'Forest', name:'Forest Grove',        prompt:'Create a small grove: 2 trees, 2 bushes, a path of 3.',hint:'Mix tree, bush, and dirt blocks. Place 7+ blocks total.',            budget:25, time:180, block:null,     color:null,      stars:0, boss:true},
+  // Chapter 2 — City
+  {id:6, chapter:'City', name:'First House',           prompt:'Build a 3-block-wide, 3-block-tall house.',           hint:'Stack 9 cube blocks in a 3x3 wall. Try a door color.',                budget:20, time:90,  block:'cube',   color:'#a86432', stars:0},
+  {id:7, chapter:'City', name:'City Wall',             prompt:'Build a wall 8 blocks long and 2 blocks tall.',        hint:'Use cube blocks. Place 8 in a row, then stack 8 more on top.',       budget:16, time:60,  block:'wall',   color:'#cccccc', stars:0},
+  {id:8, chapter:'City', name:'Street Lamp',           prompt:'Build a street lamp: tall pole with a glowing top.',   hint:'Use cube or fence blocks. The top should be a bright color.',         budget:10, time:75,  block:'cube',   color:'#fff5b8', stars:0},
+  {id:9, chapter:'City', name:'Small Bridge',         prompt:'Build a 5-block-long bridge over a gap.',              hint:'Place 5 cube blocks in a row, slightly elevated.',                    budget:15, time:90,  block:'cube',   color:'#8B7355', stars:0},
+  {id:10, chapter:'City', name:'Town Square',          prompt:'Build a town square: a house, a tree, and a 4-block path.',hint:'Combine cube, tree, and dirt blocks. Aim for 10+ blocks.',         budget:35, time:240, block:null,     color:null,      stars:0, boss:true},
+  // Chapter 3 — Space
+  {id:11, chapter:'Space', name:'Rocket',             prompt:'Build a rocket: tall thin body with a pointed top.',   hint:'Stack 3-4 cube blocks vertically, topped with a cone shape.',       budget:12, time:75,  block:'cube',   color:'#dddddd', stars:0},
+  {id:12, chapter:'Space', name:'Satellite',           prompt:'Build a small satellite with solar panels.',           hint:'1 cube center + 2 cube blocks left and right (solar panels).',       budget:10, time:60,  block:'cube',   color:'#3344aa', stars:0},
+  {id:13, chapter:'Space', name:'Moon Base',           prompt:'Build a small moon base dome.',                       hint:'Stack 4-5 cube blocks in a 2x2 square, slightly tapered.',           budget:20, time:120, block:'cube',   color:'#888888', stars:0},
+  {id:14, chapter:'Space', name:'Astronaut',           prompt:'Build an astronaut figure standing upright.',         hint:'1 cube body, 1 cube head, 2 cube arms, 2 cube legs.',                budget:15, time:90,  block:'cube',   color:'#ffffff', stars:0},
+  {id:15, chapter:'Space', name:'Lunar Colony',        prompt:'Build a full colony: rocket, moon base, and astronaut.',hint:'Place 12+ blocks total. Mix rocket + cube shapes.',                budget:30, time:240, block:null,     color:null,      stars:0, boss:true},
+  // Chapter 4 — Fantasy
+  {id:16, chapter:'Fantasy', name:'Castle Tower',      prompt:'Build a tall castle tower with a pointed roof.',      hint:'Stack 5-6 cube blocks vertically. Top with a cone.',                  budget:18, time:120, block:'cube',   color:'#999999', stars:0},
+  {id:17, chapter:'Fantasy', name:'Magic Tree',        prompt:'Build a magical tree with glowing purple leaves.',     hint:'Brown trunk + purple leaves. Use the tree block + custom color.',    budget:15, time:90,  block:'tree',   color:'#9933ff', stars:0},
+  {id:18, chapter:'Fantasy', name:'Dragon',            prompt:'Build a small dragon with body, head, wings, and tail.',hint:'Body (3 blocks) + head (1) + 2 wings (1 each) + tail (2).',        budget:25, time:150, block:'cube',   color:'#2d6e2d', stars:0},
+  {id:19, chapter:'Fantasy', name:'Wizard Hut',        prompt:'Build a small wizard hut with a pointed roof.',        hint:'3x3 base, 2 high, then a cone on top.',                               budget:20, time:120, block:'cube',   color:'#5e3a8e', stars:0},
+  {id:20, chapter:'Fantasy', name:'Dragon\'s Lair',    prompt:'Build a full lair: castle tower + dragon + magic tree.',hint:'Place 15+ blocks total. Combine cube + tree + custom blocks.',    budget:40, time:300, block:null,     color:null,      stars:0, boss:true}
+];
+
+const CHAPTERS = ['Forest','City','Space','Fantasy'];
+const CHAPTER_COLORS = {Forest:'#5BAA3F', City:'#5e8cb3', Space:'#6a4fb3', Fantasy:'#b34fae'};
+const CHAPTER_ICONS = {Forest:'🌲', City:'🏙', Space:'🚀', Fantasy:'🐉'};
+
+// Level state
+let levelState = {
+  active: false,          // true when in level mode (vs sandbox)
+  currentLevel: null,    // LEVELS entry
+  blocksPlaced: 0,
+  startTime: 0,
+  timeRemaining: 0,
+  combo: 0,               // current combo multiplier (each 3 consecutive blocks = +1x)
+  comboCount: 0,           // raw count for combo calc
+  score: 0,
+  timerInterval: null,
+  completed: false
+};
+
+// Persisted progress (separate from sandbox saves)
+let levelProgress = {};
+try {
+  levelProgress = JSON.parse(safeStorage.getItem('brickforge_levels') || '{}');
+} catch(e) { levelProgress = {}; }
+
+function saveLevelProgress() {
+  safeStorage.setItem('brickforge_levels', JSON.stringify(levelProgress));
+}
+
+function isLevelUnlocked(levelId) {
+  if (levelId === 1) return true;
+  return !!(levelProgress[levelId - 1] && levelProgress[levelId - 1].completed);
+}
+
+function isSandboxUnlocked() {
+  // Sandbox unlocks after completing level 5
+  return !!(levelProgress[5] && levelProgress[5].completed);
+}
+
+function getLevelStars(levelId) {
+  return (levelProgress[levelId] && levelProgress[levelId].stars) || 0;
+}
+
+function getTotalStars() {
+  let total = 0;
+  for (let i = 1; i <= 20; i++) total += getLevelStars(i);
+  return total;
+}
+
+function getCompletedCount() {
+  let n = 0;
+  for (let i = 1; i <= 20; i++) if (levelProgress[i] && levelProgress[i].completed) n++;
+  return n;
+}
+
+// ===== SVG preview images for each level (Minecraft-style) =====
+function levelPreviewSVG(level) {
+  // Generate a small inline SVG thumbnail for the level.
+  // We render a few stylized blocks representing the build.
+  const ch = level.chapter;
+  const accent = CHAPTER_COLORS[ch];
+  const grassColor = '#5BAA3F';
+  const skyTop = ch==='Space' ? '#0a0a3a' : (ch==='Fantasy' ? '#2a0a4a' : '#9ED8F8');
+  const skyBot = ch==='Space' ? '#000008' : (ch==='Fantasy' ? '#1a0a2e' : '#B8E5FF');
+  // Draw 2-3 stylized blocks
+  const blockSVG = (x, y, w, h, color, label) =>
+    `<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="${color}" stroke="rgba(0,0,0,0.2)" stroke-width="1"/>
+     <rect x="${x}" y="${y}" width="${w}" height="${h*0.18}" fill="rgba(255,255,255,0.18)"/>`;
+  let blocks = '';
+  if (ch === 'Forest') {
+    blocks = blockSVG(38,70,16,24,'#6b3f1e','') + blockSVG(34,46,24,24,'#4a8c2f','');
+    if (level.id === 4) blocks += blockSVG(70,70,16,24,'#6b3f1e','') + blockSVG(66,42,24,28,'#2d5a1d','');
+  } else if (ch === 'City') {
+    blocks = blockSVG(28,60,16,34,'#a86432','') + blockSVG(46,46,16,48,'#cccccc','');
+    if (level.id === 7) blocks += blockSVG(64,46,16,48,'#cccccc','') + blockSVG(28,42,16,16,'#999999','') + blockSVG(46,28,16,16,'#999999','');
+  } else if (ch === 'Space') {
+    blocks = blockSVG(48,40,12,54,'#dddddd','') + `<polygon points="48,40 54,30 60,40" fill="#dddddd"/>`;
+    if (level.id === 11) blocks += `<polygon points="48,40 54,28 60,40" fill="#dddddd"/>`;
+  } else if (ch === 'Fantasy') {
+    blocks = blockSVG(38,60,24,34,'#999999','') + `<polygon points="38,60 50,42 62,60" fill="#7a3a8e"/>`;
+    if (level.id === 17) blocks = blockSVG(38,70,16,24,'#5e3a1e','') + blockSVG(34,46,24,24,'#9933ff','');
+  }
+  return `data:image/svg+xml,${encodeURIComponent(`
+    <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'>
+      <defs>
+        <linearGradient id='sky' x1='0' y1='0' x2='0' y2='1'>
+          <stop offset='0' stop-color='${skyTop}'/>
+          <stop offset='1' stop-color='${skyBot}'/>
+        </linearGradient>
+      </defs>
+      <rect width='100' height='100' fill='url(#sky)'/>
+      <rect y='78' width='100' height='22' fill='${grassColor}'/>
+      <rect y='74' width='100' height='4' fill='#3d7a2c'/>
+      ${blocks}
+    </svg>
+  `)}`;
+}
+
+// ===== MODE SWITCH: LEVEL SELECT vs SANDBOX =====
+function showLevelSelect() {
+  const el = document.getElementById('level-select-modal');
+  if (!el) return;
+  renderLevelSelect();
+  el.style.display = 'flex';
+  // Hide the multiplayer dialog if it's showing
+  const mpd = document.getElementById('mp-join-dialog');
+  if (mpd) mpd.style.display = 'none';
+}
+
+function hideLevelSelect() {
+  const el = document.getElementById('level-select-modal');
+  if (el) el.style.display = 'none';
+}
+
+function renderLevelSelect() {
+  const grid = document.getElementById('level-grid');
+  if (!grid) return;
+  grid.innerHTML = '';
+  CHAPTERS.forEach((chapter, ci) => {
+    const chLevels = LEVELS.filter(l => l.chapter === chapter);
+    const chColor = CHAPTER_COLORS[chapter];
+    const chIcon = CHAPTER_ICONS[chapter];
+    const chCompleted = chLevels.filter(l => levelProgress[l.id]?.completed).length;
+
+    const chapterRow = document.createElement('div');
+    chapterRow.style.cssText = 'margin-bottom: 28px;';
+    chapterRow.innerHTML = `
+      <div style="display:flex; align-items:center; gap:12px; margin-bottom:14px;">
+        <div style="font-size:28px;">${chIcon}</div>
+        <div>
+          <div style="font-family:'Syne','Inter',sans-serif; font-size:20px; font-weight:800; color:${chColor}; letter-spacing:-0.01em;">${chapter}</div>
+          <div style="font-family:'Inter',sans-serif; font-size:11px; color:#8899aa; margin-top:2px;">${chCompleted}/${chLevels.length} levels complete</div>
+        </div>
+      </div>
+    `;
+    const levelGrid = document.createElement('div');
+    levelGrid.style.cssText = 'display:grid; grid-template-columns:repeat(auto-fill, minmax(180px, 1fr)); gap:12px;';
+    chLevels.forEach(level => {
+      const unlocked = isLevelUnlocked(level.id);
+      const stars = getLevelStars(level.id);
+      const card = document.createElement('div');
+      card.style.cssText = `
+        background: ${unlocked ? 'rgba(255,255,255,0.04)' : 'rgba(255,255,255,0.02)'};
+        border: 1px solid ${unlocked ? chColor + '40' : 'rgba(255,255,255,0.06)'};
+        border-radius: 12px;
+        padding: 14px;
+        cursor: ${unlocked ? 'pointer' : 'not-allowed'};
+        transition: all 0.2s;
+        position: relative;
+        overflow: hidden;
+      `;
+      if (unlocked) {
+        card.onmouseenter = () => { card.style.transform = 'translateY(-2px)'; card.style.borderColor = chColor; card.style.background = 'rgba(255,255,255,0.07)'; };
+        card.onmouseleave = () => { card.style.transform = ''; card.style.borderColor = chColor + '40'; card.style.background = 'rgba(255,255,255,0.04)'; };
+        card.onclick = () => startLevel(level.id);
+      }
+      const bossBadge = level.boss ? `<div style="position:absolute; top:8px; right:8px; font-family:'Inter',sans-serif; font-size:8px; font-weight:700; padding:3px 7px; border-radius:4px; background:rgba(255,180,40,0.2); color:#ffb428; letter-spacing:0.05em; text-transform:uppercase;">BOSS</div>` : '';
+      const lockOverlay = !unlocked ? `<div style="position:absolute; inset:0; background:rgba(0,0,0,0.5); display:flex; align-items:center; justify-content:center; font-size:24px;">🔒</div>` : '';
+      card.innerHTML = `
+        ${bossBadge}
+        <div style="width:100%; height:80px; background:rgba(0,0,0,0.2); border-radius:8px; margin-bottom:10px; background-image:url('${levelPreviewSVG(level)}'); background-size:cover; background-position:center;"></div>
+        <div style="font-family:'Inter',sans-serif; font-weight:700; font-size:13px; color:#fff; margin-bottom:4px;">${level.id}. ${level.name}</div>
+        <div style="font-family:'Inter',sans-serif; font-size:10px; color:#8899aa; line-height:1.4; height:28px; overflow:hidden;">${level.prompt.substring(0, 70)}${level.prompt.length > 70 ? '...' : ''}</div>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:8px;">
+          <div style="font-family:'Inter',sans-serif; font-size:10px; color:#666;">📦 ${level.budget} blocks · ⏱ ${level.time}s</div>
+          <div style="font-size:12px; letter-spacing:2px;">${'★'.repeat(stars)}${'☆'.repeat(3-stars)}</div>
+        </div>
+        ${lockOverlay}
+      `;
+      levelGrid.appendChild(card);
+    });
+    chapterRow.appendChild(levelGrid);
+    grid.appendChild(chapterRow);
+  });
+
+  // Update totals at top
+  const totalStarsEl = document.getElementById('level-total-stars');
+  if (totalStarsEl) totalStarsEl.textContent = getTotalStars();
+  const completedEl = document.getElementById('level-completed-count');
+  if (completedEl) completedEl.textContent = getCompletedCount();
+  const sbStatus = document.getElementById('sandbox-status');
+  if (sbStatus) {
+    if (isSandboxUnlocked()) {
+      sbStatus.innerHTML = '<span style="color:#5BAA3F;">✓ Unlocked</span>';
+      const sbBtn = document.getElementById('enter-sandbox-btn');
+      if (sbBtn) sbBtn.style.display = 'inline-flex';
+    } else {
+      sbStatus.innerHTML = '<span style="color:#888;">🔒 Complete level 5 to unlock</span>';
+      const sbBtn = document.getElementById('enter-sandbox-btn');
+      if (sbBtn) sbBtn.style.display = 'none';
+    }
+  }
+}
+
+// ===== START A LEVEL =====
+function startLevel(levelId) {
+  const level = LEVELS.find(l => l.id === levelId);
+  if (!level) return;
+  if (!isLevelUnlocked(levelId)) {
+    toast('Level locked — complete the previous level first', 'error');
+    return;
+  }
+  hideLevelSelect();
+  // Clear the scene first
+  clearAll();
+  // Reset state
+  levelState.active = true;
+  levelState.currentLevel = level;
+  levelState.blocksPlaced = 0;
+  levelState.startTime = performance.now();
+  levelState.timeRemaining = level.time;
+  levelState.combo = 1;
+  levelState.comboCount = 0;
+  levelState.score = 0;
+  levelState.completed = false;
+  // Pre-set suggested block + color (player can change after)
+  if (level.block && level.block !== 'cube') {
+    currentBlock = level.block;
+    updateGhostGeo();
+  }
+  if (level.color) {
+    currentColor = level.color;
+  }
+  // Show level intro card
+  showLevelIntro(level);
+  // Start the timer
+  if (levelState.timerInterval) clearInterval(levelState.timerInterval);
+  levelState.timerInterval = setInterval(() => {
+    if (levelState.completed) return;
+    levelState.timeRemaining -= 1;
+    updateLevelHUD();
+    if (levelState.timeRemaining <= 0) {
+      endLevel(false, 'Time up!');
+    }
+  }, 1000);
+  updateLevelHUD();
+}
+
+function showLevelIntro(level) {
+  const el = document.getElementById('level-intro-card');
+  if (!el) return;
+  document.getElementById('level-intro-title').textContent = `${level.id}. ${level.name}`;
+  document.getElementById('level-intro-chapter').textContent = level.chapter;
+  document.getElementById('level-intro-prompt').textContent = level.prompt;
+  document.getElementById('level-intro-hint').textContent = level.hint;
+  document.getElementById('level-intro-budget').textContent = `${level.budget} blocks allowed`;
+  document.getElementById('level-intro-time').textContent = `${level.time}s timer`;
+  el.style.display = 'flex';
+  // Auto-hide after 5 seconds (player can also dismiss with button)
+  setTimeout(() => { el.style.display = 'none'; }, 5000);
+}
+
+function dismissLevelIntro() {
+  const el = document.getElementById('level-intro-card');
+  if (el) el.style.display = 'none';
+}
+
+// ===== LEVEL HUD =====
+function updateLevelHUD() {
+  if (!levelState.active) return;
+  const hud = document.getElementById('level-hud');
+  if (!hud) return;
+  hud.style.display = 'flex';
+  const lvl = levelState.currentLevel;
+  document.getElementById('hud-prompt').textContent = lvl.prompt;
+  document.getElementById('hud-budget').textContent = `${levelState.blocksPlaced}/${lvl.budget}`;
+  document.getElementById('hud-time').textContent = `${levelState.timeRemaining}s`;
+  document.getElementById('hud-score').textContent = levelState.score;
+  document.getElementById('hud-combo').textContent = `×${levelState.combo}`;
+  // Color budget red if exceeded
+  const budgetEl = document.getElementById('hud-budget');
+  if (budgetEl) {
+    if (levelState.blocksPlaced > lvl.budget) budgetEl.style.color = '#ef4444';
+    else if (levelState.blocksPlaced >= lvl.budget * 0.8) budgetEl.style.color = '#fbbf24';
+    else budgetEl.style.color = '#fff';
+  }
+  // Color timer red if < 10s
+  const timeEl = document.getElementById('hud-time');
+  if (timeEl) {
+    if (levelState.timeRemaining <= 10) timeEl.style.color = '#ef4444';
+    else if (levelState.timeRemaining <= 30) timeEl.style.color = '#fbbf24';
+    else timeEl.style.color = '#fff';
+  }
+}
+
+function hideLevelHUD() {
+  const hud = document.getElementById('level-hud');
+  if (hud) hud.style.display = 'none';
+}
+
+// ===== TRACK BLOCK PLACEMENT FOR LEVEL =====
+// Hook into build() — increments blocksPlaced, score, combo
+const _origBuild = build;
+build = function() {
+  if (!levelState.active) { _origBuild(); return; }
+  if (levelState.completed) return;
+  if (levelState.blocksPlaced >= levelState.currentLevel.budget) {
+    toast('Block budget reached — finish or remove blocks', 'error');
+    return;
+  }
+  _origBuild();
+  levelState.blocksPlaced++;
+  // Combo: every 3 consecutive blocks = +1 combo (cap at 5)
+  levelState.comboCount++;
+  if (levelState.comboCount % 3 === 0 && levelState.combo < 5) levelState.combo++;
+  // Score: base 10 points per block × current combo multiplier
+  const basePts = 10;
+  levelState.score += basePts * levelState.combo;
+  updateLevelHUD();
+};
+
+// ===== END A LEVEL =====
+function endLevel(forced, reason) {
+  if (!levelState.active) return;
+  if (levelState.timerInterval) clearInterval(levelState.timerInterval);
+  levelState.completed = true;
+  // Calculate final score
+  const lvl = levelState.currentLevel;
+  const blocksPlaced = levelState.blocksPlaced;
+  const budgetUsed = Math.min(1, blocksPlaced / lvl.budget);
+  // Budget bonus: 50 pts per block under budget
+  const budgetBonus = Math.max(0, lvl.budget - blocksPlaced) * 50;
+  // Time bonus: 10 pts per second remaining
+  const timeBonus = Math.max(0, levelState.timeRemaining) * 10;
+  // Combo peak bonus
+  const comboBonus = (levelState.combo - 1) * 100;
+  // Completion bonus (must place at least 60% of budget)
+  const completionBonus = budgetUsed >= 0.6 ? 200 : 0;
+  const finalScore = levelState.score + budgetBonus + timeBonus + comboBonus + completionBonus;
+  // Star calculation: 1★ for completion (≥60% budget), 2★ if score ≥ 500, 3★ if score ≥ 1000
+  let stars = 0;
+  if (budgetUsed >= 0.6) stars = 1;
+  if (stars >= 1 && finalScore >= 500) stars = 2;
+  if (stars >= 2 && finalScore >= 1000) stars = 3;
+  // Save progress
+  const prevStars = getLevelStars(lvl.id);
+  if (stars > prevStars || !levelProgress[lvl.id]) {
+    levelProgress[lvl.id] = {
+      completed: stars >= 1,
+      stars: Math.max(stars, prevStars),
+      bestScore: Math.max(finalScore, levelProgress[lvl.id]?.bestScore || 0)
+    };
+    saveLevelProgress();
+  }
+  // Show results screen
+  showLevelResults(lvl, finalScore, stars, { blocksPlaced, budget: lvl.budget, budgetBonus, timeBonus, comboBonus, completionBonus, timeRemaining: levelState.timeRemaining });
+  levelState.active = false;
+  hideLevelHUD();
+}
+
+function showLevelResults(level, score, stars, breakdown) {
+  const el = document.getElementById('level-results-modal');
+  if (!el) return;
+  // Build score breakdown rows
+  const breakdownRows = `
+    <div style="display:flex; justify-content:space-between; padding:6px 0; font-family:'Inter',sans-serif; font-size:12px; color:#cbd5e1;">
+      <span>Blocks placed</span><span>${breakdown.blocksPlaced}/${breakdown.budget}</span>
+    </div>
+    <div style="display:flex; justify-content:space-between; padding:6px 0; font-family:'Inter',sans-serif; font-size:12px; color:#cbd5e1;">
+      <span>Budget remaining bonus (50/block)</span><span style="color:#5BAA3F;">+${breakdown.budgetBonus}</span>
+    </div>
+    <div style="display:flex; justify-content:space-between; padding:6px 0; font-family:'Inter',sans-serif; font-size:12px; color:#cbd5e1;">
+      <span>Time remaining bonus (10/s)</span><span style="color:#5BAA3F;">+${breakdown.timeBonus}</span>
+    </div>
+    <div style="display:flex; justify-content:space-between; padding:6px 0; font-family:'Inter',sans-serif; font-size:12px; color:#cbd5e1;">
+      <span>Combo peak bonus (100×)</span><span style="color:#5BAA3F;">+${breakdown.comboBonus}</span>
+    </div>
+    <div style="display:flex; justify-content:space-between; padding:6px 0; font-family:'Inter',sans-serif; font-size:12px; color:#cbd5e1;">
+      <span>Completion bonus</span><span style="color:#5BAA3F;">+${breakdown.completionBonus}</span>
+    </div>
+    <div style="display:flex; justify-content:space-between; padding:8px 0; margin-top:6px; border-top:1px solid rgba(255,255,255,0.1); font-family:'Inter',sans-serif; font-size:14px; font-weight:700; color:#fff;">
+      <span>Total score</span><span>${score}</span>
+    </div>
+  `;
+  document.getElementById('results-title').textContent = `${level.id}. ${level.name}`;
+  document.getElementById('results-stars').innerHTML = `${'★'.repeat(stars)}${'☆'.repeat(3-stars)}`;
+  document.getElementById('results-stars').style.color = ['#888', '#c0c0c0', '#fbbf24', '#fbbf24'][stars];
+  document.getElementById('results-breakdown').innerHTML = breakdownRows;
+  // Show "Next Level" button if there's a next level
+  const nextBtn = document.getElementById('results-next-btn');
+  if (nextBtn) {
+    if (level.id < 20) {
+      nextBtn.textContent = `Next Level →`;
+      nextBtn.onclick = () => { closeLevelResults(); startLevel(level.id + 1); };
+      nextBtn.style.display = 'inline-flex';
+    } else {
+      nextBtn.textContent = `🎉 You finished the campaign!`;
+      nextBtn.onclick = () => { closeLevelResults(); showLevelSelect(); };
+      nextBtn.style.display = 'inline-flex';
+    }
+  }
+  const retryBtn = document.getElementById('results-retry-btn');
+  if (retryBtn) retryBtn.onclick = () => { closeLevelResults(); startLevel(level.id); };
+  const menuBtn = document.getElementById('results-menu-btn');
+  if (menuBtn) menuBtn.onclick = () => { closeLevelResults(); showLevelSelect(); };
+  el.style.display = 'flex';
+}
+
+function closeLevelResults() {
+  const el = document.getElementById('level-results-modal');
+  if (el) el.style.display = 'none';
+}
+
+// "I'm Done" button (in HUD) — completes the level
+function finishLevel() {
+  if (!levelState.active) return;
+  if (levelState.blocksPlaced < levelState.currentLevel.budget * 0.6) {
+    toast(`Place at least ${Math.ceil(levelState.currentLevel.budget * 0.6)} blocks to complete`, 'error');
+    return;
+  }
+  endLevel(true, 'Completed');
+}
+
+// ===== SANDBOX MODE (kept existing free-build, with unlock gate) =====
+function enterSandbox() {
+  if (!isSandboxUnlocked()) {
+    toast('Sandbox unlocks after completing level 5', 'error');
+    return;
+  }
+  hideLevelSelect();
+  levelState.active = false;
+  hideLevelHUD();
+  if (levelState.timerInterval) clearInterval(levelState.timerInterval);
+  toast('Sandbox mode — build freely!', 'success');
+}
+
 // ===== HELP MODAL + FIRST-TIME HINT =====
 (function(){
     function toggleHelp(forceShow){
@@ -5210,6 +5798,18 @@ buildTemplateGrid();
         const tag=(e.target.tagName||'').toLowerCase();
         if(tag==='input'||tag==='textarea')return;
         if(e.key==='?'||(e.shiftKey&&e.key==='/')){e.preventDefault();toggleHelp();}
+        // Escape: if in level mode, return to level select; else close help
+        if(e.key==='Escape'){
+            if(levelState.active && !levelState.completed){
+                if(levelState.timerInterval)clearInterval(levelState.timerInterval);
+                levelState.active=false;
+                levelState.completed=true;
+                hideLevelHUD();
+                clearAll();
+                showLevelSelect();
+                toast('Level abandoned', 'info');
+            }
+        }
     });
     // First-time hint: show only if user hasn't dismissed it before
     const hintSeen=safeStorage.getItem('brickforge_hint_seen');
@@ -5222,6 +5822,12 @@ buildTemplateGrid();
     }
     const hintClose=document.getElementById('firsthint-close');
     if(hintClose)hintClose.addEventListener('click',()=>{if(hint)hint.style.display='none';safeStorage.setItem('brickforge_hint_seen','1');});
+
+    // ===== AUTO-SHOW LEVEL SELECT AFTER SPLASH =====
+    // Wait for the splash screen to fade (3500ms) then show level select
+    setTimeout(()=>{
+        showLevelSelect();
+    }, 4000);
 })();
 </script>
 <script data-pplx-inline-edit>
