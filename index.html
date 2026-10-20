@@ -31,7 +31,10 @@
             --panel-radius: 18px;
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; touch-action: none; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        /* Touch scrolling/pinch-zoom must stay available for modals & page.
+           Only the 3D canvas blocks default touch behavior (it has its own handlers). */
+        #canvas-container canvas { touch-action: none; }
 
         body {
             margin: 0;
@@ -847,7 +850,7 @@
 <!-- ==================== LEVEL RESULTS MODAL ==================== -->
 <div id="level-results-modal" style="display:none; position:fixed; inset:0; z-index:99988; background:rgba(0,0,0,0.6); backdrop-filter:blur(8px); align-items:center; justify-content:center;">
     <div style="max-width:420px; width:92%; background:rgba(15,30,20,0.96); border:1px solid rgba(91,170,63,0.35); border-radius:20px; padding:32px; box-shadow:0 12px 50px rgba(0,0,0,0.4), 0 0 40px rgba(91,170,63,0.15); text-align:center;">
-        <div style="font-family:'Space Grotesk',sans-serif; font-size:10px; text-transform:uppercase; letter-spacing:0.2em; color:#5BAA3F; font-weight:700; margin-bottom:6px;">Level Complete</div>
+        <div id="results-kicker" style="font-family:'Space Grotesk',sans-serif; font-size:10px; text-transform:uppercase; letter-spacing:0.2em; color:#5BAA3F; font-weight:700; margin-bottom:6px;">Level Complete</div>
         <div style="font-family:'Syne','Inter',sans-serif; font-size:22px; font-weight:800; color:#fff; margin-bottom:14px;" id="results-title">Level Name</div>
         <div style="font-family:'Inter',sans-serif; font-size:36px; font-weight:800; letter-spacing:6px; margin-bottom:20px;" id="results-stars">★★★</div>
         <div id="results-breakdown" style="text-align:left; background:rgba(255,255,255,0.03); border-radius:12px; padding:14px 18px; margin-bottom:24px;"></div>
@@ -990,12 +993,12 @@
 <!-- MAIN UI LAYER -->
 <!-- LEFT PANEL PULL TAB -->
 <div class="panel-tab ui-interactive" id="left-tab" onclick="toggleLeftPanel()" title="Blocks (B)">
-    <i class="fas fa-cubes" style="font-size:11px;"></i>
+    <i class="fas fa-cubes" style="font-size:15px;"></i>
 </div>
 
 <!-- RIGHT PANEL PULL TAB -->
 <div class="panel-tab ui-interactive" id="right-tab" onclick="toggleRightPanel()" title="Properties">
-    <i class="fas fa-sliders-h" style="font-size:11px;"></i>
+    <i class="fas fa-sliders-h" style="font-size:15px;"></i>
 </div>
 
 <!-- LEFT SLIDE PANEL: Blocks -->
@@ -4370,6 +4373,9 @@ function clearAll() {
 // ==================== KEYBOARD ====================
 document.addEventListener('keydown', e => {
     const k = e.key.toLowerCase();
+    // Don't hijack keys while typing in inputs (multiplayer name/room, save filename, etc.)
+    const tag = (e.target && e.target.tagName || '').toLowerCase();
+    if (tag === 'input' || tag === 'textarea' || (e.target && e.target.isContentEditable)) return;
     keysPressed[e.key] = true;
     if (k === 'b') setTool('build');
     else if (k === 'e') setTool('erase');
@@ -5102,9 +5108,9 @@ function shiftColor(hex, factor) {
 // ==================== FIREBASE ====================
 function initFirebase() {
     const firebaseConfig = {
-        apiKey: "YOUR_API_KEY",
+        apiKey: "AIzaSyDNUq0ru99XKh08D887Xk63h36MPOlXWwc",
         authDomain: "creative-minds-cambodia.firebaseapp.com",
-        databaseURL: "https://creative-minds-cambodia-default-rtdb.firebaseio.com",
+        databaseURL: "https://creative-minds-cambodia-default-rtdb.asia-southeast1.firebasedatabase.app",
         projectId: "creative-minds-cambodia",
         storageBucket: "creative-minds-cambodia.appspot.com",
         messagingSenderId: "YOUR_SENDER_ID",
@@ -5433,6 +5439,8 @@ function levelPreviewSVG(level) {
     blocks = blockSVG(38,60,24,34,'#999999','') + `<polygon points="38,60 50,42 62,60" fill="#7a3a8e"/>`;
     if (level.id === 17) blocks = blockSVG(38,70,16,24,'#5e3a1e','') + blockSVG(34,46,24,24,'#9933ff','');
   }
+  // encodeURIComponent leaves ' ( ) ! * raw — the raw ' terminates the CSS
+  // url('...') string and silently kills the background-image. Escape them.
   return `data:image/svg+xml,${encodeURIComponent(`
     <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'>
       <defs>
@@ -5446,7 +5454,7 @@ function levelPreviewSVG(level) {
       <rect y='74' width='100' height='4' fill='#3d7a2c'/>
       ${blocks}
     </svg>
-  `)}`;
+  `).replace(/'/g, '%27').replace(/\(/g, '%28').replace(/\)/g, '%29')}`;
 }
 
 // ===== MODE SWITCH: LEVEL SELECT vs SANDBOX =====
@@ -5554,6 +5562,9 @@ function startLevel(levelId) {
     return;
   }
   hideLevelSelect();
+  // Defensive: close any orphaned results/intro modals from a previous round
+  closeLevelResults();
+  if (levelState.timerInterval) { clearInterval(levelState.timerInterval); levelState.timerInterval = null; }
   // Clear the scene first
   clearAll();
   // Reset state
@@ -5574,9 +5585,12 @@ function startLevel(levelId) {
   if (level.color) {
     currentColor = level.color;
   }
-  // Show level intro card
+  // Show level intro card (timer starts when the player dismisses it)
   showLevelIntro(level);
-  // Start the timer
+  updateLevelHUD();
+}
+
+function startLevelTimer() {
   if (levelState.timerInterval) clearInterval(levelState.timerInterval);
   levelState.timerInterval = setInterval(() => {
     if (levelState.completed) return;
@@ -5586,7 +5600,6 @@ function startLevel(levelId) {
       endLevel(false, 'Time up!');
     }
   }, 1000);
-  updateLevelHUD();
 }
 
 function showLevelIntro(level) {
@@ -5599,13 +5612,20 @@ function showLevelIntro(level) {
   document.getElementById('level-intro-budget').textContent = `${level.budget} blocks allowed`;
   document.getElementById('level-intro-time').textContent = `${level.time}s timer`;
   el.style.display = 'flex';
-  // Auto-hide after 5 seconds (player can also dismiss with button)
-  setTimeout(() => { el.style.display = 'none'; }, 5000);
+  // Auto-dismiss after 8 seconds (also starts the timer via dismissLevelIntro)
+  clearTimeout(showLevelIntro._autoT);
+  showLevelIntro._autoT = setTimeout(() => { dismissLevelIntro(); }, 8000);
 }
 
 function dismissLevelIntro() {
   const el = document.getElementById('level-intro-card');
   if (el) el.style.display = 'none';
+  clearTimeout(showLevelIntro._autoT);
+  // The countdown begins only when the player starts building —
+  // reading the mission brief must not eat into the time limit.
+  if (levelState.active && !levelState.completed && !levelState.timerInterval) {
+    startLevelTimer();
+  }
 }
 
 // ===== LEVEL HUD =====
@@ -5665,24 +5685,28 @@ build = function() {
 // ===== END A LEVEL =====
 function endLevel(forced, reason) {
   if (!levelState.active) return;
-  if (levelState.timerInterval) clearInterval(levelState.timerInterval);
+  if (levelState.timerInterval) { clearInterval(levelState.timerInterval); levelState.timerInterval = null; }
   levelState.completed = true;
   // Calculate final score
   const lvl = levelState.currentLevel;
   const blocksPlaced = levelState.blocksPlaced;
   const budgetUsed = Math.min(1, blocksPlaced / lvl.budget);
-  // Budget bonus: 50 pts per block under budget
-  const budgetBonus = Math.max(0, lvl.budget - blocksPlaced) * 50;
-  // Time bonus: 10 pts per second remaining
-  const timeBonus = Math.max(0, levelState.timeRemaining) * 10;
-  // Combo peak bonus
-  const comboBonus = (levelState.combo - 1) * 100;
-  // Completion bonus (must place at least 60% of budget)
-  const completionBonus = budgetUsed >= 0.6 ? 200 : 0;
-  const finalScore = levelState.score + budgetBonus + timeBonus + comboBonus + completionBonus;
+  // PASS requires building at least 60% of the block budget.
+  // No bonuses on a fail — a failed level scores 0 so the campaign
+  // can't be farmed by waiting for the timer with an empty field.
+  const passed = budgetUsed >= 0.6;
+  // Blocks-built bonus: rewards actually using your budget to build
+  const buildBonus = passed ? blocksPlaced * 20 : 0;
+  // Time bonus: 10 pts per second remaining (speed reward, pass only)
+  const timeBonus = passed ? Math.max(0, levelState.timeRemaining) * 10 : 0;
+  // Combo peak bonus (pass only)
+  const comboBonus = passed ? (levelState.combo - 1) * 100 : 0;
+  // Completion bonus (pass only)
+  const completionBonus = passed ? 200 : 0;
+  const finalScore = passed ? levelState.score + buildBonus + timeBonus + comboBonus + completionBonus : 0;
   // Star calculation: 1★ for completion (≥60% budget), 2★ if score ≥ 500, 3★ if score ≥ 1000
   let stars = 0;
-  if (budgetUsed >= 0.6) stars = 1;
+  if (passed) stars = 1;
   if (stars >= 1 && finalScore >= 500) stars = 2;
   if (stars >= 2 && finalScore >= 1000) stars = 3;
   // Save progress
@@ -5696,7 +5720,7 @@ function endLevel(forced, reason) {
     saveLevelProgress();
   }
   // Show results screen
-  showLevelResults(lvl, finalScore, stars, { blocksPlaced, budget: lvl.budget, budgetBonus, timeBonus, comboBonus, completionBonus, timeRemaining: levelState.timeRemaining });
+  showLevelResults(lvl, finalScore, stars, { blocksPlaced, budget: lvl.budget, buildBonus, timeBonus, comboBonus, completionBonus, timeRemaining: levelState.timeRemaining, passed, reason: reason || '' });
   levelState.active = false;
   hideLevelHUD();
 }
@@ -5710,7 +5734,7 @@ function showLevelResults(level, score, stars, breakdown) {
       <span>Blocks placed</span><span>${breakdown.blocksPlaced}/${breakdown.budget}</span>
     </div>
     <div style="display:flex; justify-content:space-between; padding:6px 0; font-family:'Inter',sans-serif; font-size:12px; color:#cbd5e1;">
-      <span>Budget remaining bonus (50/block)</span><span style="color:#5BAA3F;">+${breakdown.budgetBonus}</span>
+      <span>Blocks built bonus (20/block)</span><span style="color:#5BAA3F;">+${breakdown.buildBonus}</span>
     </div>
     <div style="display:flex; justify-content:space-between; padding:6px 0; font-family:'Inter',sans-serif; font-size:12px; color:#cbd5e1;">
       <span>Time remaining bonus (10/s)</span><span style="color:#5BAA3F;">+${breakdown.timeBonus}</span>
@@ -5729,17 +5753,30 @@ function showLevelResults(level, score, stars, breakdown) {
   document.getElementById('results-stars').innerHTML = `${'★'.repeat(stars)}${'☆'.repeat(3-stars)}`;
   document.getElementById('results-stars').style.color = ['#888', '#c0c0c0', '#fbbf24', '#fbbf24'][stars];
   document.getElementById('results-breakdown').innerHTML = breakdownRows;
-  // Show "Next Level" button if there's a next level
+  // Dynamic kicker + failure messaging: a timed-out / abandoned level is NOT complete
+  const kicker = document.getElementById('results-kicker');
+  if (kicker) {
+    if (breakdown.passed) {
+      kicker.textContent = 'Level Complete';
+      kicker.style.color = '#5BAA3F';
+    } else {
+      kicker.textContent = (breakdown.reason || '').toLowerCase().includes('time') ? 'Time Up!' : 'Level Failed';
+      kicker.style.color = '#ef4444';
+    }
+  }
+  // Show "Next Level" button ONLY when the level was actually passed
   const nextBtn = document.getElementById('results-next-btn');
   if (nextBtn) {
-    if (level.id < 20) {
+    if (breakdown.passed && level.id < 20) {
       nextBtn.textContent = `Next Level →`;
       nextBtn.onclick = () => { closeLevelResults(); startLevel(level.id + 1); };
       nextBtn.style.display = 'inline-flex';
-    } else {
+    } else if (breakdown.passed && level.id >= 20) {
       nextBtn.textContent = `🎉 You finished the campaign!`;
       nextBtn.onclick = () => { closeLevelResults(); showLevelSelect(); };
       nextBtn.style.display = 'inline-flex';
+    } else {
+      nextBtn.style.display = 'none';
     }
   }
   const retryBtn = document.getElementById('results-retry-btn');
@@ -5798,16 +5835,20 @@ function enterSandbox() {
         const tag=(e.target.tagName||'').toLowerCase();
         if(tag==='input'||tag==='textarea')return;
         if(e.key==='?'||(e.shiftKey&&e.key==='/')){e.preventDefault();toggleHelp();}
-        // Escape: if in level mode, return to level select; else close help
+        // Escape: if in level mode, confirm before abandoning; else close help
         if(e.key==='Escape'){
             if(levelState.active && !levelState.completed){
-                if(levelState.timerInterval)clearInterval(levelState.timerInterval);
-                levelState.active=false;
-                levelState.completed=true;
-                hideLevelHUD();
-                clearAll();
-                showLevelSelect();
-                toast('Level abandoned', 'info');
+                // Esc is reflexively pressed to close dialogs — never wipe a
+                // player's in-progress build without asking first.
+                if(confirm('Abandon this level? Your current build will be cleared.')){
+                    if(levelState.timerInterval){clearInterval(levelState.timerInterval);levelState.timerInterval=null;}
+                    levelState.active=false;
+                    levelState.completed=true;
+                    hideLevelHUD();
+                    clearAll();
+                    showLevelSelect();
+                    toast('Level abandoned', 'info');
+                }
             }
         }
     });

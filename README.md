@@ -1,249 +1,101 @@
-# 🧱 BrickForge Pro - Educational Platform
+# 🧱 BrickForge Pro — Build & Conquer
 
-A collaborative 3D building platform designed for schools to facilitate digital building projects and team-based learning.
+A Minecraft-style 3D voxel building game with a **20-level campaign** for schools.
+Students build trees, houses, bridges and castles block-by-block, earn stars,
+unlock Sandbox mode, and can optionally build together in shared multiplayer rooms.
 
-**Live site:** https://cmckhmer.github.io/brainbuilder/
+**Live site:** https://cmckhmer.github.io/Project-Build/
 
-## 🎮 Quick Start — Play Offline
+## 🎮 Quick Start — Play Now (No Install)
 
-You don't need a server to start building. Open the live site or `index.html` locally and start placing blocks immediately.
+1. Open the live site (or open `index.html` directly in any modern browser).
+2. Pick **Level 1. First Tree** from the Forest chapter and press **▶ Start Building**.
+3. Left-click the ground to place blocks. That's it — the first level teaches the rest.
 
-1. Visit https://cmckhmer.github.io/brainbuilder/ or run a static server:
-   ```bash
-   python3 -m http.server 8000
-   # then open http://localhost:8000
-   ```
-2. When the multiplayer dialog appears, click **Continue Offline**.
-3. Click anywhere on the ground to place a block. The Build tool is active by default.
-4. Press `?` any time to see all keyboard shortcuts (or click the `? Help` button in the toolbar).
+Progress (stars, completed levels) is saved automatically in your browser.
 
-## 🔑 Keyboard Shortcuts
+## 🏆 Campaign
+
+- **20 levels across 4 chapters** — Forest, City, Desert, Fantasy
+- **3-star scoring**: finish fast, use your full block budget, keep a combo going
+- **Boss build levels** at the end of each chapter
+- **Sandbox mode** unlocks after completing level 5 — free building with all blocks
+- Levels have a **time limit and block budget**; the timer starts only after you
+  dismiss the mission brief, so reading the hint costs you nothing
+
+## ⌨️ Keyboard Shortcuts
 
 | Key | Action |
 |---|---|
-| `B` | Build mode (default) |
-| `E` | Erase mode |
+| `B` | Build tool (default) |
+| `E` | Erase tool |
 | `R` | Rotate block |
 | `Ctrl+Z` | Undo |
 | `Ctrl+Y` | Redo |
-| `Ctrl+S` | Save scene |
+| `Ctrl+S` | Save scene (opens save modal) |
 | `T` | Toggle toolbar |
 | `G` | Toggle grid snap |
-| `P` | Screenshot |
+| `P` | Screenshot (PNG) |
 | `M` | Mute sounds |
 | `N` | Day/night cycle |
 | `F` | Toggle fog |
-| `?` | Toggle this help modal |
+| `?` | Help modal |
+| `Esc` | Confirm-abandon a level / close dialogs |
+| Left-drag | Place / erase (tool-dependent) |
 | Right-drag | Rotate camera |
 | Middle-drag | Pan camera |
+| Wheel | Zoom camera |
 
-## 🚀 Quick Start — Multiplayer Classroom
+On phones/tablets: one finger rotates the camera, the toolbar places blocks,
+and all menus scroll normally.
 
-### For Teachers
+## 👥 Multiplayer Classroom (Optional)
 
-1. **Start the Server**
+The core campaign is fully offline. For shared building rooms:
+
+1. **Start the WebSocket server** (any machine on the school network or a small VPS):
    ```bash
    npm install
-   npm start
+   npm start        # serves on PORT 3000 by default
    ```
+2. Open the site, click **Join Room** in the multiplayer dialog.
+3. Teachers enter a name, pick **Teacher**, create a room and share the 6-char code.
+4. Students pick **Student**, enter the code, and build together in real time.
+5. Teachers can post assignments, lock/unlock the room, and monitor progress.
 
-2. **Open Browser**
-   Navigate to `http://localhost:3000`
+Multiplayer sync runs on **Firebase Realtime Database** (project
+`creative-minds-cambodia`, region `asia-southeast1`). Rooms live only in the
+database — nothing to install on student devices.
 
-
-3. **Login as Teacher**
-   - Enter your name
-   - Select "Teacher" role
-   - Click "Enter Platform"
-
-4. **Create a Project**
-   - Click "Create New Project"
-   - Enter project name and assignment details
-   - Share the Room ID with students
-
-5. **Monitor and Guide**
-   - Lock/unlock the room to control editing
-   - View student progress in real-time
-   - Chat with students
-   - Review submissions
-
-### For Students
-
-1. **Join the Platform**
-   - Enter your name
-   - Select "Student" role
-   - Click "Enter Platform"
-
-2. **Join a Room**
-   - Click on a project from the list, OR
-   - Enter the Room ID provided by your teacher
-   - Click "Join"
-
-3. **Build Together**
-   - Place blocks to build your project
-   - Chat with teammates
-   - See everyone's cursor positions
-   - Submit your work when done
-
-## ✨ Features
-
-### 🎓 Educational Features
-
-- **Assignment System**: Teachers can create assignments with descriptions and requirements
-- **Real-time Collaboration**: Multiple students can build together simultaneously
-- **Progress Monitoring**: Teachers can watch student progress in real-time
-- **Submission System**: Students submit their work with comments
-- **Room Locking**: Teachers can lock rooms to prevent changes during instruction
-
-### 💬 Communication
-
-- **Team Chat**: Built-in chat for team coordination
-- **User Presence**: See who's online and their role
-- **Remote Cursors**: See where teammates are looking/pointing
-- **System Messages**: Automatic notifications for joins, leaves, and actions
-
-### 🎮 Building Features
-
-- **20+ Block Types**: Bricks, slopes, trees, windows, doors, and more
-- **Multiplayer Sync**: All block changes sync instantly
-- **Undo/Redo**: Full history support (Ctrl+Z / Ctrl+Y)
-- **Color Palette**: 24 colors for customization
-- **3D Model Import**: Support for .glb, .gltf, and .obj files
-
-### 🎨 Environment
-
-- **Day/Night Cycle**: Adjustable time of day
-- **Weather Effects**: Rain and snow
-- **Themes**: Dark and light mode
-- **Auto-rotate Camera**: For presentations
-
-### 💾 Save & Share
-
-- **Export Build**: Save your creation as JSON
-- **Import Build**: Load previous saves
-- **Screenshots**: Capture your work as PNG
+> Note: the game itself is static and works on GitHub Pages; only the
+> multiplayer room sync needs the Firebase project (already configured).
 
 ## 🖥️ System Requirements
 
-- **Node.js** 14+ (for server)
-- **Modern Web Browser** with WebGL support
-- **Network**: All users must be on the same network or server must be publicly accessible
+- A modern browser with WebGL (Chrome/Edge/Firefox/Safari)
+- No build step, no dependencies to install for single-player
 
-## 🌐 Deployment for Schools
-
-### Local Network (Classroom)
-
-1. Run the server on a classroom computer
-2. Find the server's IP address: `ipconfig` (Windows) or `ifconfig` (Mac/Linux)
-3. Students access via: `http://[SERVER_IP]:3000`
-
-### Cloud Deployment
-
-For remote learning, deploy to:
-- **Heroku**: `git push heroku main`
-- **Railway**: Connect GitHub repo
-- **AWS/GCP**: Use EC2/Compute Engine
-- **Vercel**: Not recommended (needs WebSocket support)
-
-### Docker Deployment
-
-```dockerfile
-FROM node:18-alpine
-WORKDIR /app
-COPY package*.json ./
-RUN npm install
-COPY . .
-EXPOSE 8080
-CMD ["npm", "start"]
-```
-
-```bash
-docker build -t brickforge-pro .
-docker run -p 8080:8080 brickforge-pro
-```
-
-## 📋 Keyboard Shortcuts
-
-| Key | Action |
-|-----|--------|
-| B / Space | Place block |
-| R | Rotate block |
-| T | Build tool |
-| E | Erase tool |
-| P | Paint tool |
-| S | Select tool |
-| W | Toggle weather |
-| A | Auto-rotate camera |
-| G | Toggle grid |
-| X | Toggle snap |
-| H | Toggle help |
-| Tab | Toggle UI |
-| Ctrl+Z | Undo |
-| Ctrl+Y | Redo |
-| Ctrl+D | Duplicate selected |
-| Delete | Delete selected |
-
-## 🏗️ Project Structure
+## 🗂️ Project Structure
 
 ```
-BrickForgePro/
-├── index.html          # Main client application
-├── server.js           # WebSocket server
-├── package.json        # Dependencies
-├── README.md          # This file
-└── .gitignore         # Git ignore rules
+Project-Build/
+├── index.html      # The entire game (single file, self-contained)
+├── server.js       # Optional WebSocket relay for local multiplayer
+├── public/         # Static assets
+├── src/            # Legacy Next.js prototype (not used by the deployed game)
+└── README.md
 ```
 
-## 🔒 Security Considerations
+## 🔒 Privacy & Safety
 
-- **No Authentication**: Current version uses simple name-based identification
-- **Room Isolation**: Each room is separate; users can't access other rooms
-- **Teacher Controls**: Only teachers can create rooms, lock rooms, clear blocks
-- **No Persistence**: Rooms are deleted 5 minutes after all users leave
-
-## 🐛 Troubleshooting
-
-### Connection Issues
-- Check firewall settings (port 8080)
-- Verify all users are on the same network
-- Check browser console for errors
-
-### WebGL Not Working
-- Update graphics drivers
-- Enable hardware acceleration in browser
-- Try a different browser (Chrome recommended)
-
-### Port Already in Use
-The default port is 3000. To use a different port:
-```bash
-PORT=8080 npm start  # Unix/Mac
-set PORT=8080 && npm start  # Windows
-```
-
-## 🤝 Contributing
-
-This is an educational open-source project. Contributions welcome!
-
-### Ideas for Enhancement
-- [ ] User accounts and authentication
-- [ ] Persistent room storage (database)
-- [ ] Project templates
-- [ ] Grading/rubric system
-- [ ] Screen sharing for teachers
-- [ ] Audio chat
-- [ ] Mobile app
-- [ ] VR support
+- No accounts, no personal data collection — progress stays in the browser's
+  `localStorage`; multiplayer rooms only store display names and block data
+- Teacher controls: room locking, clearing blocks, assignment posts
 
 ## 📜 License
 
-MIT License - Free for educational use
-
-## 🙏 Credits
-
-- **Three.js** - 3D rendering
-- **WebSocket** - Real-time communication
-- **Tailwind CSS** - Styling
+MIT — free for educational use.
 
 ---
 
-**Built for educators who want to bring creativity into the classroom.** 🎓✨
+**Built for classrooms. Place your first block in 10 seconds.** 🎓
