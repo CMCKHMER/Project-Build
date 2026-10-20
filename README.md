@@ -1,15 +1,27 @@
 # 🧱 BrickForge Pro — Build & Conquer
 
-A Minecraft-style 3D voxel building game with a **20-level campaign** for schools.
-Students build trees, houses, bridges and castles block-by-block, earn stars,
-unlock Sandbox mode, and can optionally build together in shared multiplayer rooms.
+A Minecraft-style 3D voxel building game for schools, with **four game modes**:
+a 20-level campaign, free building, teacher-assigned class projects, and live
+team multiplayer. Students build trees, houses, bridges and castles
+block-by-block, earn stars, and can build together in shared rooms.
 
 **Live site:** https://cmckhmer.github.io/Project-Build/
+
+## 🚪 Start Screen — Pick Your Mode
+
+| Mode | What it is |
+|---|---|
+| 🏁 **Campaign** | 20 missions across 4 chapters — earn up to 60 stars |
+| 🎨 **Free Build** | The whole workshop, every block, no budgets or timers |
+| 📋 **Class Projects** | Builds assigned by a teacher: a brief, block budget & deadline |
+| 👥 **Team Build** | Live shared world via room code — build together in 4 teams |
+
+A 🏠 button in-game returns to the menu at any time (your build stays loaded).
 
 ## 🎮 Quick Start — Play Now (No Install)
 
 1. Open the live site (or open `index.html` directly in any modern browser).
-2. Pick **Level 1. First Tree** from the Forest chapter and press **▶ Start Building**.
+2. Pick a mode on the start screen — **Campaign → Level 1. First Tree** is the classic start.
 3. Left-click the ground to place blocks. That's it — the first level teaches the rest.
 
 Progress (stars, completed levels) is saved automatically in your browser.
@@ -19,9 +31,33 @@ Progress (stars, completed levels) is saved automatically in your browser.
 - **20 levels across 4 chapters** — Forest, City, Desert, Fantasy
 - **3-star scoring**: finish fast, use your full block budget, keep a combo going
 - **Boss build levels** at the end of each chapter
-- **Sandbox mode** unlocks after completing level 5 — free building with all blocks
+- **Sandbox mode** also unlocks after completing level 5 (or use Free Build from the menu anytime)
 - Levels have a **time limit and block budget**; the timer starts only after you
   dismiss the mission brief, so reading the hint costs you nothing
+
+## 📋 Class Projects (Teacher-Assigned)
+
+- 6 built-in sample briefs: River Bridge, Khmer Temple (Wat), Stilt House,
+  Dream Classroom, Floating Village (Tonlé Sap) and School Garden
+- Each project runs on the campaign engine: brief card → budget & timer →
+  star-scored results
+- **Teachers post their own projects** from any Team Build room:
+  *Classroom Control → Create Assignment → **Post to Class Projects***
+  — title, description, requirements, due date, block budget and time limit
+- Posted projects appear **live** for every student on the Class Projects screen
+  (Firebase path `brickforge-projects`); samples work fully offline
+
+## 👥 Team Build (Live Multiplayer)
+
+1. Pick **Team Build** on the start screen, enter your name and pick a team
+   (Mint, Amber, Sky or Coral).
+2. **Create a room** (generates a 4-letter code) or **Join** with a shared code.
+3. Everyone in the room builds in the same world — block places **and erases**
+   sync live to all players.
+4. The room pill (top-left) shows the code, your team and online count; click it
+   for the **team roster** with per-team block totals.
+5. Teachers tick *"I'm the teacher"* to get classroom controls: lock the room,
+   clear all blocks, post room assignments / class projects, export progress.
 
 ## ⌨️ Keyboard Shortcuts
 
@@ -49,26 +85,15 @@ Progress (stars, completed levels) is saved automatically in your browser.
 On phones/tablets: one finger rotates the camera, the toolbar places blocks,
 and all menus scroll normally.
 
-## 👥 Multiplayer Classroom (Optional)
+## 🌐 Multiplayer Backend
 
-The core campaign is fully offline. For shared building rooms:
+Team Build and Class Projects sync through **Firebase Realtime Database**
+(project `creative-minds-cambodia`, region `asia-southeast1`) — rooms live only
+in the database, nothing to install on student devices. The game itself is
+static and works on GitHub Pages; Campaign and Free Build run fully offline.
 
-1. **Start the WebSocket server** (any machine on the school network or a small VPS):
-   ```bash
-   npm install
-   npm start        # serves on PORT 3000 by default
-   ```
-2. Open the site, click **Join Room** in the multiplayer dialog.
-3. Teachers enter a name, pick **Teacher**, create a room and share the 6-char code.
-4. Students pick **Student**, enter the code, and build together in real time.
-5. Teachers can post assignments, lock/unlock the room, and monitor progress.
-
-Multiplayer sync runs on **Firebase Realtime Database** (project
-`creative-minds-cambodia`, region `asia-southeast1`). Rooms live only in the
-database — nothing to install on student devices.
-
-> Note: the game itself is static and works on GitHub Pages; only the
-> multiplayer room sync needs the Firebase project (already configured).
+> Note: for room writes to succeed, publish `database.rules.json` in the
+> Firebase Console → Realtime Database → Rules.
 
 ## 🖥️ System Requirements
 
