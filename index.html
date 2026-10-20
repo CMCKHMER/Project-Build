@@ -1296,6 +1296,224 @@ button, [role="button"], input, textarea, select { touch-action: manipulation; }
     </div>
 </div>
 
+<!-- ==================== START SCREEN (GAME MODE SELECT) ==================== -->
+<style id="startui-css">
+#start-screen { position:fixed; inset:0; z-index:99995; display:none; flex-direction:column; align-items:center; justify-content:center; overflow-y:auto; padding:38px 20px 60px;
+    background:radial-gradient(1100px 520px at 12% -8%, rgba(62,224,143,0.14), transparent 60%), radial-gradient(900px 480px at 92% 6%, rgba(42,169,214,0.11), transparent 60%), radial-gradient(700px 420px at 50% 115%, rgba(255,184,77,0.08), transparent 60%), linear-gradient(180deg,#0A1D17 0%,#081411 55%,#071019 100%); }
+#start-screen::-webkit-scrollbar { width:9px; }
+#start-screen::-webkit-scrollbar-thumb { background:rgba(62,224,143,0.25); border-radius:5px; }
+.start-cube { position:absolute; opacity:0.55; animation:cubeFloat 7s ease-in-out infinite; pointer-events:none; z-index:0; filter:drop-shadow(0 10px 22px rgba(0,0,0,0.45)); }
+@keyframes cubeFloat { 0%,100% { transform:translateY(0) rotate(-2deg); } 50% { transform:translateY(-22px) rotate(3deg); } }
+.start-inner { position:relative; z-index:1; width:100%; max-width:1080px; text-align:center; animation:fade-slide-up 0.7s 0.05s cubic-bezier(0.22,1.2,0.36,1) both; }
+.start-logo-row { display:flex; align-items:center; justify-content:center; gap:12px; flex-wrap:wrap; margin-bottom:8px; }
+.start-logo { font-family:'Outfit',sans-serif; font-size:clamp(38px,6vw,58px); font-weight:800; color:#fff; letter-spacing:-0.02em; text-shadow:0 4px 30px rgba(62,224,143,0.25); }
+.start-logo em { font-style:normal; color:#3EE08F; }
+.start-badge { font-family:'Outfit',sans-serif; font-size:11px; font-weight:800; letter-spacing:0.18em; padding:6px 12px; border-radius:9px; background:linear-gradient(135deg,#FFB84D,#FFA030); color:#3A2400; box-shadow:0 6px 18px rgba(255,184,77,0.35); }
+.start-tag { font-family:'Nunito',sans-serif; font-size:13px; color:#8FA9A0; letter-spacing:0.22em; text-transform:uppercase; font-weight:700; margin-bottom:34px; }
+.mode-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(320px,1fr)); gap:20px; margin:0 auto; max-width:980px; }
+.mode-card { position:relative; text-align:left; background:rgba(13,27,22,0.72); backdrop-filter:blur(14px); border:1px solid rgba(62,224,143,0.22); border-radius:22px; overflow:hidden; cursor:pointer; transition:transform 0.28s cubic-bezier(0.22,1.2,0.36,1), border-color 0.28s, box-shadow 0.28s, background 0.28s; animation:fade-slide-up 0.65s cubic-bezier(0.22,1.2,0.36,1) both; }
+.mode-card:nth-child(1) { animation-delay:0.10s; } .mode-card:nth-child(2) { animation-delay:0.18s; } .mode-card:nth-child(3) { animation-delay:0.26s; } .mode-card:nth-child(4) { animation-delay:0.34s; }
+.mode-card:hover { transform:translateY(-7px); border-color:var(--mc,#3EE08F); background:rgba(19,38,30,0.82); box-shadow:0 24px 60px rgba(2,8,6,0.55), 0 0 42px color-mix(in srgb, var(--mc,#3EE08F) 22%, transparent); }
+.mode-card:active { transform:translateY(-3px) scale(0.99); }
+.mode-art { height:150px; display:flex; align-items:center; justify-content:center; position:relative; overflow:hidden; background:linear-gradient(180deg, color-mix(in srgb, var(--mc,#3EE08F) 9%, transparent), transparent 85%); border-bottom:1px solid rgba(255,255,255,0.05); }
+.mode-art svg { height:118px; width:auto; max-width:88%; filter:drop-shadow(0 8px 18px rgba(0,0,0,0.4)); transition:transform 0.35s cubic-bezier(0.22,1.2,0.36,1); }
+.mode-card:hover .mode-art svg { transform:scale(1.07) translateY(-3px); }
+.mode-body { padding:16px 20px 18px; }
+.mode-kicker { font-family:'Outfit',sans-serif; font-size:9px; font-weight:800; letter-spacing:0.2em; text-transform:uppercase; color:var(--mc,#3EE08F); margin-bottom:5px; display:flex; align-items:center; gap:6px; }
+.mode-title { font-family:'Outfit',sans-serif; font-size:21px; font-weight:800; color:#fff; letter-spacing:-0.01em; margin-bottom:6px; }
+.mode-desc { font-family:'Nunito',sans-serif; font-size:12.5px; line-height:1.55; color:#9DB8AE; min-height:38px; }
+.mode-cta { margin-top:12px; display:inline-flex; align-items:center; gap:7px; font-family:'Outfit',sans-serif; font-size:12px; font-weight:800; color:var(--mc,#3EE08F); letter-spacing:0.04em; }
+.mode-cta i { transition:transform 0.25s; }
+.mode-card:hover .mode-cta i { transform:translateX(5px); }
+.mode-corner { position:absolute; top:14px; right:14px; font-family:'Outfit',sans-serif; font-size:9px; font-weight:800; letter-spacing:0.12em; padding:4px 9px; border-radius:7px; background:rgba(255,255,255,0.07); color:rgba(255,255,255,0.75); border:1px solid rgba(255,255,255,0.09); }
+.start-resume { margin-top:26px; display:none; align-items:center; gap:8px; font-family:'Outfit',sans-serif; font-size:13px; font-weight:700; padding:11px 26px; border-radius:13px; background:rgba(255,255,255,0.06); color:#B9F7D4; border:1px solid rgba(62,224,143,0.3); cursor:pointer; transition:all 0.2s; }
+.start-resume:hover { background:rgba(62,224,143,0.14); transform:translateY(-2px); }
+.start-foot { margin-top:30px; font-family:'Nunito',sans-serif; font-size:11px; color:rgba(143,169,160,0.55); }
+.start-foot b { color:rgba(185,247,212,0.7); }
+/* ---- HOME BUTTON + MP PILL ---- */
+#home-btn { display:none; position:fixed; top:14px; left:14px; z-index:99987; width:44px; height:44px; border-radius:13px; background:rgba(13,27,22,0.8); backdrop-filter:blur(10px); border:1px solid rgba(62,224,143,0.3); color:#B9F7D4; cursor:pointer; font-size:16px; align-items:center; justify-content:center; transition:all 0.2s; box-shadow:0 8px 22px rgba(2,8,6,0.45); }
+#home-btn:hover { background:rgba(62,224,143,0.16); transform:translateY(-2px); color:#fff; }
+#mp-hud-pill { display:none; position:fixed; top:14px; left:66px; z-index:99987; height:44px; padding:0 16px; border-radius:13px; background:rgba(13,27,22,0.8); backdrop-filter:blur(10px); border:1px solid rgba(62,224,143,0.3); color:#E7FFF3; font-family:'Outfit',sans-serif; font-size:11px; font-weight:700; align-items:center; gap:9px; cursor:pointer; transition:all 0.2s; box-shadow:0 8px 22px rgba(2,8,6,0.45); white-space:nowrap; }
+#mp-hud-pill:hover { background:rgba(62,224,143,0.14); }
+#mp-hud-pill .pill-room { letter-spacing:0.08em; color:#B9F7D4; } #mp-hud-pill .pill-room b { color:#fff; }
+#mp-hud-pill .pill-dot { width:11px; height:11px; border-radius:50%; background:#3EE08F; box-shadow:0 0 10px currentColor; }
+#mp-hud-pill .pill-sep { width:1px; height:18px; background:rgba(255,255,255,0.12); }
+#team-roster { display:none; position:fixed; top:66px; left:14px; z-index:99986; width:280px; max-height:62vh; overflow-y:auto; background:rgba(13,27,22,0.94); backdrop-filter:blur(14px); border:1px solid rgba(62,224,143,0.3); border-radius:18px; padding:16px; box-shadow:0 24px 60px rgba(2,8,6,0.6); animation:fade-slide-up 0.3s cubic-bezier(0.22,1.2,0.36,1) both; }
+#team-roster h4 { margin:0 0 10px; font-family:'Outfit',sans-serif; font-size:12px; letter-spacing:0.14em; text-transform:uppercase; color:#8FA9A0; }
+.roster-team-head { display:flex; justify-content:space-between; align-items:center; font-family:'Outfit',sans-serif; font-size:11px; font-weight:800; margin:10px 0 5px; }
+.roster-row { display:flex; align-items:center; gap:8px; padding:4px 0; font-family:'Nunito',sans-serif; font-size:12px; color:#DFF7EA; }
+.roster-row .r-dot { width:9px; height:9px; border-radius:50%; flex-shrink:0; }
+.roster-row .r-count { margin-left:auto; font-family:'Outfit',sans-serif; font-size:10px; font-weight:800; color:#FFB84D; }
+.roster-row.me { background:rgba(62,224,143,0.08); border-radius:7px; padding:4px 6px; margin:0 -6px; }
+@media (max-width:640px) {
+    #start-screen { padding:26px 14px 48px; }
+    .mode-grid { grid-template-columns:1fr; }
+    .mode-art { height:120px; } .mode-art svg { height:92px; }
+    #mp-hud-pill { top:64px; left:14px; height:38px; font-size:10px; padding:0 12px; }
+    #home-btn { width:38px; height:38px; }
+    #team-roster { width:calc(100vw - 28px); }
+}
+</style>
+<div id="start-screen">
+    <div id="start-cubes"></div>
+    <div class="start-inner">
+        <div class="start-logo-row">
+            <span class="start-logo">BRICK<em>FORGE</em></span>
+            <span class="start-badge">PRO</span>
+        </div>
+        <div class="start-tag">Classroom Edition — Pick Your Mode</div>
+        <div class="mode-grid">
+            <div class="mode-card" style="--mc:#3EE08F;" onclick="startCampaign()" onmouseenter="this.style.setProperty('--mc','#3EE08F')">
+                <div class="mode-corner">20 LEVELS</div>
+                <div class="mode-art" data-art="campaign"></div>
+                <div class="mode-body">
+                    <div class="mode-kicker"><i class="fas fa-flag"></i> Adventure</div>
+                    <div class="mode-title">Campaign</div>
+                    <div class="mode-desc">20 building missions across 4 chapters. Earn stars, beat the clock and unlock the sandbox.</div>
+                    <span class="mode-cta">Start the quest <i class="fas fa-arrow-right"></i></span>
+                </div>
+            </div>
+            <div class="mode-card" style="--mc:#4FB8E8;" onclick="startFreeBuild()">
+                <div class="mode-corner">NO LIMITS</div>
+                <div class="mode-art" data-art="free"></div>
+                <div class="mode-body">
+                    <div class="mode-kicker"><i class="fas fa-palette"></i> Creative</div>
+                    <div class="mode-title">Free Build</div>
+                    <div class="mode-desc">The whole 3D workshop to yourself — every block, every scene, no budgets and no timers.</div>
+                    <span class="mode-cta">Enter the workshop <i class="fas fa-arrow-right"></i></span>
+                </div>
+            </div>
+            <div class="mode-card" style="--mc:#FFB84D;" onclick="openProjects()">
+                <div class="mode-corner">TEACHER SET</div>
+                <div class="mode-art" data-art="projects"></div>
+                <div class="mode-body">
+                    <div class="mode-kicker"><i class="fas fa-clipboard-list"></i> Assignments</div>
+                    <div class="mode-title">Class Projects</div>
+                    <div class="mode-desc">Builds assigned by your teacher — a brief, a block budget and a deadline. Show what you've learned.</div>
+                    <span class="mode-cta">Open project briefs <i class="fas fa-arrow-right"></i></span>
+                </div>
+            </div>
+            <div class="mode-card" style="--mc:#FF8A7A;" onclick="openTeamBuild()">
+                <div class="mode-corner">LIVE · 4 TEAMS</div>
+                <div class="mode-art" data-art="team"></div>
+                <div class="mode-body">
+                    <div class="mode-kicker"><i class="fas fa-users"></i> Multiplayer</div>
+                    <div class="mode-title">Team Build</div>
+                    <div class="mode-desc">Join a room code with your classmates and build one world together — live, block by block, in teams.</div>
+                    <span class="mode-cta">Grab a team <i class="fas fa-arrow-right"></i></span>
+                </div>
+            </div>
+        </div>
+        <button class="start-resume" id="start-resume-btn" onclick="hideStartScreen()"><i class="fas fa-arrow-rotate-left"></i> Back to your build</button>
+        <div class="start-foot">A <b>Creative Minds Cambodia</b> build studio · works offline in Free Build &amp; Campaign</div>
+    </div>
+</div>
+
+<!-- ==================== CLASS PROJECTS MODAL ==================== -->
+<style id="projects-css">
+#projects-modal { display:none; position:fixed; inset:0; z-index:99994; overflow-y:auto; background:radial-gradient(1000px 500px at 15% -5%, rgba(255,184,77,0.12), transparent 60%), radial-gradient(900px 480px at 90% 8%, rgba(62,224,143,0.1), transparent 60%), linear-gradient(180deg,#0A1D17 0%,#081411 55%,#071019 100%); }
+#projects-modal .proj-wrap { max-width:1080px; margin:0 auto; padding:40px 24px 60px; animation:fade-slide-up 0.5s 0.05s cubic-bezier(0.22,1.2,0.36,1) both; }
+.proj-head { text-align:center; margin-bottom:30px; }
+.proj-title { font-family:'Outfit',sans-serif; font-size:36px; font-weight:800; color:#fff; letter-spacing:-0.02em; }
+.proj-title span { color:#FFB84D; }
+.proj-sub { font-family:'Nunito',sans-serif; font-size:12px; color:#8FA9A0; letter-spacing:0.14em; text-transform:uppercase; font-weight:700; margin-top:5px; }
+.proj-back { position:sticky; top:14px; z-index:5; float:left; display:inline-flex; align-items:center; gap:8px; font-family:'Outfit',sans-serif; font-size:12px; font-weight:700; padding:9px 18px; border-radius:12px; background:rgba(13,27,22,0.85); color:#B9F7D4; border:1px solid rgba(62,224,143,0.3); cursor:pointer; backdrop-filter:blur(10px); transition:all 0.2s; }
+.proj-back:hover { background:rgba(62,224,143,0.16); }
+.proj-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:16px; clear:both; }
+.proj-card { background:rgba(13,27,22,0.72); border:1px solid rgba(255,255,255,0.08); border-radius:18px; padding:20px; cursor:pointer; transition:all 0.25s cubic-bezier(0.22,1.2,0.36,1); position:relative; overflow:hidden; animation:fade-slide-up 0.5s cubic-bezier(0.22,1.2,0.36,1) both; }
+.proj-card:hover { transform:translateY(-4px); border-color:var(--pc,#FFB84D); background:rgba(19,38,30,0.82); box-shadow:0 18px 44px rgba(2,8,6,0.5); }
+.proj-card .p-icon { width:46px; height:46px; border-radius:13px; display:flex; align-items:center; justify-content:center; font-size:22px; background:color-mix(in srgb, var(--pc,#FFB84D) 14%, transparent); border:1px solid color-mix(in srgb, var(--pc,#FFB84D) 30%, transparent); margin-bottom:12px; }
+.proj-card .p-title { font-family:'Outfit',sans-serif; font-size:17px; font-weight:800; color:#fff; margin-bottom:5px; }
+.proj-card .p-desc { font-family:'Nunito',sans-serif; font-size:12px; line-height:1.55; color:#9DB8AE; margin-bottom:10px; }
+.proj-card .p-reqs { display:flex; flex-wrap:wrap; gap:5px; margin-bottom:12px; }
+.proj-card .p-req { font-family:'Nunito',sans-serif; font-size:10px; font-weight:700; color:#B9F7D4; background:rgba(62,224,143,0.1); border:1px solid rgba(62,224,143,0.2); padding:3px 8px; border-radius:6px; }
+.proj-card .p-meta { display:flex; justify-content:space-between; align-items:center; font-family:'Outfit',sans-serif; font-size:10.5px; font-weight:700; color:#8FA9A0; }
+.proj-card .p-badge { position:absolute; top:14px; right:14px; font-family:'Outfit',sans-serif; font-size:8.5px; font-weight:800; letter-spacing:0.1em; padding:3px 8px; border-radius:6px; text-transform:uppercase; }
+.proj-note { margin-top:22px; text-align:center; font-family:'Nunito',sans-serif; font-size:11.5px; color:rgba(143,169,160,0.7); }
+@media (max-width:640px) { .proj-grid { grid-template-columns:1fr; } .proj-title { font-size:28px; } }
+</style>
+<div id="projects-modal">
+    <div class="proj-wrap">
+        <button class="proj-back" onclick="closeProjects()"><i class="fas fa-arrow-left"></i> Menu</button>
+        <div class="proj-head">
+            <div class="proj-title">Class <span>Projects</span></div>
+            <div class="proj-sub">Builds assigned by your teacher · a brief, a budget &amp; a deadline</div>
+        </div>
+        <div class="proj-grid" id="projects-grid"></div>
+        <div class="proj-note" id="projects-note">Loading teacher projects…</div>
+    </div>
+</div>
+
+<!-- ==================== TEAM BUILD (MULTIPLAYER) MODAL ==================== -->
+<style id="team-css">
+#team-modal { display:none; position:fixed; inset:0; z-index:99996; background:rgba(4,12,9,0.88); backdrop-filter:blur(14px); align-items:center; justify-content:center; padding:18px; }
+#team-modal .team-dialog { width:480px; max-width:96vw; max-height:92vh; overflow-y:auto; background:rgba(13,27,22,0.96); border:1px solid rgba(62,224,143,0.32); border-radius:24px; padding:30px 30px 26px; box-shadow:0 30px 90px rgba(2,8,6,0.7), 0 0 60px rgba(62,224,143,0.1); animation:fade-slide-up 0.45s cubic-bezier(0.22,1.2,0.36,1) both; }
+.team-logo { text-align:center; margin-bottom:4px; font-family:'Outfit',sans-serif; font-size:24px; font-weight:800; color:#fff; }
+.team-logo b { color:#3EE08F; }
+.team-tagline { text-align:center; font-family:'Nunito',sans-serif; font-size:11px; letter-spacing:0.22em; text-transform:uppercase; color:rgba(255,255,255,0.4); font-weight:700; margin-bottom:20px; }
+.tfield-label { display:block; font-family:'Outfit',sans-serif; font-size:9.5px; font-weight:800; letter-spacing:0.18em; text-transform:uppercase; color:#8FA9A0; margin:14px 0 7px; }
+.tinput { width:100%; box-sizing:border-box; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.12); border-radius:12px; padding:12px 15px; color:#fff; font-family:'Nunito',sans-serif; font-size:14px; outline:none; transition:border 0.2s, box-shadow 0.2s; }
+.tinput:focus { border-color:#3EE08F; box-shadow:0 0 0 3px rgba(62,224,143,0.15); }
+.team-pick { display:grid; grid-template-columns:repeat(2,1fr); gap:8px; }
+.team-opt { display:flex; align-items:center; gap:9px; padding:10px 12px; border-radius:12px; background:rgba(255,255,255,0.04); border:1.5px solid rgba(255,255,255,0.09); cursor:pointer; transition:all 0.18s; font-family:'Outfit',sans-serif; font-size:12.5px; font-weight:700; color:#DFF7EA; }
+.team-opt .t-dot { width:14px; height:14px; border-radius:50%; flex-shrink:0; box-shadow:0 0 10px currentColor; }
+.team-opt:hover { background:rgba(255,255,255,0.08); }
+.team-opt.selected { border-color:var(--tc); background:color-mix(in srgb, var(--tc) 12%, transparent); color:#fff; }
+.team-room-row { display:flex; gap:9px; }
+.team-room-row .tinput { flex:1; text-transform:uppercase; font-family:'Outfit',sans-serif; letter-spacing:0.14em; font-size:17px; font-weight:800; text-align:center; }
+.tbtn { flex-shrink:0; font-family:'Outfit',sans-serif; font-size:13px; font-weight:800; padding:0 20px; border-radius:12px; border:none; cursor:pointer; transition:all 0.2s; display:inline-flex; align-items:center; justify-content:center; gap:8px; }
+.tbtn-mint { background:linear-gradient(135deg,#3EE08F,#2FCB82); color:#06231A; box-shadow:0 8px 24px rgba(62,224,143,0.35); }
+.tbtn-mint:hover { transform:translateY(-2px); box-shadow:0 12px 30px rgba(62,224,143,0.5); }
+.tbtn-amber { background:linear-gradient(135deg,#FFB84D,#FFA030); color:#3A2400; box-shadow:0 8px 24px rgba(255,184,77,0.3); }
+.tbtn-amber:hover { transform:translateY(-2px); }
+.tbtn-ghost { background:rgba(255,255,255,0.06); color:#B9F7D4; border:1px solid rgba(62,224,143,0.25); }
+.tbtn-ghost:hover { background:rgba(62,224,143,0.12); }
+.team-divider { display:flex; align-items:center; gap:12px; margin:18px 0; color:rgba(255,255,255,0.3); font-family:'Outfit',sans-serif; font-size:10px; font-weight:800; letter-spacing:0.2em; }
+.team-divider::before, .team-divider::after { content:''; flex:1; height:1px; background:rgba(255,255,255,0.08); }
+.team-role-row { display:flex; align-items:center; gap:10px; margin-top:4px; font-family:'Nunito',sans-serif; font-size:12.5px; color:#9DB8AE; cursor:pointer; user-select:none; }
+.team-role-row input { accent-color:#3EE08F; width:16px; height:16px; cursor:pointer; }
+#team-status { margin-top:14px; text-align:center; font-family:'Nunito',sans-serif; font-size:12px; min-height:18px; color:#FFB84D; }
+.team-back-row { text-align:center; margin-top:12px; }
+.team-back-row button { background:none; border:none; color:rgba(255,255,255,0.45); font-family:'Outfit',sans-serif; font-size:12px; font-weight:700; cursor:pointer; padding:6px 14px; border-radius:9px; transition:all 0.2s; }
+.team-back-row button:hover { color:#fff; background:rgba(255,255,255,0.06); }
+.team-hint { margin-top:16px; background:rgba(79,184,232,0.07); border:1px solid rgba(79,184,232,0.2); border-radius:12px; padding:11px 14px; font-family:'Nunito',sans-serif; font-size:11.5px; line-height:1.55; color:#A8D4EA; }
+.team-hint b { color:#fff; }
+@media (max-width:520px) { .team-pick { grid-template-columns:1fr; } #team-modal .team-dialog { padding:24px 20px; } }
+</style>
+<div id="team-modal">
+    <div class="team-dialog">
+        <div class="team-logo">Team <b>Build</b></div>
+        <div class="team-tagline">One world · live · 4 teams</div>
+        <label class="tfield-label">Your name</label>
+        <input type="text" id="tm-name" class="tinput" placeholder="e.g. Dara, Sophea, Vishnu…" maxlength="18" autocomplete="off">
+        <label class="tfield-label">Pick your team</label>
+        <div class="team-pick" id="tm-team-pick"></div>
+        <div class="team-divider">ROOM CODE</div>
+        <div class="team-room-row">
+            <input type="text" id="tm-room" class="tinput" placeholder="ABCD" maxlength="6" autocomplete="off">
+            <button class="tbtn tbtn-mint" onclick="joinTeamRoom()"><i class="fas fa-door-open"></i> Join</button>
+        </div>
+        <div style="height:10px;"></div>
+        <button class="tbtn tbtn-amber" style="width:100%; height:44px;" onclick="createTeamRoom()"><i class="fas fa-wand-magic-sparkles"></i> Create a new room</button>
+        <label class="team-role-row" style="margin-top:16px;"><input type="checkbox" id="tm-teacher"> I'm the teacher (classroom controls)</label>
+        <div id="team-status"></div>
+        <div class="team-hint"><b>How it works:</b> share the room code with your class. Everyone in the room builds in the same world — place and erase blocks live, and the scoreboard tracks each team's blocks.</div>
+        <div class="team-back-row"><button onclick="closeTeamModal()"><i class="fas fa-arrow-left"></i> Back to menu</button></div>
+    </div>
+</div>
+
+<!-- ==================== IN-GAME MENU BUTTON + TEAM HUD PILL ==================== -->
+<button id="home-btn" onclick="homeBtnClick()" title="Game menu"><i class="fas fa-home"></i></button>
+<div id="mp-hud-pill" onclick="toggleRoster()" title="Team roster">
+    <span class="pill-room">ROOM <b id="pill-room-code">----</b></span>
+    <span class="pill-dot" id="pill-team-dot"></span>
+    <span id="pill-team-name">Team</span>
+    <span class="pill-sep"></span>
+    <i class="fas fa-user-group" style="font-size:10px;"></i>
+    <b id="pill-count">1</b>
+</div>
+<div id="team-roster"><h4>Team Roster</h4><div id="team-roster-body"></div></div>
+
 <div id="canvas-container"></div>
 
 <!-- MOBILE CONTROLS -->
@@ -1401,9 +1619,14 @@ button, [role="button"], input, textarea, select { touch-action: manipulation; }
         <div style="margin-bottom:15px;"><label class="field-label">Description</label><textarea id="mp-assign-desc" class="mp-input mp-textarea" placeholder="Describe the project goals..."></textarea></div>
         <div style="margin-bottom:15px;"><label class="field-label">Requirements (one per line)</label><textarea id="mp-assign-req" class="mp-input mp-textarea" placeholder="Minimum 50 blocks&#10;Include nature elements&#10;Use 3+ materials"></textarea></div>
         <div style="margin-bottom:22px;"><label class="field-label">Due Date</label><input type="datetime-local" id="mp-assign-due" class="mp-input" style="color-scheme:dark;"></div>
-        <div style="display:flex; gap:10px; justify-content:flex-end;">
+        <div style="display:flex; gap:10px; margin-bottom:22px;">
+            <div style="flex:1;"><label class="field-label">Block Budget</label><input type="number" id="mp-assign-budget" class="mp-input" value="80" min="10" max="500"></div>
+            <div style="flex:1;"><label class="field-label">Time Limit (s)</label><input type="number" id="mp-assign-time" class="mp-input" value="300" min="60" max="1800" step="30"></div>
+        </div>
+        <div style="display:flex; gap:10px; justify-content:flex-end; flex-wrap:wrap;">
             <button onclick="document.getElementById('mp-assignment-modal').style.display='none'" class="glass-btn">Cancel</button>
-            <button onclick="saveAssignment()" class="glass-btn active">Post Assignment</button>
+            <button onclick="saveClassProject()" class="glass-btn" style="border-color:rgba(255,184,77,0.5); color:#FFB84D;"><i class="fas fa-folder-open"></i> Post to Class Projects</button>
+            <button onclick="saveAssignment()" class="glass-btn active">Post to Room</button>
         </div>
     </div>
 </div>
@@ -2470,6 +2693,11 @@ function eraseBlock(target) {
         levelState.comboCount = 0;
         levelState.combo = 1;
         updateLevelHUD();
+    }
+    // Team sync: broadcast erase so remote players remove it too
+    if (mpState.roomId && mpState.db && target.userData && target.userData.remoteKey) {
+        mpState.db.ref('brickforge-rooms/' + mpState.roomId + '/blocks/' + target.userData.remoteKey).remove();
+        delete mpState.remoteBlocks[target.userData.remoteKey];
     }
 }
 
@@ -4287,7 +4515,11 @@ function buildAtPosition(pos, blockType, color, size, rotation, isMirror) {
 
             if (mpState.roomId && mpState.db) {
                 const blockData = { type: blockType, position: { x: pos.x, y: pos.y, z: pos.z }, rotation: rotation, color, size, userId: mpState.userId, userName: mpState.userName, timestamp: Date.now() };
-                mpState.db.ref('brickforge-rooms/' + mpState.roomId + '/blocks').push(blockData);
+                const blocksRef = mpState.db.ref('brickforge-rooms/' + mpState.roomId + '/blocks');
+                const pushKey = blocksRef.push().key;
+                blocksRef.child(pushKey).set(blockData);
+                mesh.userData.remoteKey = pushKey;
+                mpState.remoteBlocks[pushKey] = mesh; // track local mesh so remote erases resolve it
                 mpState.blockCount++; updateMyProgress();
             }
         }
@@ -6669,6 +6901,545 @@ function enterSandbox() {
     else init();
 })();
 
+// ==================== START SCREEN & GAME MODES (Part 1: art, modes, projects) ====================
+const GAME_MODES_STATE = { started: false };
+
+/* ---- isometric voxel SVG art engine ---- */
+function _shade(hex, f) {
+    let h = hex.replace('#','');
+    if (h.length === 3) h = h.split('').map(c=>c+c).join('');
+    const r = Math.min(255, Math.round(parseInt(h.slice(0,2),16)*f));
+    const g = Math.min(255, Math.round(parseInt(h.slice(2,4),16)*f));
+    const b = Math.min(255, Math.round(parseInt(h.slice(4,6),16)*f));
+    return 'rgb(' + r + ',' + g + ',' + b + ')';
+}
+function isoCube(x, y, s, hex, op) {
+    const o = op ? ' opacity="' + op + '"' : '';
+    const d = s * 0.95;
+    return '<path d="M ' + x + ' ' + (y - s/2) + ' L ' + (x + s) + ' ' + y + ' L ' + x + ' ' + (y + s/2) + ' L ' + (x - s) + ' ' + y + ' Z" fill="' + _shade(hex, 1.22) + '"' + o + '/>' +
+           '<path d="M ' + (x - s) + ' ' + y + ' L ' + x + ' ' + (y + s/2) + ' L ' + x + ' ' + (y + s/2 + d) + ' L ' + (x - s) + ' ' + (y + d) + ' Z" fill="' + _shade(hex, 0.88) + '"' + o + '/>' +
+           '<path d="M ' + (x + s) + ' ' + y + ' L ' + x + ' ' + (y + s/2) + ' L ' + x + ' ' + (y + s/2 + d) + ' L ' + (x + s) + ' ' + (y + d) + ' Z" fill="' + _shade(hex, 0.66) + '"' + o + '/>';
+}
+function _svgWrap(inner) {
+    return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 132">' + inner + '</svg>';
+}
+function modeArtSVG(kind) {
+    if (kind === 'campaign') {
+        return _svgWrap(
+            isoCube(58, 96, 26, '#4CBB6C') + isoCube(110, 96, 26, '#3FA85D') + isoCube(162, 96, 26, '#4CBB6C') +
+            isoCube(110, 73, 26, '#5D4037') + isoCube(110, 50, 26, '#E8B84B') +
+            '<rect x="108" y="8" width="3.5" height="34" rx="1.5" fill="#E8F7EE"/>' +
+            '<path d="M 111 8 L 141 16 L 111 25 Z" fill="#3EE08F"/>' +
+            '<path d="M 92 118 q 9 -6 18 0 q 9 6 18 0" stroke="#B9F7D4" stroke-width="2.5" fill="none" opacity="0.6" stroke-linecap="round"/>'
+        );
+    }
+    if (kind === 'free') {
+        return _svgWrap(
+            isoCube(84, 104, 24, '#4FB8E8') + isoCube(88, 80, 24, '#FFB84D') +
+            isoCube(82, 56, 24, '#C084FC') + isoCube(87, 32, 24, '#3EE08F') +
+            '<rect x="146" y="78" width="7" height="18" rx="2" fill="#8D6E4C"/>' + isoCube(149, 66, 17, '#57C96A') +
+            '<circle cx="178" cy="26" r="3" fill="#FFB84D" opacity="0.8"/><circle cx="30" cy="40" r="2.5" fill="#3EE08F" opacity="0.7"/><circle cx="196" cy="58" r="2" fill="#4FB8E8" opacity="0.8"/>'
+        );
+    }
+    if (kind === 'projects') {
+        return _svgWrap(
+            '<rect x="34" y="22" width="152" height="92" rx="10" fill="#10293D" stroke="#4FB8E8" stroke-width="1.6"/>' +
+            '<path d="M 52 42 H 168 M 52 62 H 168 M 52 82 H 168 M 76 30 V 106 M 118 30 V 106 M 160 30 V 106" stroke="#4FB8E8" stroke-width="0.6" opacity="0.25"/>' +
+            '<path d="M 88 78 L 110 62 L 132 78 M 92 78 V 98 H 128 V 78 M 106 98 V 86 H 114 V 98" stroke="#E8F7EE" stroke-width="2.2" fill="none" stroke-dasharray="5 4" stroke-linecap="round" stroke-linejoin="round"/>' +
+            isoCube(56, 96, 13, '#FFB84D') + isoCube(160, 98, 13, '#3EE08F')
+        );
+    }
+    if (kind === 'team') {
+        return _svgWrap(
+            isoCube(52, 88, 22, '#3EE08F') + isoCube(52, 66, 22, '#3EE08F') +
+            isoCube(168, 88, 22, '#FF8A7A') + isoCube(168, 66, 22, '#FF8A7A') +
+            isoCube(110, 76, 20, '#4FB8E8') + isoCube(110, 56, 20, '#4FB8E8') +
+            '<rect x="50" y="34" width="3" height="22" fill="#E8F7EE"/><path d="M 53 34 L 68 39 L 53 45 Z" fill="#3EE08F"/>' +
+            '<rect x="167" y="34" width="3" height="22" fill="#E8F7EE"/><path d="M 170 34 L 185 39 L 170 45 Z" fill="#FF8A7A"/>' +
+            '<circle cx="30" cy="30" r="5" fill="#FFB84D" opacity="0.85"/><circle cx="196" cy="24" r="4" fill="#4FB8E8" opacity="0.85"/><circle cx="110" cy="18" r="3.5" fill="#3EE08F" opacity="0.8"/>'
+        );
+    }
+    return '';
+}
+function paintModeArt() {
+    document.querySelectorAll('.mode-art[data-art]').forEach(el => { el.innerHTML = modeArtSVG(el.getAttribute('data-art')); });
+}
+function paintStartDecor() {
+    const cont = document.getElementById('start-cubes');
+    if (!cont) return;
+    cont.style.cssText = 'position:absolute; inset:0; overflow:hidden; pointer-events:none;';
+    const colors = ['#3EE08F', '#FFB84D', '#4FB8E8', '#C084FC', '#FF8A7A'];
+    for (let i = 0; i < 8; i++) {
+        const c = document.createElement('div');
+        c.className = 'start-cube';
+        const s = 16 + Math.random() * 26;
+        const x = 3 + Math.random() * 92, y = 4 + Math.random() * 84;
+        c.style.cssText = 'left:' + x + '%; top:' + y + '%; animation-delay:' + (Math.random() * 5).toFixed(1) + 's; animation-duration:' + (5.5 + Math.random() * 4).toFixed(1) + 's;';
+        c.innerHTML = '<svg width="' + (s * 2) + '" height="' + (s * 2) + '" viewBox="-30 -30 60 60">' + isoCube(0, 0, 20, colors[i % colors.length]) + '</svg>';
+        cont.appendChild(c);
+    }
+    /* horizon strip — a little voxel skyline along the bottom */
+    const hz = document.createElement('div');
+    hz.style.cssText = 'position:absolute; left:0; right:0; bottom:-6px; height:96px; pointer-events:none; opacity:0.5;';
+    let art = '';
+    for (let i = 0; i < 12; i++) art += isoCube(i * 40 + 14, 66, 21, i % 2 ? '#1E4634' : '#245540', 0.85);
+    art += '<rect x="486" y="18" width="6" height="26" rx="2" fill="#E8F7EE" opacity="0.85"/><path d="M 492 18 L 512 24 L 492 31 Z" fill="#3EE08F" opacity="0.9"/>' +
+           '<rect x="146" y="20" width="6" height="24" rx="2" fill="#E8F7EE" opacity="0.7"/><path d="M 152 20 L 170 26 L 152 32 Z" fill="#4FB8E8" opacity="0.9"/>';
+    hz.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="96" viewBox="0 0 520 96" preserveAspectRatio="xMidYMax slice">' + art + '</svg>';
+    cont.appendChild(hz);
+}
+
+/* ---- start screen show/hide ---- */
+function showStartScreen() {
+    const el = document.getElementById('start-screen');
+    if (!el) return;
+    el.style.display = 'flex';
+    const resume = document.getElementById('start-resume-btn');
+    if (resume) resume.style.display = GAME_MODES_STATE.started ? 'inline-flex' : 'none';
+    hideRoster();
+}
+function hideStartScreen() {
+    const el = document.getElementById('start-screen');
+    if (el) el.style.display = 'none';
+}
+function homeBtnClick() { showStartScreen(); }
+function updateHomeBtn() {
+    const b = document.getElementById('home-btn');
+    if (b) b.style.display = GAME_MODES_STATE.started ? 'flex' : 'none';
+}
+
+/* ---- MODE 1: Campaign (existing 20-level engine) ---- */
+function startCampaign() {
+    GAME_MODES_STATE.started = true;
+    hideStartScreen();
+    updateHomeBtn();
+    closeLevelResults();
+    hideLevelSelect();
+    showLevelSelect();
+    toast('Campaign — pick a mission, builder!', 'success');
+}
+
+/* ---- MODE 2: Free Build (existing sandbox engine, ungated from menu) ---- */
+function startFreeBuild() {
+    GAME_MODES_STATE.started = true;
+    hideStartScreen();
+    updateHomeBtn();
+    closeLevelResults();
+    hideLevelSelect();
+    hideProjectsModal();
+    if (levelState.timerInterval) { clearInterval(levelState.timerInterval); levelState.timerInterval = null; }
+    levelState.active = false;
+    hideLevelHUD();
+    toast('Free Build — every block, zero limits. Go create!', 'success');
+}
+
+/* ---- MODE 3: Class Projects ---- */
+const CLASS_PROJECTS = [
+    { id:'p_bridge', title:'River Bridge', icon:'🌉', color:'#4FB8E8',
+      desc:'Design a bridge that spans the river. Strong pillars, a flat deck and safe walkways.',
+      reqs:['Span 12+ blocks of water','Pillars under the deck','Rails on both sides'], budget:80, time:300, block:'cube', color:'#4FB8E8' },
+    { id:'p_wat', title:'Khmer Temple (Wat)', icon:'🛕', color:'#FFB84D',
+      desc:'Build a temple inspired by Angkor architecture — tiered towers, gateways and stairs.',
+      reqs:['Symmetrical base','2+ tiered levels','Gateway entrance'], budget:120, time:420, block:'cube', color:'#C9A86A' },
+    { id:'p_house', title:'Stilt House', icon:'🏡', color:'#3EE08F',
+      desc:'A traditional stilt house that stays dry in rainy season. Make those pillars strong!',
+      reqs:['Floor 3+ blocks high','Ladder or stairs','Roof with overhang'], budget:70, time:300, block:'cube', color:'#B5854B' },
+    { id:'p_school', title:'Dream Classroom', icon:'🏫', color:'#C084FC',
+      desc:'Design your dream school — windows, doors, a playground, the works.',
+      reqs:['4+ windows','Main entrance with door frame','Outdoor seating or playground'], budget:100, time:360, block:'cube', color:'#C084FC' },
+    { id:'p_village', title:'Floating Village', icon:'🛶', color:'#38BDF8',
+      desc:'Inspired by Tonlé Sap — homes that float on the water, connected by walkways.',
+      reqs:['Build on water','3+ floating homes','Connect with walkways'], budget:110, time:420, block:'water', color:'#38BDF8' },
+    { id:'p_garden', title:'School Garden', icon:'🌻', color:'#22C55E',
+      desc:'Plan a garden with flowers, trees, paved paths and a bench to rest on.',
+      reqs:['6+ nature blocks','Paved path','Bench or shelter'], budget:60, time:240, block:'tree', color:'#22C55E' }
+];
+let teacherProjects = {};
+function allProjects() {
+    const out = {};
+    CLASS_PROJECTS.forEach(p => { out[p.id] = Object.assign({ source: 'sample' }, p); });
+    Object.keys(teacherProjects || {}).forEach(k => {
+        const t = teacherProjects[k] || {};
+        out['t_' + k] = {
+            id: 't_' + k, source: 'teacher', title: t.title || 'Untitled Project', icon: t.icon || '📋',
+            color: t.color || '#FFB84D', desc: t.description || 'Build assigned by your teacher.',
+            reqs: t.requirements || [], budget: t.budget || 80, time: t.timeLimit || 300,
+            block: t.block || 'cube', colorHint: t.color
+        };
+        if (t.color) out['t_' + k].color = t.color;
+    });
+    return out;
+}
+let _projStagger = 0;
+function renderProjects() {
+    const grid = document.getElementById('projects-grid');
+    if (!grid) return;
+    const projects = allProjects();
+    grid.innerHTML = '';
+    _projStagger = 0;
+    Object.values(projects).forEach(p => {
+        const card = document.createElement('div');
+        card.className = 'proj-card';
+        card.style.setProperty('--pc', p.color);
+        card.style.animationDelay = Math.min(_projStagger * 60, 700) + 'ms';
+        _projStagger++;
+        const badge = p.source === 'teacher'
+            ? '<span class="p-badge" style="background:rgba(255,184,77,0.16); color:#FFB84D; border:1px solid rgba(255,184,77,0.35);">Teacher</span>'
+            : '<span class="p-badge" style="background:rgba(62,224,143,0.12); color:#3EE08F; border:1px solid rgba(62,224,143,0.3);">Sample</span>';
+        const reqs = (p.reqs || []).slice(0, 3).map(r => '<span class="p-req">' + r + '</span>').join('');
+        const due = p.dueDate ? new Date(p.dueDate).toLocaleDateString() : 'No deadline';
+        card.innerHTML = badge +
+            '<div class="p-icon">' + (p.icon || '📋') + '</div>' +
+            '<div class="p-title">' + p.title + '</div>' +
+            '<div class="p-desc">' + (p.desc || '') + '</div>' +
+            '<div class="p-reqs">' + reqs + '</div>' +
+            '<div class="p-meta"><span>📦 ' + (p.budget || 80) + ' blocks · ⏱ ' + (p.time || 300) + 's</span><span>📅 ' + due + '</span></div>';
+        card.onclick = () => startProject(p.id);
+        grid.appendChild(card);
+    });
+    const teacherCount = Object.keys(teacherProjects || {}).length;
+    const note = document.getElementById('projects-note');
+    if (note) note.innerHTML = teacherCount > 0
+        ? '✨ ' + teacherCount + ' project' + (teacherCount > 1 ? 's' : '') + ' posted by your teacher · samples below'
+        : 'No teacher projects yet — try a sample brief below. <b style="color:#FFB84D;">Teachers:</b> post one from any Team Build room via <b style="color:#B9F7D4;">Classroom Control → Create Assignment → Post to Class Projects</b>.';
+}
+function openProjects() {
+    GAME_MODES_STATE.started = true;
+    updateHomeBtn();
+    hideStartScreen();
+    renderProjects();
+    const el = document.getElementById('projects-modal');
+    if (el) { el.style.display = 'block'; el.scrollTop = 0; }
+}
+function closeProjects() {
+    hideProjectsModal();
+    showStartScreen();
+}
+function hideProjectsModal() {
+    const el = document.getElementById('projects-modal');
+    if (el) el.style.display = 'none';
+}
+function projectsModalOpen() {
+    const el = document.getElementById('projects-modal');
+    return !!(el && el.style.display !== 'none' && el.style.display !== '');
+}
+
+/* Run a class project through the existing level engine */
+const PROJECT_LEVELS = {};
+function startProject(pid) {
+    const p = allProjects()[pid];
+    if (!p) return;
+    const level = {
+        id: pid, name: p.title, chapter: 'Class Project', isProject: true,
+        prompt: p.desc, hint: (p.reqs || []).join(' · '),
+        budget: p.budget || 80, time: p.time || 300,
+        block: p.block || 'cube', color: p.color || '#3EE08F'
+    };
+    PROJECT_LEVELS[pid] = level;
+    hideProjectsModal();
+    hideLevelSelect();
+    closeLevelResults();
+    if (levelState.timerInterval) { clearInterval(levelState.timerInterval); levelState.timerInterval = null; }
+    clearAll();
+    levelState.active = true;
+    levelState.currentLevel = level;
+    levelState.blocksPlaced = 0;
+    levelState.startTime = performance.now();
+    levelState.timeRemaining = level.time;
+    levelState.combo = 1;
+    levelState.comboCount = 0;
+    levelState.score = 0;
+    levelState.completed = false;
+    if (level.block && level.block !== 'cube') { currentBlock = level.block; updateGhostGeo(); }
+    if (level.color) currentColor = level.color;
+    showLevelIntro(level);
+    updateLevelHUD();
+    updateHomeBtn();
+    toast('Project: ' + level.name, 'success');
+}
+
+/* Teacher posts a class project (visible to every student, any room) */
+function saveClassProject() {
+    if (mpState.role !== 'teacher' || !mpState.db) { toast('Only teachers in a room can post class projects', 'error'); return; }
+    const title = document.getElementById('mp-assign-title').value.trim();
+    const desc = document.getElementById('mp-assign-desc').value.trim();
+    const reqText = document.getElementById('mp-assign-req').value;
+    const due = document.getElementById('mp-assign-due').value;
+    const budget = parseInt(document.getElementById('mp-assign-budget').value, 10) || 80;
+    const time = parseInt(document.getElementById('mp-assign-time').value, 10) || 300;
+    if (!title) { toast('Please enter a project title', 'error'); return; }
+    const project = { title, description: desc, requirements: reqText.split('\n').map(r => r.trim()).filter(Boolean), dueDate: due, budget, timeLimit: time, createdBy: mpState.userId, createdAt: Date.now() };
+    mpState.db.ref('brickforge-projects').push(project);
+    document.getElementById('mp-assignment-modal').style.display = 'none';
+    toast('Posted to Class Projects — all students can see it!', 'success');
+}
+/* Students: live-listen for teacher projects */
+function listenClassProjects() {
+    if (!mpState.db) return;
+    try {
+        mpState.db.ref('brickforge-projects').limitToLast(50).on('value', (snap) => {
+            const prevCount = Object.keys(teacherProjects || {}).length;
+            teacherProjects = snap.val() || {};
+            if (projectsModalOpen()) renderProjects();
+            if (Object.keys(teacherProjects).length > prevCount && prevCount > 0) toast('New class project posted!', 'success');
+        });
+    } catch (e) { /* offline — samples only */ }
+}
+
+</script>
+<script>
+// ==================== START SCREEN & GAME MODES (Part 2: team build) ====================
+const TEAMS = [
+    { id:'mint',  name:'Team Mint',  color:'#3EE08F' },
+    { id:'amber', name:'Team Amber', color:'#FFB84D' },
+    { id:'sky',   name:'Team Sky',   color:'#4FB8E8' },
+    { id:'coral', name:'Team Coral', color:'#FF8A7A' }
+];
+
+function renderTeamPicker() {
+    const wrap = document.getElementById('tm-team-pick');
+    if (!wrap) return;
+    wrap.innerHTML = '';
+    TEAMS.forEach((t, i) => {
+        const opt = document.createElement('div');
+        opt.className = 'team-opt' + (i === 0 ? ' selected' : '');
+        opt.style.setProperty('--tc', t.color);
+        opt.innerHTML = '<span class="t-dot" style="background:' + t.color + '; color:' + t.color + ';"></span>' + t.name;
+        opt.onclick = () => {
+            wrap.querySelectorAll('.team-opt').forEach(o => o.classList.remove('selected'));
+            opt.classList.add('selected');
+        };
+        wrap.appendChild(opt);
+    });
+}
+function selectedTeam() {
+    const sel = document.querySelector('#tm-team-pick .team-opt.selected');
+    const idx = sel ? Array.prototype.indexOf.call(sel.parentNode.children, sel) : 0;
+    return TEAMS[idx] || TEAMS[0];
+}
+function setTeamStatus(msg, isErr) {
+    const el = document.getElementById('team-status');
+    if (el) { el.textContent = msg || ''; el.style.color = isErr ? '#FF8A7A' : '#FFB84D'; }
+}
+function openTeamBuild() {
+    const saved = safeStorage.getItem('bf_player_name');
+    if (saved) document.getElementById('tm-name').value = saved;
+    setTeamStatus('');
+    document.getElementById('team-modal').style.display = 'flex';
+}
+function closeTeamModal() { document.getElementById('team-modal').style.display = 'none'; }
+
+function createTeamRoom() {
+    const chars = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789';
+    let code = '';
+    for (let i = 0; i < 4; i++) code += chars[Math.floor(Math.random() * chars.length)];
+    document.getElementById('tm-room').value = code;
+    connectTeamRoom(code);
+}
+function joinTeamRoom() {
+    const code = document.getElementById('tm-room').value.trim().toUpperCase();
+    if (code.length < 3) { setTeamStatus('Enter the room code your teacher or classmate shared', true); return; }
+    connectTeamRoom(code);
+}
+function connectTeamRoom(code) {
+    const name = document.getElementById('tm-name').value.trim();
+    if (!name) { setTeamStatus('Enter your name so teammates recognize you', true); return; }
+    if (!mpState.db) {
+        setTeamStatus('No connection — Team Build needs internet. Free Build works offline!', true);
+        return;
+    }
+    safeStorage.setItem('bf_player_name', name);
+    const team = selectedTeam();
+    mpState.userName = name;
+    mpState.roomId = code;
+    mpState.role = document.getElementById('tm-teacher').checked ? 'teacher' : 'student';
+    mpState.teamId = team.id;
+    mpState.userColor = team.color;
+    closeTeamModal();
+    hideStartScreen();
+    hideProjectsModal();
+    closeLevelResults();
+    hideLevelSelect();
+    if (levelState.timerInterval) { clearInterval(levelState.timerInterval); levelState.timerInterval = null; }
+    levelState.active = false;
+    hideLevelHUD();
+    clearAll();
+    GAME_MODES_STATE.started = true;
+    updateHomeBtn();
+    if (mpState.role === 'teacher') {
+        const tp = document.getElementById('mp-teacher-panel');
+        if (tp) tp.classList.remove('mp-hidden');
+        const rd = document.getElementById('mp-room-display');
+        if (rd) rd.textContent = 'ROOM: ' + code;
+    }
+    setupRoomListeners();
+    /* live erase sync (new): remove blocks others erased */
+    mpState.db.ref('brickforge-rooms/' + code + '/blocks').on('child_removed', (snap) => removeRemoteBlock(snap.key));
+    registerTeamUser();
+    const pill = document.getElementById('mp-hud-pill');
+    if (pill) pill.style.display = 'flex';
+    updatePill({});
+    toast('Connected to room ' + code + ' — ' + team.name + '! Build together!', 'success');
+}
+function registerTeamUser() {
+    if (!mpState.db || !mpState.roomId) return;
+    const team = TEAMS.find(t => t.id === mpState.teamId) || TEAMS[0];
+    const userRef = mpState.db.ref('brickforge-rooms/' + mpState.roomId + '/users/' + mpState.userId);
+    userRef.set({ name: mpState.userName, role: mpState.role, team: mpState.teamId, color: team.color, joinedAt: Date.now(), lastActive: Date.now(), blockCount: 0 });
+    setInterval(() => { userRef.child('lastActive').set(Date.now()); }, 30000);
+    userRef.onDisconnect().remove();
+}
+
+/* ---- remote erase resolution ---- */
+function removeRemoteBlock(key) {
+    let mesh = mpState.remoteBlocks[key];
+    if (!mesh) mesh = placedBlocks.find(b => b.userData && b.userData.remoteKey === key) || null;
+    if (!mesh) return;
+    if (placedBlocks.indexOf(mesh) === -1) { delete mpState.remoteBlocks[key]; return; }
+    if (mesh.userData && mesh.userData.pointLight) scene.remove(mesh.userData.pointLight);
+    if (mesh.userData && mesh.userData.contactShadow) scene.remove(mesh.userData.contactShadow);
+    scene.remove(mesh);
+    const idx = placedBlocks.indexOf(mesh);
+    if (idx > -1) placedBlocks.splice(idx, 1);
+    updateBlockCounter(placedBlocks.length);
+    delete mpState.remoteBlocks[key];
+}
+
+/* ---- wrappers: remote-block toast, roster + pill from user list ---- */
+const _origBRB = buildRemoteBlock;
+let _lastRemoteToast = 0;
+buildRemoteBlock = function (data, key) {
+    _origBRB(data, key);
+    try {
+        const now = Date.now();
+        if (data && data.userName && data.userId !== mpState.userId && now - _lastRemoteToast > 4000) {
+            _lastRemoteToast = now;
+            toast(data.userName + ' placed a block', 'info');
+        }
+    } catch (e) { /* cosmetic only */ }
+};
+const _origUSL = updateStudentList;
+updateStudentList = function (users) {
+    mpState._lastUsers = users || {};
+    _origUSL(users);
+    renderRoster(users);
+    updatePill(users);
+};
+function renderRoster(users) {
+    const body = document.getElementById('team-roster-body');
+    if (!body) return;
+    users = users || {};
+    const groups = {};
+    Object.keys(users).forEach(id => {
+        const u = users[id] || {};
+        const t = u.team || 'none';
+        (groups[t] = groups[t] || []).push({ id: id, name: u.name || 'Builder', role: u.role, blockCount: u.blockCount || 0 });
+    });
+    const rowHtml = (m, color) =>
+        '<div class="roster-row' + (m.id === mpState.userId ? ' me' : '') + '">' +
+        '<span class="r-dot" style="background:' + color + '"></span><span>' + m.name + (m.role === 'teacher' ? ' · teacher' : '') + '</span>' +
+        '<span class="r-count">' + m.blockCount + '</span></div>';
+    let html = '';
+    TEAMS.forEach(t => {
+        const members = groups[t.id] || [];
+        const total = members.reduce((s, m) => s + m.blockCount, 0);
+        html += '<div class="roster-team-head" style="color:' + t.color + ';"><span>' + t.name + '</span><span>' + total + ' blocks</span></div>';
+        html += members.length ? members.map(m => rowHtml(m, t.color)).join('') : '<div class="roster-row" style="opacity:0.4;">waiting for builders…</div>';
+    });
+    const loners = groups['none'] || [];
+    if (loners.length) {
+        html += '<div class="roster-team-head" style="color:#8FA9A0;"><span>No team</span><span></span></div>';
+        html += loners.map(m => rowHtml(m, '#8FA9A0')).join('');
+    }
+    body.innerHTML = html;
+}
+function updatePill(users) {
+    const pill = document.getElementById('mp-hud-pill');
+    if (!pill || !mpState.roomId) return;
+    pill.style.display = 'flex';
+    const rc = document.getElementById('pill-room-code');
+    if (rc) rc.textContent = mpState.roomId;
+    const team = TEAMS.find(t => t.id === mpState.teamId) || TEAMS[0];
+    const dot = document.getElementById('pill-team-dot');
+    if (dot) { dot.style.background = team.color; dot.style.color = team.color; }
+    const tn = document.getElementById('pill-team-name');
+    if (tn) tn.textContent = team.name;
+    const pc = document.getElementById('pill-count');
+    if (pc) pc.textContent = Object.keys(users || {}).length || 1;
+}
+function toggleRoster() {
+    const r = document.getElementById('team-roster');
+    if (!r) return;
+    const show = r.style.display !== 'block';
+    r.style.display = show ? 'block' : 'none';
+    if (show) renderRoster(mpState._lastUsers || {});
+}
+function hideRoster() {
+    const r = document.getElementById('team-roster');
+    if (r) r.style.display = 'none';
+}
+
+/* ---- project results: rebind result buttons for class projects ---- */
+const _origSLR = showLevelResults;
+showLevelResults = function (level, score, stars, breakdown) {
+    _origSLR(level, score, stars, breakdown);
+    if (!level || !level.isProject) return;
+    /* projects have string ids — don't show "p_garden." prefix in the title */
+    const rt = document.getElementById('results-title');
+    if (rt) rt.textContent = level.name;
+    const nextBtn = document.getElementById('results-next-btn');
+    if (nextBtn && breakdown && breakdown.passed) {
+        nextBtn.textContent = '📁 Pick Another Project';
+        nextBtn.onclick = function () { closeLevelResults(); openProjects(); };
+        nextBtn.style.display = 'inline-flex';
+    }
+    const retryBtn = document.getElementById('results-retry-btn');
+    if (retryBtn) retryBtn.onclick = function () { closeLevelResults(); startProject(level.id); };
+    const menuBtn = document.getElementById('results-menu-btn');
+    if (menuBtn) menuBtn.onclick = function () { closeLevelResults(); openProjects(); };
+};
+/* project intro card: hide the id prefix too */
+const _origSLI = showLevelIntro;
+showLevelIntro = function (level) {
+    _origSLI(level);
+    if (!level || !level.isProject) return;
+    const t = document.getElementById('level-intro-title');
+    if (t) t.textContent = level.name;
+    const ch = document.getElementById('level-intro-chapter');
+    if (ch) ch.textContent = 'Class Project' + (level.chapter && level.chapter !== 'Class Project' ? ' · ' + level.chapter : '');
+};
+
+/* ---- Escape closes my overlays ---- */
+document.addEventListener('keydown', (e) => {
+    if (e.key !== 'Escape') return;
+    const tm = document.getElementById('team-modal');
+    if (tm && tm.style.display === 'flex') { closeTeamModal(); return; }
+    if (projectsModalOpen()) { closeProjects(); return; }
+    const ss = document.getElementById('start-screen');
+    if (ss && ss.style.display === 'flex' && GAME_MODES_STATE.started) hideStartScreen();
+});
+
+/* ---- BOOT: paint art, replace old join dialog, show start screen after splash ---- */
+(function bootModes() {
+    paintModeArt();
+    paintStartDecor();
+    renderTeamPicker();
+    /* the old boot join-dialog is replaced by the start screen */
+    const mpd = document.getElementById('mp-join-dialog');
+    if (mpd) mpd.style.display = 'none';
+    let launched = false;
+    const iv = setInterval(() => {
+        const sp = document.getElementById('splash-screen');
+        const gone = !sp || sp.style.display === 'none' || sp.classList.contains('fade-out');
+        if (gone && !launched) {
+            launched = true;
+            clearInterval(iv);
+            setTimeout(() => { if (!GAME_MODES_STATE.started) showStartScreen(); }, 700);
+        }
+    }, 150);
+    setTimeout(() => clearInterval(iv), 15000);
+    listenClassProjects();
+})();
 </script>
 </body>
 </html>
