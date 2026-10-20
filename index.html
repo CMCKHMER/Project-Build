@@ -1647,6 +1647,32 @@ button, [role="button"], input, textarea, select { touch-action: manipulation; }
     <i class="fas fa-cubes" style="font-size:15px;"></i>
 </div>
 
+<style id="wshop-css">
+/* ---- UNIFIED LEFT WORKSHOP PANEL ---- */
+.wshop-box { padding:9px 10px 4px; border-bottom:1px solid rgba(255,255,255,0.05); }
+.wshop-box.wshop-last { padding-bottom:10px; }
+.wshop-label { font-family:'Orbitron',monospace; font-size:8px; letter-spacing:0.18em; color:rgba(143,169,160,0.8); text-transform:uppercase; margin-bottom:5px; display:flex; align-items:center; }
+.wshop-tools { display:grid; grid-template-columns:repeat(4,1fr); gap:4px; background:rgba(0,0,0,0.3); border:1px solid rgba(255,255,255,0.07); border-radius:10px; padding:4px; }
+.wtool-btn { display:flex; flex-direction:column; align-items:center; gap:3px; padding:7px 0 5px; border:none; background:transparent; border-radius:7px; color:rgba(255,255,255,0.5); font-family:'Nunito',sans-serif; font-size:8.5px; font-weight:700; cursor:pointer; transition:all .18s; }
+.wtool-btn i { font-size:12px; }
+.wtool-btn:hover { color:#fff; background:rgba(62,224,143,0.1); }
+.wtool-btn.active { background:linear-gradient(135deg, rgba(62,224,143,0.32), rgba(62,224,143,0.1)); color:#7CF0B8; box-shadow:0 0 10px rgba(62,224,143,0.22); }
+.wshop-row2 { display:flex; gap:12px; align-items:flex-start; }
+.wshop-grow { flex:1; min-width:0; }
+.wshop-mini { flex-shrink:0; }
+.wshop-cats { display:grid; grid-template-columns:repeat(3,1fr); gap:4px; padding:8px 10px; border-bottom:1px solid rgba(255,255,255,0.06); }
+#left-panel .size-control { margin:0; }
+#left-panel .size-btn { padding:4px 10px; font-size:10px; }
+#left-panel #colors { gap:4px; padding:6px; border-radius:8px; margin-bottom:0; }
+#left-panel .color-btn { width:19px; height:19px; border-radius:4px; border-width:1.5px; }
+#left-panel .sym-btn { padding:3px 8px; font-size:9px; }
+#left-panel .tab-btn { display:flex; align-items:center; justify-content:center; gap:5px; padding:7px 4px; font-size:10px; border-radius:8px; }
+#left-panel .tab-btn i { font-size:11px; }
+#left-panel .block-btn { width:48px; height:48px; }
+#left-panel .block-btn .label { font-size:7.5px; }
+#favorites-bar { min-height:40px; padding:5px 10px; }
+@media (max-width:640px) { .wshop-cats { grid-template-columns:repeat(2,1fr); } }
+</style>
 <!-- RIGHT PANEL PULL TAB -->
 <div class="panel-tab ui-interactive" id="right-tab" onclick="toggleRightPanel()" title="Properties">
     <i class="fas fa-sliders-h" style="font-size:15px;"></i>
@@ -1657,6 +1683,74 @@ button, [role="button"], input, textarea, select { touch-action: manipulation; }
     <div class="panel-header">
         <span><i class="fas fa-cubes" style="margin-right:6px;"></i>Blocks</span>
         <button onclick="toggleLeftPanel()" style="background:none;border:none;color:rgba(255,255,255,0.4);cursor:pointer;font-size:14px;">✕</button>
+    </div>
+    <!-- QUICK TOOLBOX (moved from right panel) -->
+    <div class="wshop-box">
+        <div class="wshop-label"><i class="fas fa-hand-pointer" style="margin-right:4px;"></i>Tool</div>
+        <div class="wshop-tools">
+            <button class="wtool-btn active" data-tool="build"  onclick="setTool('build')"><i class="fas fa-cubes"></i><span>Build</span></button>
+            <button class="wtool-btn" data-tool="erase"  onclick="setTool('erase')"><i class="fas fa-trash-alt"></i><span>Erase</span></button>
+            <button class="wtool-btn" data-tool="select" onclick="setTool('select')"><i class="fas fa-mouse-pointer"></i><span>Select</span></button>
+            <button class="wtool-btn" data-tool="move"   onclick="setTool('move')"><i class="fas fa-arrows-alt"></i><span>Move</span></button>
+        </div>
+    </div>
+    <div class="wshop-box wshop-row2">
+        <div class="wshop-grow">
+            <div class="wshop-label">Size</div>
+        <div class="size-control" style="margin-bottom:14px;">
+            <button onclick="setSize(0.5)" class="size-btn" id="size-05">0.5</button>
+            <button onclick="setSize(1)"   class="size-btn active" id="size-1">1</button>
+            <button onclick="setSize(2)"   class="size-btn" id="size-2">2</button>
+            <button onclick="setSize(4)"   class="size-btn" id="size-4">4</button>
+        </div>
+        </div>
+        <div class="wshop-mini">
+            <div class="wshop-label">Snap</div>
+            <div class="snap-toggle active" id="snap-toggle" onclick="toggleSnap()"></div>
+        </div>
+        <div class="wshop-mini">
+            <div class="wshop-label">Sym</div>
+            <button class="sym-btn" id="sym-btn" onclick="cycleSymmetry()">NONE</button>
+        </div>
+    </div>
+    <div class="wshop-box wshop-last">
+        <div class="wshop-label"><i class="fas fa-droplet" style="margin-right:4px;"></i>Color</div>
+        <div id="colors" style="display:flex; gap:5px; flex-wrap:wrap; padding:8px; background:rgba(0,0,0,0.3); border-radius:10px; border:1px solid rgba(255,255,255,0.07); margin-bottom:14px;">
+            <!-- Neutrals / Construction -->
+            <div class="color-btn active" style="background:#CCCCCC;" onclick="setColor('#CCCCCC', this)" title="Concrete Gray"></div>
+            <div class="color-btn" style="background:#999999;" onclick="setColor('#999999', this)" title="Steel Gray"></div>
+            <div class="color-btn" style="background:#666666;" onclick="setColor('#666666', this)" title="Dark Steel"></div>
+            <div class="color-btn" style="background:#333333;" onclick="setColor('#333333', this)" title="Charcoal"></div>
+            <div class="color-btn" style="background:#F5F5F5;" onclick="setColor('#F5F5F5', this)" title="White"></div>
+            <div class="color-btn" style="background:#1a1a1a; border-color:#444;" onclick="setColor('#1a1a1a', this)" title="Black"></div>
+            <!-- Earth Tones -->
+            <div class="color-btn" style="background:#C2A87D;" onclick="setColor('#C2A87D', this)" title="Sand"></div>
+            <div class="color-btn" style="background:#8B4513;" onclick="setColor('#8B4513', this)" title="Brown"></div>
+            <div class="color-btn" style="background:#A0522D;" onclick="setColor('#A0522D', this)" title="Sienna"></div>
+            <div class="color-btn" style="background:#DEB887;" onclick="setColor('#DEB887', this)" title="Tan"></div>
+            <div class="color-btn" style="background:#5d4037;" onclick="setColor('#5d4037', this)" title="Wood"></div>
+            <div class="color-btn" style="background:#3e2723;" onclick="setColor('#3e2723', this)" title="Dark Wood"></div>
+            <!-- Architectural Reds/Bricks -->
+            <div class="color-btn" style="background:#B22222;" onclick="setColor('#B22222', this)" title="Brick Red"></div>
+            <div class="color-btn" style="background:#CC5555;" onclick="setColor('#CC5555', this)" title="Terracotta"></div>
+            <div class="color-btn" style="background:#8B3A3A;" onclick="setColor('#8B3A3A', this)" title="Rust"></div>
+            <div class="color-btn" style="background:#CD5C5C;" onclick="setColor('#CD5C5C', this)" title="Indian Red"></div>
+            <!-- Blues / Glass -->
+            <div class="color-btn" style="background:#4A90E2;" onclick="setColor('#4A90E2', this)" title="Sky Blue"></div>
+            <div class="color-btn" style="background:#5B9BD5;" onclick="setColor('#5B9BD5', this)" title="Glass Blue"></div>
+            <div class="color-btn" style="background:#2E5C8A;" onclick="setColor('#2E5C8A', this)" title="Navy"></div>
+            <div class="color-btn" style="background:#7FB8D8;" onclick="setColor('#7FB8D8', this)" title="Light Blue"></div>
+            <!-- Greens / Landscape -->
+            <div class="color-btn" style="background:#4a9c52;" onclick="setColor('#4a9c52', this)" title="Grass Green"></div>
+            <div class="color-btn" style="background:#2d5a3d;" onclick="setColor('#2d5a3d', this)" title="Forest"></div>
+            <div class="color-btn" style="background:#6B8E23;" onclick="setColor('#6B8E23', this)" title="Olive"></div>
+            <div class="color-btn" style="background:#8FBC8F;" onclick="setColor('#8FBC8F', this)" title="Sage"></div>
+            <!-- Accents / Safety -->
+            <div class="color-btn" style="background:#FF8C00;" onclick="setColor('#FF8C00', this)" title="Safety Orange"></div>
+            <div class="color-btn" style="background:#FFD700;" onclick="setColor('#FFD700', this)" title="Gold"></div>
+            <div class="color-btn" style="background:#C0C0C0;" onclick="setColor('#C0C0C0', this)" title="Silver"></div>
+            <div class="color-btn" style="background:#B87333;" onclick="setColor('#B87333', this)" title="Copper"></div>
+        </div>
     </div>
     <!-- Favorites -->
     <div id="favorites-bar" style="padding:6px 10px; border-bottom:1px solid rgba(255,255,255,0.06); min-height:44px; display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
@@ -1675,13 +1769,13 @@ button, [role="button"], input, textarea, select { touch-action: manipulation; }
         <div class="mint-recents-row" id="mint-recents-row"></div>
     </div>
     <!-- Category tabs (icon rail) -->
-    <div style="display:flex; flex-direction:column; gap:2px; padding:8px 10px; border-bottom:1px solid rgba(255,255,255,0.06);">
-        <button class="tab-btn active" onclick="switchTab('blocks',event)" style="text-align:left; border-radius:8px;"><i class="fas fa-cube"></i> Blocks</button>
-        <button class="tab-btn" onclick="switchTab('architecture',event)" style="text-align:left; border-radius:8px;"><i class="fas fa-archway"></i> Architecture</button>
-        <button class="tab-btn" onclick="switchTab('nature',event)" style="text-align:left; border-radius:8px;"><i class="fas fa-leaf"></i> Nature</button>
-        <button class="tab-btn" onclick="switchTab('materials',event)" style="text-align:left; border-radius:8px;"><i class="fas fa-layer-group"></i> Materials</button>
-        <button class="tab-btn" onclick="switchTab('platform',event)" style="text-align:left; border-radius:8px;"><i class="fas fa-mountain"></i> Terrain</button>
-        <button class="tab-btn" onclick="switchTab('scene',event)" style="text-align:left; border-radius:8px;"><i class="fas fa-globe"></i> Scene</button>
+    <div class="wshop-cats">
+        <button class="tab-btn active" onclick="switchTab('blocks',event)" style="justify-content:center;"><i class="fas fa-cube"></i> Blocks</button>
+        <button class="tab-btn" onclick="switchTab('architecture',event)" style="justify-content:center;"><i class="fas fa-archway"></i> Architecture</button>
+        <button class="tab-btn" onclick="switchTab('nature',event)" style="justify-content:center;"><i class="fas fa-leaf"></i> Nature</button>
+        <button class="tab-btn" onclick="switchTab('materials',event)" style="justify-content:center;"><i class="fas fa-layer-group"></i> Materials</button>
+        <button class="tab-btn" onclick="switchTab('platform',event)" style="justify-content:center;"><i class="fas fa-mountain"></i> Terrain</button>
+        <button class="tab-btn" onclick="switchTab('scene',event)" style="justify-content:center;"><i class="fas fa-globe"></i> Scene</button>
     </div>
     <div style="padding:4px 6px;">
 
@@ -1951,67 +2045,10 @@ button, [role="button"], input, textarea, select { touch-action: manipulation; }
 <!-- RIGHT SLIDE PANEL: Properties -->
 <div id="right-panel" class="slide-panel ui-interactive">
     <div class="panel-header">
-        <span><i class="fas fa-sliders-h" style="margin-right:6px;"></i>Properties</span>
+        <span><i class="fas fa-wand-magic-sparkles" style="margin-right:6px;"></i>Quick Actions</span>
         <button onclick="toggleRightPanel()" style="background:none;border:none;color:rgba(255,255,255,0.4);cursor:pointer;font-size:14px;">✕</button>
     </div>
     <div class="panel-inner">
-        <!-- Size -->
-        <div class="field-label" style="margin-bottom:6px;">Block Size</div>
-        <div class="size-control" style="margin-bottom:14px;">
-            <button onclick="setSize(0.5)" class="size-btn" id="size-05">0.5</button>
-            <button onclick="setSize(1)"   class="size-btn active" id="size-1">1</button>
-            <button onclick="setSize(2)"   class="size-btn" id="size-2">2</button>
-            <button onclick="setSize(4)"   class="size-btn" id="size-4">4</button>
-        </div>
-        <!-- Colors -->
-        <div class="field-label" style="margin-bottom:6px;">Color</div>
-        <div id="colors" style="display:flex; gap:5px; flex-wrap:wrap; padding:8px; background:rgba(0,0,0,0.3); border-radius:10px; border:1px solid rgba(255,255,255,0.07); margin-bottom:14px;">
-            <!-- Neutrals / Construction -->
-            <div class="color-btn active" style="background:#CCCCCC;" onclick="setColor('#CCCCCC', this)" title="Concrete Gray"></div>
-            <div class="color-btn" style="background:#999999;" onclick="setColor('#999999', this)" title="Steel Gray"></div>
-            <div class="color-btn" style="background:#666666;" onclick="setColor('#666666', this)" title="Dark Steel"></div>
-            <div class="color-btn" style="background:#333333;" onclick="setColor('#333333', this)" title="Charcoal"></div>
-            <div class="color-btn" style="background:#F5F5F5;" onclick="setColor('#F5F5F5', this)" title="White"></div>
-            <div class="color-btn" style="background:#1a1a1a; border-color:#444;" onclick="setColor('#1a1a1a', this)" title="Black"></div>
-            <!-- Earth Tones -->
-            <div class="color-btn" style="background:#C2A87D;" onclick="setColor('#C2A87D', this)" title="Sand"></div>
-            <div class="color-btn" style="background:#8B4513;" onclick="setColor('#8B4513', this)" title="Brown"></div>
-            <div class="color-btn" style="background:#A0522D;" onclick="setColor('#A0522D', this)" title="Sienna"></div>
-            <div class="color-btn" style="background:#DEB887;" onclick="setColor('#DEB887', this)" title="Tan"></div>
-            <div class="color-btn" style="background:#5d4037;" onclick="setColor('#5d4037', this)" title="Wood"></div>
-            <div class="color-btn" style="background:#3e2723;" onclick="setColor('#3e2723', this)" title="Dark Wood"></div>
-            <!-- Architectural Reds/Bricks -->
-            <div class="color-btn" style="background:#B22222;" onclick="setColor('#B22222', this)" title="Brick Red"></div>
-            <div class="color-btn" style="background:#CC5555;" onclick="setColor('#CC5555', this)" title="Terracotta"></div>
-            <div class="color-btn" style="background:#8B3A3A;" onclick="setColor('#8B3A3A', this)" title="Rust"></div>
-            <div class="color-btn" style="background:#CD5C5C;" onclick="setColor('#CD5C5C', this)" title="Indian Red"></div>
-            <!-- Blues / Glass -->
-            <div class="color-btn" style="background:#4A90E2;" onclick="setColor('#4A90E2', this)" title="Sky Blue"></div>
-            <div class="color-btn" style="background:#5B9BD5;" onclick="setColor('#5B9BD5', this)" title="Glass Blue"></div>
-            <div class="color-btn" style="background:#2E5C8A;" onclick="setColor('#2E5C8A', this)" title="Navy"></div>
-            <div class="color-btn" style="background:#7FB8D8;" onclick="setColor('#7FB8D8', this)" title="Light Blue"></div>
-            <!-- Greens / Landscape -->
-            <div class="color-btn" style="background:#4a9c52;" onclick="setColor('#4a9c52', this)" title="Grass Green"></div>
-            <div class="color-btn" style="background:#2d5a3d;" onclick="setColor('#2d5a3d', this)" title="Forest"></div>
-            <div class="color-btn" style="background:#6B8E23;" onclick="setColor('#6B8E23', this)" title="Olive"></div>
-            <div class="color-btn" style="background:#8FBC8F;" onclick="setColor('#8FBC8F', this)" title="Sage"></div>
-            <!-- Accents / Safety -->
-            <div class="color-btn" style="background:#FF8C00;" onclick="setColor('#FF8C00', this)" title="Safety Orange"></div>
-            <div class="color-btn" style="background:#FFD700;" onclick="setColor('#FFD700', this)" title="Gold"></div>
-            <div class="color-btn" style="background:#C0C0C0;" onclick="setColor('#C0C0C0', this)" title="Silver"></div>
-            <div class="color-btn" style="background:#B87333;" onclick="setColor('#B87333', this)" title="Copper"></div>
-        </div>
-        <!-- Snap + Symmetry -->
-        <div style="display:flex; gap:12px; align-items:center; margin-bottom:14px;">
-            <div class="flex items-center gap-2">
-                <span style="font-size:9px; font-family:'Orbitron',monospace; color:rgba(255,255,255,0.45); text-transform:uppercase; letter-spacing:0.15em;">SNAP</span>
-                <div class="snap-toggle active" id="snap-toggle" onclick="toggleSnap()"></div>
-            </div>
-            <div class="flex items-center gap-2">
-                <span style="font-size:9px; font-family:'Orbitron',monospace; color:rgba(255,255,255,0.45); text-transform:uppercase; letter-spacing:0.15em;">SYM</span>
-                <button class="sym-btn" id="sym-btn" onclick="cycleSymmetry()">NONE</button>
-            </div>
-        </div>
         <!-- Actions -->
         <div class="field-label" style="margin-bottom:6px;">Actions</div>
         <div style="display:flex; flex-direction:column; gap:6px;">
@@ -4716,6 +4753,7 @@ function setTool(t) {
     document.querySelectorAll('.tool-pill-btn').forEach(b => b.classList.remove('active'));
     const activeBtn = document.getElementById('tool-' + t);
     if (activeBtn) activeBtn.classList.add('active');
+    document.querySelectorAll('.wtool-btn').forEach(b => b.classList.toggle('active', b.dataset.tool === t));
     
     // Update cursor and interaction mode based on tool
     if (t === 'build') {
@@ -5924,7 +5962,7 @@ const THEMES = {
     neon:     { name:'Neon',     desc:'Magenta overdrive',accent:'#ff00ff', glassBg:'rgba(10,0,20,0.9)',   glassBorder:'rgba(255,0,255,0.35)', bgGrad1:'#0a0014', bgGrad2:'#14002e', bgGrad3:'#0a0020', gridColor:0x660066, bgColor:0x0a0014, fogColor:0x14002e, hemiSky:0x880088, hemiGround:0x220033, glowColor:'rgba(255,0,255,0.5)', textPrimary:'#ffffff', textSecondary:'#cc44cc', gridLineColor:'rgba(255,0,255,0.04)', accentGlow:'rgba(255,0,255,0.6)' },
     arctic:   { name:'Arctic',   desc:'Ice and snow',     accent:'#88ccff', glassBg:'rgba(200,220,240,0.15)',glassBorder:'rgba(136,204,255,0.4)',bgGrad1:'#0a1520', bgGrad2:'#0f2030', bgGrad3:'#0a1828', gridColor:0x3399bb, bgColor:0x0a1520, fogColor:0x0f2030, hemiSky:0xaaddff, hemiGround:0x336688, glowColor:'rgba(136,204,255,0.4)', textPrimary:'#e8f4ff', textSecondary:'#99bbcc', gridLineColor:'rgba(136,204,255,0.04)', accentGlow:'rgba(136,204,255,0.5)' },
     volcanic: { name:'Volcanic', desc:'Lava and fire',    accent:'#ff4400', glassBg:'rgba(15,5,0,0.92)',   glassBorder:'rgba(255,68,0,0.35)', bgGrad1:'#0f0500', bgGrad2:'#1a0800', bgGrad3:'#0f0300', gridColor:0x661100, bgColor:0x0f0500, fogColor:0x1a0800, hemiSky:0x441100, hemiGround:0x220500, glowColor:'rgba(255,68,0,0.5)', textPrimary:'#fff0e0', textSecondary:'#cc6633', gridLineColor:'rgba(255,68,0,0.04)', accentGlow:'rgba(255,68,0,0.6)' },
-    voxel:    { name:'Voxel',    desc:'Minecraft daylight',accent:'#5BAA3F', glassBg:'rgba(15,30,20,0.85)',  glassBorder:'rgba(91,170,63,0.35)', bgGrad1:'#7EC0EE', bgGrad2:'#9ED8F8', bgGrad3:'#B8E5FF', gridColor:0x558833, bgColor:0x87CEEB, fogColor:0xC8E8F8, hemiSky:0x9ED8F8, hemiGround:0x558833, glowColor:'rgba(91,170,63,0.3)', textPrimary:'#1d3318', textSecondary:'#4d6e3d', gridLineColor:'rgba(60,100,40,0.06)', accentGlow:'rgba(91,170,63,0.3)' }
+    voxel:    { name:'Voxel',    desc:'Minecraft daylight',accent:'#5BAA3F', glassBg:'rgba(15,30,20,0.85)',  glassBorder:'rgba(91,170,63,0.35)', bgGrad1:'#7EC0EE', bgGrad2:'#9ED8F8', bgGrad3:'#B8E5FF', gridColor:0x558833, bgColor:0x87CEEB, fogColor:0xC8E8F8, hemiSky:0x9ED8F8, hemiGround:0x558833, glowColor:'rgba(91,170,63,0.3)', textPrimary:'#EAF6EE', textSecondary:'#9DB8A8', gridLineColor:'rgba(60,100,40,0.06)', accentGlow:'rgba(91,170,63,0.3)' }
 };
 
 function setTheme(themeName) {
@@ -6986,11 +7024,18 @@ function showStartScreen() {
 function hideStartScreen() {
     const el = document.getElementById('start-screen');
     if (el) el.style.display = 'none';
+    if (!window.__wshopAutoOpened && window.innerWidth > 900) {
+        window.__wshopAutoOpened = true;
+        const lp = document.getElementById('left-panel');
+        if (lp && !lp.classList.contains('panel-open')) toggleLeftPanel();
+    }
 }
 function homeBtnClick() { showStartScreen(); }
 function updateHomeBtn() {
     const b = document.getElementById('home-btn');
     if (b) b.style.display = GAME_MODES_STATE.started ? 'flex' : 'none';
+    const ui = document.querySelector('.ui-layer');
+    if (ui) ui.style.left = GAME_MODES_STATE.started ? '66px' : '10px';
 }
 
 /* ---- MODE 1: Campaign (existing 20-level engine) ---- */
