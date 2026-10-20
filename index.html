@@ -4,9 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>BrickForge Pro - Classroom Edition</title>
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%230a0a1a'/%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%2300d4ff'/%3E%3Cstop offset='100%25' stop-color='%237c44ff'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect x='18' y='18' width='64' height='64' rx='6' fill='none' stroke='url(%23g)' stroke-width='6'/%3E%3Crect x='30' y='30' width='40' height='40' fill='url(%23g)'/%3E%3C/svg%3E" />
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%23081411'/%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%233EE08F'/%3E%3Cstop offset='100%25' stop-color='%232AA9D6'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect x='18' y='18' width='64' height='64' rx='14' fill='none' stroke='url(%23g)' stroke-width='6'/%3E%3Crect x='30' y='30' width='40' height='40' rx='6' fill='url(%23g)'/%3E%3C/svg%3E" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;800;900&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Nunito:wght@400;600;700;800;900&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
@@ -691,6 +692,423 @@
         .ui-interactive { pointer-events: auto; }
         .field-label { font-size: 9px; font-family: 'Orbitron', monospace; color: var(--accent); text-transform: uppercase; letter-spacing: 0.2em; font-weight: 700; margin-bottom: 6px; display: block; opacity: 0.85; }
     </style>
+
+<!-- ============ MINT STUDIO override layer ============ -->
+<style>
+/* ============================================================
+   MINT STUDIO — modern UI override layer (loads after base CSS)
+   Palette: deep forest-navy panels / mint hero / amber rewards
+   Type:    Outfit (display) + Nunito (body)
+   ============================================================ */
+
+/* ---------- 1. TOKENS (overrides original :root names too) ---------- */
+:root {
+    --mint: #3EE08F;
+    --mint-deep: #22C77E;
+    --mint-soft: rgba(62, 224, 143, 0.14);
+    --amber: #FFB84D;
+    --panel-bg: linear-gradient(180deg, rgba(13, 27, 22, 0.96), rgba(9, 20, 16, 0.94));
+    --panel-border: rgba(62, 224, 143, 0.20);
+
+    /* legacy variable names → new values (auto-reskins everything using them) */
+    --accent: #3EE08F;
+    --accent-glow: rgba(62, 224, 143, 0.45);
+    --glass-bg: rgba(13, 27, 22, 0.92);
+    --glass-border: rgba(62, 224, 143, 0.22);
+    --vivid-pink: #FF8FB2;
+    --vivid-green: #3EE08F;
+    --vivid-orange: var(--amber);
+    --text-primary: #EDF5F1;
+    --text-secondary: #8FA9A0;
+    --bg-gradient-1: #081411;
+    --bg-gradient-2: #0B1F1A;
+    --bg-gradient-3: #071019;
+    --grid-line-color: rgba(62, 224, 143, 0.035);
+    --glow-color: rgba(62, 224, 143, 0.45);
+    --panel-radius: 20px;
+}
+
+/* ---------- 2. PAGE BACKGROUND & ATMOSPHERE ---------- */
+body {
+    font-family: 'Nunito', 'Inter', sans-serif;
+    background: linear-gradient(135deg, var(--bg-gradient-1) 0%, var(--bg-gradient-2) 48%, var(--bg-gradient-3) 100%);
+}
+body::before { background-size: 56px 56px; }
+
+#vignette { background: radial-gradient(ellipse at center, transparent 58%, rgba(3, 10, 8, 0.5) 100%); }
+
+::selection { background: rgba(62, 224, 143, 0.35); color: #fff; }
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(62, 224, 143, 0.3); border-radius: 3px; }
+
+button, [role="button"], input, textarea, select { touch-action: manipulation; }
+:focus-visible { outline: 2px solid var(--mint); outline-offset: 2px; border-radius: 8px; }
+
+/* ---------- 3. TYPOGRAPHY SWAP (Outfit replaces Orbitron everywhere) ---------- */
+.splash-logo, .splash-pro-badge, .splash-progress-label, .bf-logo, .pro-badge,
+.block-counter-num, .category-header, .panel-header, .field-label, .size-btn,
+.sym-btn, .template-card-name, .theme-card-name, .save-modal-title,
+.enter-room-btn, .mp-room-code {
+    font-family: 'Outfit', 'Inter', sans-serif !important;
+}
+.field-label { color: var(--mint); letter-spacing: 0.18em; opacity: 0.9; }
+.category-header {
+    color: var(--mint);
+    text-shadow: none;
+    background: linear-gradient(90deg, var(--mint-soft), transparent);
+    border-left: 2px solid var(--mint);
+    border-radius: 0 6px 6px 0;
+    padding: 4px 10px;
+}
+
+/* ---------- 4. SPLASH SCREEN ---------- */
+#splash-screen { background: radial-gradient(ellipse at 50% 38%, #0E2A20 0%, #081411 55%, #050B09 100%); }
+.splash-particle { background: var(--mint); }
+.splash-logo {
+    letter-spacing: 0.1em;
+    background: linear-gradient(100deg, #C9F7E0 10%, var(--mint) 45%, #8AE8FF 90%);
+    -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+    text-shadow: none;
+    filter: drop-shadow(0 0 34px rgba(62, 224, 143, 0.45));
+    animation: splash-in 0.9s cubic-bezier(0.22, 1.4, 0.36, 1) both;
+}
+@keyframes splash-in { from { opacity: 0; transform: translateY(26px) scale(0.96); } to { opacity: 1; transform: none; } }
+.splash-pro-badge {
+    background: linear-gradient(135deg, var(--mint), #2AA9D6); color: #06231A;
+    animation: badge-glow 2.4s ease-in-out infinite;
+}
+@keyframes badge-glow {
+    0%, 100% { box-shadow: 0 0 14px rgba(62, 224, 143, 0.5); }
+    50% { box-shadow: 0 0 30px rgba(62, 224, 143, 0.85); }
+}
+.splash-subtitle { letter-spacing: 0.5em; color: rgba(237, 245, 241, 0.55); animation: splash-in 0.9s 0.12s cubic-bezier(0.22, 1.4, 0.36, 1) both; }
+.splash-progress-label { color: rgba(62, 224, 143, 0.75); }
+.splash-progress-bar { background: rgba(62, 224, 143, 0.14); }
+.splash-progress-fill { background: linear-gradient(90deg, var(--mint), #8AE8FF, var(--mint)); }
+
+/* ---------- 5. GLASS PANELS & BUTTONS ---------- */
+.glass-panel {
+    background: var(--panel-bg);
+    border: 1px solid var(--panel-border);
+    border-radius: var(--panel-radius);
+    box-shadow: 0 16px 48px rgba(2, 8, 6, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+.glass-btn {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.09);
+    color: var(--text-primary);
+    border-radius: 12px;
+    font-family: 'Nunito', sans-serif; font-weight: 700;
+    text-transform: none; letter-spacing: 0.3px; font-size: 12.5px;
+}
+.glass-btn:hover {
+    background: var(--mint-soft);
+    border-color: rgba(62, 224, 143, 0.55);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 26px rgba(62, 224, 143, 0.18);
+}
+.glass-btn:active { transform: scale(0.94) !important; }
+.glass-btn.active {
+    background: linear-gradient(135deg, rgba(62, 224, 143, 0.26), rgba(62, 224, 143, 0.1));
+    border-color: var(--mint); color: #D9FFE9;
+    box-shadow: 0 0 18px rgba(62, 224, 143, 0.22);
+    text-shadow: none;
+}
+
+.bf-logo {
+    background: linear-gradient(100deg, var(--mint), #8AE8FF, var(--mint));
+    background-size: 200% auto;
+    -webkit-background-clip: text; background-clip: text;
+    animation: logo-gradient 6s linear infinite;
+}
+.pro-badge { background: linear-gradient(135deg, var(--mint), #2AA9D6); color: #06231A; box-shadow: 0 0 12px rgba(62, 224, 143, 0.4); }
+
+/* ---------- 6. TOP BAR / TOOL SEGMENTED CONTROL ---------- */
+.ui-layer .glass-panel { border-radius: 16px; }
+.tool-pill {
+    background: rgba(4, 12, 9, 0.6);
+    border: 1px solid rgba(62, 224, 143, 0.18);
+    border-radius: 14px;
+    box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.45);
+}
+.tool-pill-btn {
+    border-radius: 11px;
+    font-family: 'Nunito', sans-serif; font-weight: 800;
+    text-transform: none; letter-spacing: 0.4px; font-size: 12px;
+    color: rgba(237, 245, 241, 0.55);
+    z-index: 2;
+}
+.tool-pill-btn:hover { color: #fff; background: rgba(255, 255, 255, 0.05); }
+.tool-pill-btn.active {
+    background: transparent;
+    color: #083B26;
+    box-shadow: none; text-shadow: none;
+}
+#tool-pill-ind {
+    position: absolute; top: 3px; bottom: 3px; left: 3px; width: 60px;
+    border-radius: 11px;
+    background: linear-gradient(135deg, var(--mint), #2FCB82);
+    box-shadow: 0 2px 12px rgba(62, 224, 143, 0.45);
+    transition: left 0.32s cubic-bezier(0.34, 1.4, 0.64, 1), width 0.32s cubic-bezier(0.34, 1.4, 0.64, 1);
+    z-index: 1; pointer-events: none;
+}
+.block-counter-num { color: var(--mint); text-shadow: 0 0 18px rgba(62, 224, 143, 0.4); }
+.block-counter-label { color: var(--mint); }
+
+/* ---------- 7. SLIDE PANELS & TABS ---------- */
+.slide-panel { background: var(--panel-bg); border-top: 1px solid var(--panel-border); transition: transform 0.38s cubic-bezier(0.32, 1.25, 0.44, 1); }
+#left-panel  { border-right: 1px solid var(--panel-border); }
+#right-panel { border-left: 1px solid var(--panel-border); }
+.panel-tab {
+    width: 24px; height: 60px; border-radius: 0 12px 12px 0;
+    background: linear-gradient(180deg, rgba(62, 224, 143, 0.22), rgba(62, 224, 143, 0.08));
+    border: 1px solid rgba(62, 224, 143, 0.3); color: var(--mint);
+    animation: tab-nudge 3.2s ease-in-out infinite;
+}
+@keyframes tab-nudge { 0%, 88%, 100% { transform: translateY(-50%); } 93% { transform: translateY(calc(-50% - 4px)); } }
+#left-tab:hover  { animation: none; }
+.panel-tab i { font-size: 13px; }
+.panel-header { font-weight: 700; letter-spacing: 0.18em; color: var(--mint); border-bottom-color: rgba(255, 255, 255, 0.05); }
+
+.tab-bar { background: rgba(4, 12, 9, 0.5); border-color: rgba(255, 255, 255, 0.06); }
+.tab-btn { text-transform: none; letter-spacing: 0.4px; font-family: 'Nunito', sans-serif; font-weight: 700; }
+.tab-btn.active {
+    background: var(--mint-soft); color: #B9F7D4; text-shadow: none;
+}
+.tab-btn.active::after { background: var(--mint); box-shadow: 0 0 10px rgba(62, 224, 143, 0.6); }
+
+/* category tab list (left panel) */
+#left-panel .tab-btn { display: flex; align-items: center; gap: 9px; font-size: 12px; padding: 8px 12px; border-radius: 10px; color: rgba(237, 245, 241, 0.6); }
+#left-panel .tab-btn i { width: 16px; text-align: center; font-size: 13px; color: rgba(143, 169, 160, 0.9); transition: color 0.2s, transform 0.2s; }
+#left-panel .tab-btn:hover { background: rgba(255, 255, 255, 0.05); color: #fff; }
+#left-panel .tab-btn:hover i { color: var(--mint); transform: scale(1.12); }
+#left-panel .tab-btn.active { background: var(--mint-soft); color: #D9FFE9; }
+#left-panel .tab-btn.active i { color: var(--mint); }
+
+/* ---------- 8. SEARCH + RECENTS (new panel operation) ---------- */
+.mint-search {
+    display: flex; align-items: center; gap: 8px;
+    margin: 10px 10px 4px; padding: 8px 12px;
+    background: rgba(4, 12, 9, 0.55);
+    border: 1px solid rgba(62, 224, 143, 0.22);
+    border-radius: 12px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+.mint-search:focus-within { border-color: rgba(62, 224, 143, 0.6); box-shadow: 0 0 0 3px rgba(62, 224, 143, 0.12); }
+.mint-search i { color: rgba(143, 169, 160, 0.7); font-size: 12px; }
+.mint-search input {
+    flex: 1; background: transparent; border: none; outline: none;
+    color: var(--text-primary); font-family: 'Nunito', sans-serif;
+    font-size: 13px; font-weight: 600; min-width: 0;
+}
+.mint-search input::placeholder { color: rgba(143, 169, 160, 0.55); }
+.mint-search .mint-search-clear {
+    display: none; background: rgba(255, 255, 255, 0.08); border: none; color: #fff;
+    width: 18px; height: 18px; border-radius: 50%; font-size: 9px; cursor: pointer;
+    align-items: center; justify-content: center; flex-shrink: 0;
+}
+.mint-search.has-query .mint-search-clear { display: flex; }
+.mint-results-note {
+    display: none; margin: 4px 12px 0; font-size: 10px; font-weight: 700;
+    color: var(--mint); font-family: 'Nunito', sans-serif; letter-spacing: 0.04em;
+}
+.mint-recents { padding: 8px 10px 2px; }
+.mint-recents-label {
+    font-size: 8.5px; font-family: 'Outfit', sans-serif; font-weight: 700;
+    color: rgba(143, 169, 160, 0.75); text-transform: uppercase; letter-spacing: 0.2em;
+    margin: 0 2px 6px; display: flex; align-items: center; gap: 6px;
+}
+.mint-recents-label::after { content: ''; flex: 1; height: 1px; background: rgba(255, 255, 255, 0.06); }
+.mint-recents-row { display: flex; gap: 5px; overflow-x: auto; padding-bottom: 4px; scrollbar-width: none; }
+.mint-recents-row::-webkit-scrollbar { display: none; }
+.mint-recent-btn {
+    width: 40px; height: 40px; border-radius: 10px; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center; font-size: 14px;
+    background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--mint); cursor: pointer; transition: all 0.2s cubic-bezier(0.34, 1.4, 0.64, 1);
+    animation: pop-in 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+.mint-recent-btn:hover { border-color: var(--mint); background: var(--mint-soft); transform: translateY(-3px) scale(1.06); }
+.mint-recent-btn:active { transform: scale(0.9); }
+.mint-hidden { display: none !important; }
+
+/* ---------- 9. BLOCK BUTTONS ---------- */
+.block-btn {
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.05);
+    box-shadow: 0 3px 12px rgba(2, 8, 6, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.09);
+}
+.block-btn:hover {
+    background: var(--mint-soft);
+    border-color: rgba(62, 224, 143, 0.6);
+    transform: translateY(-4px) scale(1.05);
+    box-shadow: 0 14px 30px rgba(62, 224, 143, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+.block-btn.selected {
+    border-color: var(--mint);
+    background: linear-gradient(145deg, rgba(62, 224, 143, 0.3), rgba(62, 224, 143, 0.12));
+    box-shadow: 0 0 0 1px var(--mint), 0 10px 26px rgba(62, 224, 143, 0.28);
+    transform: scale(1.07);
+    animation: pop-select 0.32s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+@keyframes pop-select { 0% { transform: scale(0.92); } 60% { transform: scale(1.12); } 100% { transform: scale(1.07); } }
+.block-btn.selected .label { color: #B9F7D4; text-shadow: none; }
+.block-btn .label { font-family: 'Nunito', sans-serif; font-weight: 700; }
+
+/* ---------- 10. COLOR / SIZE / SWITCHES ---------- */
+.color-btn { border-radius: 8px; border-color: rgba(255, 255, 255, 0.14); }
+.color-btn.active { border-color: #fff; box-shadow: 0 0 0 2px #fff, 0 4px 14px rgba(0, 0, 0, 0.35); }
+.size-control { background: rgba(4, 12, 9, 0.5); border-color: rgba(255, 255, 255, 0.07); border-radius: 11px; }
+.size-btn { font-weight: 700; letter-spacing: 0.02em; }
+.size-btn.active { background: linear-gradient(135deg, rgba(62, 224, 143, 0.3), rgba(62, 224, 143, 0.12)); color: #B9F7D4; box-shadow: 0 0 10px rgba(62, 224, 143, 0.18); }
+.snap-toggle { background: rgba(255, 255, 255, 0.07); border-color: rgba(255, 255, 255, 0.13); }
+.snap-toggle.active { background: linear-gradient(135deg, rgba(62, 224, 143, 0.65), rgba(62, 224, 143, 0.4)); border-color: var(--mint); box-shadow: 0 0 12px rgba(62, 224, 143, 0.35); }
+.snap-toggle.active::after { box-shadow: 0 0 10px rgba(62, 224, 143, 0.6); }
+.snap-toggle::after { transition: all 0.28s cubic-bezier(0.34, 1.4, 0.64, 1); }
+.sym-btn { font-family: 'Outfit', sans-serif; }
+.sym-btn.active { border-color: #2AA9D6; background: rgba(42, 169, 214, 0.16); color: #7FD8F5; box-shadow: 0 0 12px rgba(42, 169, 214, 0.3); }
+
+/* ---------- 11. FAVORITES ---------- */
+.fav-btn { border-radius: 11px; background: rgba(255, 255, 255, 0.05); }
+.fav-btn:hover { border-color: var(--mint); background: var(--mint-soft); transform: translateY(-2px); }
+
+/* ---------- 12. ACTION RAIL (right pill) ---------- */
+.right-panel { background: var(--panel-bg); border-color: var(--panel-border); border-radius: 22px; }
+.tip-btn { background: rgba(255, 255, 255, 0.05); border-color: rgba(255, 255, 255, 0.09); }
+.tip-btn:hover { background: var(--mint-soft); border-color: rgba(62, 224, 143, 0.55); color: var(--mint); box-shadow: 0 0 16px rgba(62, 224, 143, 0.25), 0 6px 18px rgba(0, 0, 0, 0.3); transform: scale(1.1); }
+.tip-btn:active { transform: scale(0.88) !important; }
+.tip-btn.active { background: linear-gradient(135deg, rgba(62, 224, 143, 0.32), rgba(62, 224, 143, 0.1)); border-color: var(--mint); color: #B9F7D4; box-shadow: 0 0 18px rgba(62, 224, 143, 0.35); }
+.tip-btn::after { background: rgba(8, 20, 16, 0.96); border-color: rgba(62, 224, 143, 0.35); font-family: 'Nunito', sans-serif; border-radius: 8px; }
+
+/* ---------- 13. CONTEXT MENU / TOASTS ---------- */
+#block-context-menu { background: var(--panel-bg); border-color: var(--panel-border); border-radius: 14px; }
+.ctx-item:hover { background: var(--mint-soft); color: #B9F7D4; }
+.toast { background: var(--panel-bg); border-radius: 14px; font-family: 'Nunito', sans-serif; animation: toast-slide-in 0.42s cubic-bezier(0.34, 1.4, 0.64, 1) forwards; }
+.toast.type-info { border-left-color: var(--mint); }
+.toast.type-info .toast-icon, .toast.type-info .toast-progress { color: var(--mint); background: var(--mint); }
+
+/* ---------- 14. MULTIPLAYER / MODALS ---------- */
+.mp-input, .modal-input, .mp-select {
+    background: rgba(4, 12, 9, 0.55);
+    border: 1px solid rgba(62, 224, 143, 0.25);
+    border-radius: 12px; font-family: 'Nunito', sans-serif;
+}
+.mp-input:focus, .modal-input:focus, .mp-select:focus {
+    border-color: rgba(62, 224, 143, 0.7);
+    box-shadow: 0 0 0 3px rgba(62, 224, 143, 0.14), inset 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+.mp-select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%233EE08F' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E"); }
+.role-card { border-radius: 13px; background: rgba(4, 12, 9, 0.4); }
+.role-card:hover { border-color: rgba(62, 224, 143, 0.45); background: var(--mint-soft); }
+.role-card.selected { border-color: var(--mint); background: var(--mint-soft); box-shadow: 0 0 16px rgba(62, 224, 143, 0.22); }
+.role-card.selected .role-card-name { color: #B9F7D4; }
+.enter-room-btn { background: linear-gradient(135deg, var(--mint), #2FCB82); color: #06231A; border-radius: 14px; box-shadow: 0 6px 22px rgba(62, 224, 143, 0.35); }
+.enter-room-btn:hover { box-shadow: 0 10px 32px rgba(62, 224, 143, 0.5); }
+.join-dialog { background: var(--panel-bg); border: 1px solid var(--panel-border); }
+.join-dialog::before { display: none; }
+.join-dialog { box-shadow: 0 24px 80px rgba(2, 8, 6, 0.7), 0 0 60px rgba(62, 224, 143, 0.08); }
+.save-modal-inner { border-color: var(--panel-border); }
+.save-modal-title { color: var(--mint); }
+
+/* ---------- 15. MOBILE CONTROLS ---------- */
+.mobile-btn {
+    background: var(--panel-bg); border: 1.5px solid rgba(62, 224, 143, 0.5);
+    box-shadow: 0 4px 15px rgba(2, 8, 6, 0.4);
+}
+.mobile-btn:active { background: rgba(62, 224, 143, 0.3); transform: scale(0.88); box-shadow: 0 0 22px rgba(62, 224, 143, 0.45); }
+@media (pointer: coarse) {
+    .mobile-controls { bottom: auto; top: 64px; right: 12px; background: var(--panel-bg); border: 1px solid var(--panel-border); }
+}
+
+/* ---------- 16. CAMPAIGN: LEVEL SELECT (unify with Mint Studio) ---------- */
+#level-select-modal {
+    background:
+        radial-gradient(1000px 500px at 15% -5%, rgba(62, 224, 143, 0.13), transparent 60%),
+        radial-gradient(900px 480px at 90% 8%, rgba(42, 169, 214, 0.1), transparent 60%),
+        linear-gradient(180deg, #0A1D17 0%, #081411 55%, #071019 100%);
+    animation: lvl-select-in 0.45s cubic-bezier(0.32, 1.2, 0.44, 1) both;
+}
+@keyframes lvl-select-in { from { opacity: 0; } to { opacity: 1; } }
+#level-select-modal > div { animation: fade-slide-up 0.5s 0.05s cubic-bezier(0.22, 1.2, 0.36, 1) both; }
+@keyframes fade-slide-up { from { opacity: 0; transform: translateY(22px); } to { opacity: 1; transform: none; } }
+
+#level-select-modal kbd { background: rgba(255, 255, 255, 0.07); border-color: rgba(62, 224, 143, 0.3); color: #B9F7D4; }
+
+/* level cards get final polish + stagger via .mint-lvl-card (added by hook) */
+.mint-lvl-card { animation: card-stagger 0.45s cubic-bezier(0.22, 1.25, 0.36, 1) both; }
+@keyframes card-stagger { from { opacity: 0; transform: translateY(16px) scale(0.97); } to { opacity: 1; transform: none; } }
+.mint-lvl-card:hover { transform: translateY(-4px) !important; box-shadow: 0 14px 34px rgba(2, 8, 6, 0.45) !important; }
+
+/* ---------- 17. CAMPAIGN: INTRO / HUD / RESULTS ---------- */
+/* HUD sits below the top toolbar instead of overlapping it */
+#level-hud { top: 62px !important; }
+#level-intro-card > div { animation: modal-pop 0.42s cubic-bezier(0.3, 1.4, 0.5, 1) both; }
+@keyframes modal-pop { from { opacity: 0; transform: scale(0.86) translateY(18px); } to { opacity: 1; transform: none; } }
+#level-results-modal > div { animation: modal-pop 0.46s cubic-bezier(0.3, 1.4, 0.5, 1) both; }
+#level-hud > div:first-child { animation: hud-drop 0.5s cubic-bezier(0.3, 1.35, 0.5, 1) both; }
+@keyframes hud-drop { from { opacity: 0; transform: translateY(-24px); } to { opacity: 1; transform: none; } }
+#hud-score { transition: color 0.3s; }
+#hud-score.mint-tick { animation: score-tick 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); }
+@keyframes score-tick { 0% { transform: scale(1); } 45% { transform: scale(1.35); color: var(--amber); } 100% { transform: scale(1); } }
+#hud-budget { transition: color 0.25s; }
+#hud-time.low-time { color: #FF6B6B !important; animation: time-blink 1s ease-in-out infinite; }
+@keyframes time-blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.45; } }
+
+/* results star pop (stars injected as spans by hook) */
+#results-stars .rstar { display: inline-block; animation: star-pop 0.5s cubic-bezier(0.3, 1.6, 0.5, 1) both; }
+#results-stars .rstar:nth-child(2) { animation-delay: 0.14s; }
+#results-stars .rstar:nth-child(3) { animation-delay: 0.28s; }
+@keyframes star-pop { 0% { transform: scale(0) rotate(-30deg); opacity: 0; } 70% { transform: scale(1.35) rotate(6deg); } 100% { transform: scale(1) rotate(0); opacity: 1; } }
+
+/* confetti */
+.mint-confetti {
+    position: fixed; top: -14px; z-index: 99999; pointer-events: none;
+    width: 9px; height: 14px; border-radius: 2px;
+    animation: confetti-fall linear forwards;
+}
+@keyframes confetti-fall {
+    0% { transform: translateY(-20px) rotate(0deg); opacity: 1; }
+    85% { opacity: 1; }
+    100% { transform: translateY(105vh) rotate(720deg); opacity: 0; }
+}
+
+/* ---------- 18. PULL TO REPLACE SCROLLBARS ---------- */
+.scroll-row::-webkit-scrollbar-thumb { background: rgba(62, 224, 143, 0.4); }
+.slide-panel::-webkit-scrollbar-thumb { background: rgba(62, 224, 143, 0.3); }
+
+/* ---------- 19. RESPONSIVE ---------- */
+@media (max-width: 760px) {
+    .ui-layer { max-width: calc(100vw - 76px); }
+    .ui-layer .glass-panel { gap: 6px; padding: 6px 8px !important; }
+    .ui-layer .tool-pill-btn { padding: 6px 10px; font-size: 10.5px; }
+    .ui-layer .tool-pill-btn i { display: none; }
+    .ui-layer .block-counter-num { font-size: 20px; }
+    .ui-layer > div > div:last-child, .ui-layer #tool-help { display: none; } /* rotate key-hints + help off tiny screens */
+    .slide-panel { width: min(86vw, 300px); }
+    .block-btn { width: 48px; height: 48px; }
+    .block-btn .label { font-size: 7px; }
+    #level-hud { width: calc(100vw - 24px); }
+    #level-hud > div:first-child { padding: 8px 10px !important; gap: 6px !important; }
+    #level-intro-card > div, #level-results-modal > div { padding: 22px 18px !important; }
+    .right-panel { gap: 3px; padding: 8px 6px !important; }
+    .tip-btn { width: 36px; height: 36px; font-size: 14px; }
+    .mobile-controls { display: flex; }
+}
+@media (pointer: coarse) and (max-width: 760px) {
+    .block-btn { width: 52px; height: 52px; }
+    .glass-btn, .tab-btn, .tool-pill-btn { min-height: 34px; }
+}
+
+/* ---------- 20. REDUCED MOTION ---------- */
+@media (prefers-reduced-motion: reduce) {
+    .mint-lvl-card, #level-select-modal > div, #level-intro-card > div,
+    #level-results-modal > div, #level-hud > div:first-child, .splash-logo,
+    .splash-subtitle, .panel-tab, #tool-pill-ind, .block-btn.selected,
+    .toast, .mint-recent-btn { animation: none !important; transition-duration: 0.01s !important; }
+}
+
+</style>
 </head>
 <body>
 
@@ -750,64 +1168,64 @@
 </div>
 
 <!-- ==================== LEVEL SELECT MODAL ==================== -->
-<div id="level-select-modal" style="display:none; position:fixed; inset:0; z-index:99989; background:linear-gradient(180deg, #7EC0EE 0%, #9ED8F8 50%, #B8E5FF 100%); overflow-y:auto;">
+<div id="level-select-modal" style="display:none; position:fixed; inset:0; z-index:99989; background:radial-gradient(1000px 500px at 15% -5%, rgba(62,224,143,0.13), transparent 60%), radial-gradient(900px 480px at 90% 8%, rgba(42,169,214,0.1), transparent 60%), linear-gradient(180deg, #0A1D17 0%, #081411 55%, #071019 100%); overflow-y:auto;">
     <div style="max-width:1100px; margin:0 auto; padding:40px 24px 60px;">
         <!-- Header -->
         <div style="text-align:center; margin-bottom:32px;">
-            <div style="font-family:'Syne','Plus Jakarta Sans',sans-serif; font-size:42px; font-weight:800; color:#1d3318; letter-spacing:-0.02em; margin-bottom:6px;">BrickForge Pro</div>
-            <div style="font-family:'Space Grotesk','Inter',sans-serif; font-size:13px; color:#4d6e3d; letter-spacing:0.05em; text-transform:uppercase;">Build & Conquer — 20 Levels</div>
+            <div style="font-family:'Outfit',sans-serif; font-size:42px; font-weight:800; color:#fff; letter-spacing:-0.02em; margin-bottom:6px;">BrickForge <span style="color:#3EE08F;">Pro</span></div>
+            <div style="font-family:'Nunito',sans-serif; font-size:13px; color:#8FA9A0; letter-spacing:0.12em; text-transform:uppercase; font-weight:700;">Build & Conquer — 20 Levels</div>
         </div>
         <!-- Stats bar -->
         <div style="display:flex; gap:14px; justify-content:center; flex-wrap:wrap; margin-bottom:30px;">
-            <div style="background:rgba(255,255,255,0.4); backdrop-filter:blur(10px); border:1px solid rgba(91,170,63,0.3); border-radius:14px; padding:12px 22px;">
-                <div style="font-family:'Inter',sans-serif; font-size:9px; text-transform:uppercase; letter-spacing:0.15em; color:#4d6e3d; font-weight:700;">Stars</div>
-                <div style="font-family:'Inter',sans-serif; font-size:22px; font-weight:800; color:#1d3318;">⭐ <span id="level-total-stars">0</span>/60</div>
+            <div style="background:rgba(13,27,22,0.72); backdrop-filter:blur(12px); border:1px solid rgba(62,224,143,0.22); border-radius:16px; padding:12px 22px;">
+                <div style="font-family:'Outfit',sans-serif; font-size:9px; text-transform:uppercase; letter-spacing:0.15em; color:#8FA9A0; font-weight:700;">Stars</div>
+                <div style="font-family:'Outfit',sans-serif; font-size:22px; font-weight:800; color:#FFB84D;">⭐ <span id="level-total-stars">0</span>/60</div>
             </div>
-            <div style="background:rgba(255,255,255,0.4); backdrop-filter:blur(10px); border:1px solid rgba(91,170,63,0.3); border-radius:14px; padding:12px 22px;">
-                <div style="font-family:'Inter',sans-serif; font-size:9px; text-transform:uppercase; letter-spacing:0.15em; color:#4d6e3d; font-weight:700;">Completed</div>
-                <div style="font-family:'Inter',sans-serif; font-size:22px; font-weight:800; color:#1d3318;"><span id="level-completed-count">0</span>/20</div>
+            <div style="background:rgba(13,27,22,0.72); backdrop-filter:blur(12px); border:1px solid rgba(62,224,143,0.22); border-radius:16px; padding:12px 22px;">
+                <div style="font-family:'Outfit',sans-serif; font-size:9px; text-transform:uppercase; letter-spacing:0.15em; color:#8FA9A0; font-weight:700;">Completed</div>
+                <div style="font-family:'Outfit',sans-serif; font-size:22px; font-weight:800; color:#3EE08F;"><span id="level-completed-count">0</span>/20</div>
             </div>
-            <div style="background:rgba(255,255,255,0.4); backdrop-filter:blur(10px); border:1px solid rgba(91,170,63,0.3); border-radius:14px; padding:12px 22px;">
-                <div style="font-family:'Inter',sans-serif; font-size:9px; text-transform:uppercase; letter-spacing:0.15em; color:#4d6e3d; font-weight:700;">Sandbox</div>
+            <div style="background:rgba(13,27,22,0.72); backdrop-filter:blur(12px); border:1px solid rgba(62,224,143,0.22); border-radius:16px; padding:12px 22px;">
+                <div style="font-family:'Outfit',sans-serif; font-size:9px; text-transform:uppercase; letter-spacing:0.15em; color:#8FA9A0; font-weight:700;">Sandbox</div>
                 <div style="font-family:'Inter',sans-serif; font-size:14px; font-weight:700; padding-top:4px;" id="sandbox-status"><span style="color:#888;">🔒 Complete level 5</span></div>
             </div>
         </div>
         <!-- Sandbox button (visible once unlocked) -->
         <div style="text-align:center; margin-bottom:30px;">
-            <button id="enter-sandbox-btn" onclick="enterSandbox()" style="display:none; font-family:'Inter',sans-serif; font-size:14px; font-weight:700; padding:12px 32px; border-radius:12px; background:linear-gradient(135deg, #5BAA3F, #3d7a2c); color:#fff; border:none; cursor:pointer; box-shadow:0 8px 24px rgba(91,170,63,0.3); transition:all 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform=''">
+            <button id="enter-sandbox-btn" onclick="enterSandbox()" style="display:none; font-family:'Outfit',sans-serif; font-size:14px; font-weight:700; padding:12px 32px; border-radius:14px; background:linear-gradient(135deg, #3EE08F, #2FCB82); color:#06231A; border:none; cursor:pointer; box-shadow:0 8px 24px rgba(62,224,143,0.35); transition:all 0.2s;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 12px 32px rgba(62,224,143,0.5)'" onmouseout="this.style.transform=''; this.style.boxShadow='0 8px 24px rgba(62,224,143,0.35)'">
                 🎨 Enter Free Build Sandbox
             </button>
         </div>
         <!-- Level grid -->
         <div id="level-grid"></div>
         <!-- Footer -->
-        <div style="text-align:center; margin-top:40px; font-family:'Inter',sans-serif; font-size:11px; color:#4d6e3d; opacity:0.7;">
-            Press <kbd style="padding:1px 6px; background:rgba(255,255,255,0.5); border:1px solid rgba(91,170,63,0.3); border-radius:4px; font-family:monospace;">Esc</kbd> any time during a level to abandon it.
+        <div style="text-align:center; margin-top:40px; font-family:'Nunito',sans-serif; font-size:11px; color:#8FA9A0; opacity:0.8;">
+            Press <kbd style="padding:1px 6px; background:rgba(255,255,255,0.07); border:1px solid rgba(62,224,143,0.3); border-radius:4px; font-family:monospace; color:#B9F7D4;">Esc</kbd> any time during a level to abandon it.
         </div>
     </div>
 </div>
 
 <!-- ==================== LEVEL INTRO CARD ==================== -->
 <div id="level-intro-card" style="display:none; position:fixed; inset:0; z-index:99987; background:rgba(0,0,0,0.5); backdrop-filter:blur(8px); align-items:center; justify-content:center;">
-    <div style="max-width:440px; width:90%; background:rgba(15,30,20,0.96); border:1px solid rgba(91,170,63,0.4); border-radius:20px; padding:32px; box-shadow:0 12px 50px rgba(0,0,0,0.4), 0 0 40px rgba(91,170,63,0.15);">
-        <div style="font-family:'Space Grotesk',sans-serif; font-size:10px; text-transform:uppercase; letter-spacing:0.2em; color:#5BAA3F; font-weight:700; margin-bottom:6px;" id="level-intro-chapter">Chapter</div>
-        <div style="font-family:'Syne','Inter',sans-serif; font-size:26px; font-weight:800; color:#fff; margin-bottom:14px;" id="level-intro-title">Level Title</div>
-        <div style="font-family:'Inter',sans-serif; font-size:15px; color:#cbd5e1; line-height:1.5; margin-bottom:14px;" id="level-intro-prompt">Prompt</div>
-        <div style="background:rgba(91,170,63,0.08); border-left:3px solid #5BAA3F; padding:10px 14px; border-radius:6px; margin-bottom:18px;">
-            <div style="font-family:'Inter',sans-serif; font-size:9px; text-transform:uppercase; letter-spacing:0.15em; color:#5BAA3F; font-weight:700; margin-bottom:4px;">Hint</div>
-            <div style="font-family:'Inter',sans-serif; font-size:13px; color:#cbd5e1; line-height:1.5;" id="level-intro-hint">Hint text</div>
+    <div style="max-width:440px; width:90%; background:rgba(13,27,22,0.96); border:1px solid rgba(62,224,143,0.35); border-radius:22px; padding:32px; box-shadow:0 24px 70px rgba(2,8,6,0.6), 0 0 50px rgba(62,224,143,0.12);">
+        <div style="font-family:'Outfit',sans-serif; font-size:10px; text-transform:uppercase; letter-spacing:0.22em; color:#3EE08F; font-weight:700; margin-bottom:6px;" id="level-intro-chapter">Chapter</div>
+        <div style="font-family:'Outfit',sans-serif; font-size:26px; font-weight:800; color:#fff; margin-bottom:14px;" id="level-intro-title">Level Title</div>
+        <div style="font-family:'Nunito',sans-serif; font-size:15px; color:#C4D6CE; line-height:1.55; margin-bottom:14px;" id="level-intro-prompt">Prompt</div>
+        <div style="background:rgba(62,224,143,0.07); border-left:3px solid #3EE08F; padding:10px 14px; border-radius:8px; margin-bottom:18px;">
+            <div style="font-family:'Outfit',sans-serif; font-size:9px; text-transform:uppercase; letter-spacing:0.15em; color:#3EE08F; font-weight:700; margin-bottom:4px;">Hint</div>
+            <div style="font-family:'Nunito',sans-serif; font-size:13px; color:#C4D6CE; line-height:1.5;" id="level-intro-hint">Hint text</div>
         </div>
         <div style="display:flex; gap:14px; margin-bottom:24px;">
-            <div style="flex:1; background:rgba(255,255,255,0.04); border-radius:10px; padding:10px 14px;">
-                <div style="font-family:'Inter',sans-serif; font-size:9px; text-transform:uppercase; letter-spacing:0.15em; color:#8899aa; font-weight:700;">Budget</div>
-                <div style="font-family:'Inter',sans-serif; font-size:14px; font-weight:700; color:#fff;" id="level-intro-budget">15 blocks</div>
+            <div style="flex:1; background:rgba(255,255,255,0.04); border-radius:12px; padding:10px 14px; border:1px solid rgba(255,255,255,0.06);">
+                <div style="font-family:'Outfit',sans-serif; font-size:9px; text-transform:uppercase; letter-spacing:0.15em; color:#8FA9A0; font-weight:700;">Budget</div>
+                <div style="font-family:'Outfit',sans-serif; font-size:14px; font-weight:700; color:#fff;" id="level-intro-budget">15 blocks</div>
             </div>
-            <div style="flex:1; background:rgba(255,255,255,0.04); border-radius:10px; padding:10px 14px;">
-                <div style="font-family:'Inter',sans-serif; font-size:9px; text-transform:uppercase; letter-spacing:0.15em; color:#8899aa; font-weight:700;">Time limit</div>
-                <div style="font-family:'Inter',sans-serif; font-size:14px; font-weight:700; color:#fff;" id="level-intro-time">60s</div>
+            <div style="flex:1; background:rgba(255,255,255,0.04); border-radius:12px; padding:10px 14px; border:1px solid rgba(255,255,255,0.06);">
+                <div style="font-family:'Outfit',sans-serif; font-size:9px; text-transform:uppercase; letter-spacing:0.15em; color:#8FA9A0; font-weight:700;">Time limit</div>
+                <div style="font-family:'Outfit',sans-serif; font-size:14px; font-weight:700; color:#fff;" id="level-intro-time">60s</div>
             </div>
         </div>
-        <button onclick="dismissLevelIntro()" style="font-family:'Inter',sans-serif; font-size:14px; font-weight:700; padding:12px 24px; border-radius:10px; background:linear-gradient(135deg, #5BAA3F, #3d7a2c); color:#fff; border:none; cursor:pointer; box-shadow:0 4px 14px rgba(91,170,63,0.3); transition:all 0.2s; width:100%;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform=''">
+        <button onclick="dismissLevelIntro()" style="font-family:'Outfit',sans-serif; font-size:14px; font-weight:700; padding:13px 24px; border-radius:13px; background:linear-gradient(135deg, #3EE08F, #2FCB82); color:#06231A; border:none; cursor:pointer; box-shadow:0 6px 20px rgba(62,224,143,0.35); transition:all 0.2s; width:100%;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 10px 28px rgba(62,224,143,0.5)'" onmouseout="this.style.transform=''; this.style.boxShadow='0 6px 20px rgba(62,224,143,0.35)'">
             ▶ Start Building
         </button>
     </div>
@@ -815,33 +1233,33 @@
 
 <!-- ==================== LEVEL HUD (in-game overlay) ==================== -->
 <div id="level-hud" style="display:none; position:fixed; top:14px; left:50%; transform:translateX(-50%); z-index:99986; pointer-events:none; max-width:calc(100vw - 32px); width:600px;">
-    <div style="display:flex; gap:10px; align-items:stretch; background:rgba(15,30,20,0.92); backdrop-filter:blur(12px); border:1px solid rgba(91,170,63,0.35); border-radius:14px; padding:10px 14px; box-shadow:0 8px 32px rgba(0,0,0,0.4);">
+    <div style="display:flex; gap:10px; align-items:stretch; background:rgba(13,27,22,0.92); backdrop-filter:blur(14px); border:1px solid rgba(62,224,143,0.32); border-radius:16px; padding:10px 14px; box-shadow:0 12px 40px rgba(2,8,6,0.5);">
         <div style="flex:1; min-width:0;">
-            <div style="font-family:'Space Grotesk',sans-serif; font-size:8px; text-transform:uppercase; letter-spacing:0.15em; color:#5BAA3F; font-weight:700; margin-bottom:3px;">Mission</div>
-            <div style="font-family:'Inter',sans-serif; font-size:11px; color:#fff; line-height:1.35; max-height:30px; overflow:hidden;" id="hud-prompt">Build a tree</div>
+            <div style="font-family:'Outfit',sans-serif; font-size:8px; text-transform:uppercase; letter-spacing:0.18em; color:#3EE08F; font-weight:700; margin-bottom:3px;">Mission</div>
+            <div style="font-family:'Nunito',sans-serif; font-size:11px; color:#fff; line-height:1.35; max-height:30px; overflow:hidden;" id="hud-prompt">Build a tree</div>
         </div>
         <div style="display:flex; gap:10px; align-items:center; flex-shrink:0;">
             <div style="text-align:center;">
-                <div style="font-family:'Inter',sans-serif; font-size:8px; text-transform:uppercase; letter-spacing:0.1em; color:#8899aa; font-weight:700;">Blocks</div>
-                <div style="font-family:'Inter',sans-serif; font-size:13px; font-weight:800; color:#fff; white-space:nowrap;" id="hud-budget">0/15</div>
+                <div style="font-family:'Outfit',sans-serif; font-size:8px; text-transform:uppercase; letter-spacing:0.1em; color:#8FA9A0; font-weight:700;">Blocks</div>
+                <div style="font-family:'Outfit',sans-serif; font-size:13px; font-weight:800; color:#fff; white-space:nowrap;" id="hud-budget">0/15</div>
             </div>
             <div style="text-align:center;">
-                <div style="font-family:'Inter',sans-serif; font-size:8px; text-transform:uppercase; letter-spacing:0.1em; color:#8899aa; font-weight:700;">Time</div>
-                <div style="font-family:'Inter',sans-serif; font-size:13px; font-weight:800; color:#fff; white-space:nowrap;" id="hud-time">60s</div>
+                <div style="font-family:'Outfit',sans-serif; font-size:8px; text-transform:uppercase; letter-spacing:0.1em; color:#8FA9A0; font-weight:700;">Time</div>
+                <div style="font-family:'Outfit',sans-serif; font-size:13px; font-weight:800; color:#fff; white-space:nowrap;" id="hud-time">60s</div>
             </div>
             <div style="text-align:center;">
-                <div style="font-family:'Inter',sans-serif; font-size:8px; text-transform:uppercase; letter-spacing:0.1em; color:#8899aa; font-weight:700;">Score</div>
-                <div style="font-family:'Inter',sans-serif; font-size:13px; font-weight:800; color:#fff; white-space:nowrap;" id="hud-score">0</div>
+                <div style="font-family:'Outfit',sans-serif; font-size:8px; text-transform:uppercase; letter-spacing:0.1em; color:#8FA9A0; font-weight:700;">Score</div>
+                <div style="font-family:'Outfit',sans-serif; font-size:13px; font-weight:800; color:#FFB84D; white-space:nowrap;" id="hud-score">0</div>
             </div>
             <div style="text-align:center; padding-left:6px; border-left:1px solid rgba(255,255,255,0.1);">
-                <div style="font-family:'Inter',sans-serif; font-size:8px; text-transform:uppercase; letter-spacing:0.1em; color:#8899aa; font-weight:700;">Combo</div>
-                <div style="font-family:'Inter',sans-serif; font-size:13px; font-weight:800; color:#fbbf24; white-space:nowrap;" id="hud-combo">×1</div>
+                <div style="font-family:'Outfit',sans-serif; font-size:8px; text-transform:uppercase; letter-spacing:0.1em; color:#8FA9A0; font-weight:700;">Combo</div>
+                <div style="font-family:'Outfit',sans-serif; font-size:13px; font-weight:800; color:#FFB84D; white-space:nowrap;" id="hud-combo">×1</div>
             </div>
         </div>
     </div>
     <!-- Done button -->
     <div style="text-align:center; margin-top:8px;">
-        <button onclick="finishLevel()" style="font-family:'Inter',sans-serif; font-size:12px; font-weight:700; padding:8px 22px; border-radius:10px; background:linear-gradient(135deg, #5BAA3F, #3d7a2c); color:#fff; border:none; cursor:pointer; box-shadow:0 4px 14px rgba(91,170,63,0.3); transition:all 0.2s; pointer-events:auto;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform=''">
+        <button onclick="finishLevel()" style="font-family:'Outfit',sans-serif; font-size:12px; font-weight:700; padding:8px 22px; border-radius:11px; background:linear-gradient(135deg, #3EE08F, #2FCB82); color:#06231A; border:none; cursor:pointer; box-shadow:0 6px 20px rgba(62,224,143,0.35); transition:all 0.2s; pointer-events:auto;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform=''">
             ✓ I'm Done
         </button>
     </div>
@@ -849,14 +1267,14 @@
 
 <!-- ==================== LEVEL RESULTS MODAL ==================== -->
 <div id="level-results-modal" style="display:none; position:fixed; inset:0; z-index:99988; background:rgba(0,0,0,0.6); backdrop-filter:blur(8px); align-items:center; justify-content:center;">
-    <div style="max-width:420px; width:92%; background:rgba(15,30,20,0.96); border:1px solid rgba(91,170,63,0.35); border-radius:20px; padding:32px; box-shadow:0 12px 50px rgba(0,0,0,0.4), 0 0 40px rgba(91,170,63,0.15); text-align:center;">
-        <div id="results-kicker" style="font-family:'Space Grotesk',sans-serif; font-size:10px; text-transform:uppercase; letter-spacing:0.2em; color:#5BAA3F; font-weight:700; margin-bottom:6px;">Level Complete</div>
-        <div style="font-family:'Syne','Inter',sans-serif; font-size:22px; font-weight:800; color:#fff; margin-bottom:14px;" id="results-title">Level Name</div>
-        <div style="font-family:'Inter',sans-serif; font-size:36px; font-weight:800; letter-spacing:6px; margin-bottom:20px;" id="results-stars">★★★</div>
+    <div style="max-width:420px; width:92%; background:rgba(13,27,22,0.96); border:1px solid rgba(62,224,143,0.35); border-radius:22px; padding:32px; box-shadow:0 24px 70px rgba(2,8,6,0.6), 0 0 50px rgba(62,224,143,0.12); text-align:center;">
+        <div id="results-kicker" style="font-family:'Outfit',sans-serif; font-size:10px; text-transform:uppercase; letter-spacing:0.22em; color:#3EE08F; font-weight:700; margin-bottom:6px;">Level Complete</div>
+        <div style="font-family:'Outfit',sans-serif; font-size:22px; font-weight:800; color:#fff; margin-bottom:14px;" id="results-title">Level Name</div>
+        <div style="font-family:'Outfit',sans-serif; font-size:36px; font-weight:800; letter-spacing:6px; margin-bottom:20px;" id="results-stars">★★★</div>
         <div id="results-breakdown" style="text-align:left; background:rgba(255,255,255,0.03); border-radius:12px; padding:14px 18px; margin-bottom:24px;"></div>
         <div style="display:flex; gap:8px; justify-content:center; flex-wrap:wrap;">
             <button id="results-retry-btn" style="font-family:'Inter',sans-serif; font-size:13px; font-weight:700; padding:10px 20px; border-radius:10px; background:rgba(255,255,255,0.06); color:#fff; border:1px solid rgba(255,255,255,0.1); cursor:pointer; transition:all 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.12)'" onmouseout="this.style.background='rgba(255,255,255,0.06)'">🔄 Retry</button>
-            <button id="results-next-btn" style="font-family:'Inter',sans-serif; font-size:13px; font-weight:700; padding:10px 22px; border-radius:10px; background:linear-gradient(135deg, #5BAA3F, #3d7a2c); color:#fff; border:none; cursor:pointer; box-shadow:0 4px 14px rgba(91,170,63,0.3); transition:all 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform=''">Next Level →</button>
+            <button id="results-next-btn" style="font-family:'Outfit',sans-serif; font-size:13px; font-weight:700; padding:10px 22px; border-radius:11px; background:linear-gradient(135deg, #3EE08F, #2FCB82); color:#06231A; border:none; cursor:pointer; box-shadow:0 6px 20px rgba(62,224,143,0.35); transition:all 0.2s;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 10px 28px rgba(62,224,143,0.5)'" onmouseout="this.style.transform=''; this.style.boxShadow='0 6px 20px rgba(62,224,143,0.35)'">Next Level →</button>
             <button id="results-menu-btn" style="font-family:'Inter',sans-serif; font-size:13px; font-weight:700; padding:10px 20px; border-radius:10px; background:rgba(255,255,255,0.06); color:#fff; border:1px solid rgba(255,255,255,0.1); cursor:pointer; transition:all 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.12)'" onmouseout="this.style.background='rgba(255,255,255,0.06)'">Menu</button>
         </div>
     </div>
@@ -1012,14 +1430,25 @@
         <span class="fav-hint" id="fav-hint" style="font-size:8px;">Right-click any block to pin</span>
         <div id="fav-slots" style="display:flex; gap:5px; flex-wrap:wrap;"></div>
     </div>
-    <!-- Tab Bar (vertical) -->
+    <!-- Search + Recents (new panel operation) -->
+    <div class="mint-search" id="mint-search">
+        <i class="fas fa-search"></i>
+        <input type="text" id="mint-search-input" placeholder="Search blocks..." autocomplete="off">
+        <button class="mint-search-clear" id="mint-search-clear" title="Clear search"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="mint-results-note" id="mint-results-note"></div>
+    <div class="mint-recents" id="mint-recents">
+        <div class="mint-recents-label"><i class="fas fa-clock-rotate-left" style="font-size:9px;"></i> Recently used</div>
+        <div class="mint-recents-row" id="mint-recents-row"></div>
+    </div>
+    <!-- Category tabs (icon rail) -->
     <div style="display:flex; flex-direction:column; gap:2px; padding:8px 10px; border-bottom:1px solid rgba(255,255,255,0.06);">
-        <button class="tab-btn active" onclick="switchTab('blocks',event)" style="text-align:left; padding:6px 10px; border-radius:8px;">⬛ Blocks</button>
-        <button class="tab-btn" onclick="switchTab('architecture',event)" style="text-align:left; padding:6px 10px; border-radius:8px;">🏛 Architecture</button>
-        <button class="tab-btn" onclick="switchTab('nature',event)" style="text-align:left; padding:6px 10px; border-radius:8px;">🌿 Nature</button>
-        <button class="tab-btn" onclick="switchTab('materials',event)" style="text-align:left; padding:6px 10px; border-radius:8px;">🧱 Materials</button>
-        <button class="tab-btn" onclick="switchTab('platform',event)" style="text-align:left; padding:6px 10px; border-radius:8px;">⛰️ Terrain</button>
-        <button class="tab-btn" onclick="switchTab('scene',event)" style="text-align:left; padding:6px 10px; border-radius:8px;">🌍 Scene</button>
+        <button class="tab-btn active" onclick="switchTab('blocks',event)" style="text-align:left; border-radius:8px;"><i class="fas fa-cube"></i> Blocks</button>
+        <button class="tab-btn" onclick="switchTab('architecture',event)" style="text-align:left; border-radius:8px;"><i class="fas fa-archway"></i> Architecture</button>
+        <button class="tab-btn" onclick="switchTab('nature',event)" style="text-align:left; border-radius:8px;"><i class="fas fa-leaf"></i> Nature</button>
+        <button class="tab-btn" onclick="switchTab('materials',event)" style="text-align:left; border-radius:8px;"><i class="fas fa-layer-group"></i> Materials</button>
+        <button class="tab-btn" onclick="switchTab('platform',event)" style="text-align:left; border-radius:8px;"><i class="fas fa-mountain"></i> Terrain</button>
+        <button class="tab-btn" onclick="switchTab('scene',event)" style="text-align:left; border-radius:8px;"><i class="fas fa-globe"></i> Scene</button>
     </div>
     <div style="padding:4px 6px;">
 
@@ -1393,7 +1822,8 @@
         </div>
         <div style="width:1px; height:26px; background:rgba(255,255,255,0.1);"></div>
         <div class="tool-pill">
-            <button onclick="setTool('build')" class="tool-pill-btn" id="tool-build"><i class="fas fa-cubes" style="font-size:12px;"></i> Build</button>
+            <span id="tool-pill-ind"></span>
+            <button onclick="setTool('build')" class="tool-pill-btn active" id="tool-build"><i class="fas fa-cubes" style="font-size:12px;"></i> Build</button>
             <button onclick="setTool('erase')" class="tool-pill-btn" id="tool-erase"><i class="fas fa-trash-alt" style="font-size:12px;"></i> Erase</button>
             <button onclick="setTool('select')" class="tool-pill-btn" id="tool-select"><i class="fas fa-mouse-pointer" style="font-size:12px;"></i> Select</button>
             <button onclick="setTool('move')" class="tool-pill-btn" id="tool-move"><i class="fas fa-arrows-alt" style="font-size:12px;"></i> Move</button>
@@ -5359,7 +5789,7 @@ const LEVELS = [
 ];
 
 const CHAPTERS = ['Forest','City','Space','Fantasy'];
-const CHAPTER_COLORS = {Forest:'#5BAA3F', City:'#5e8cb3', Space:'#6a4fb3', Fantasy:'#b34fae'};
+const CHAPTER_COLORS = {Forest:'#3EE08F', City:'#6FB3E0', Space:'#9B7FE8', Fantasy:'#E86FD9'};
 const CHAPTER_ICONS = {Forest:'🌲', City:'🏙', Space:'🚀', Fantasy:'🐉'};
 
 // Level state
@@ -5542,7 +5972,7 @@ function renderLevelSelect() {
   const sbStatus = document.getElementById('sandbox-status');
   if (sbStatus) {
     if (isSandboxUnlocked()) {
-      sbStatus.innerHTML = '<span style="color:#5BAA3F;">✓ Unlocked</span>';
+      sbStatus.innerHTML = '<span style="color:#3EE08F;">✓ Unlocked</span>';
       const sbBtn = document.getElementById('enter-sandbox-btn');
       if (sbBtn) sbBtn.style.display = 'inline-flex';
     } else {
@@ -5734,16 +6164,16 @@ function showLevelResults(level, score, stars, breakdown) {
       <span>Blocks placed</span><span>${breakdown.blocksPlaced}/${breakdown.budget}</span>
     </div>
     <div style="display:flex; justify-content:space-between; padding:6px 0; font-family:'Inter',sans-serif; font-size:12px; color:#cbd5e1;">
-      <span>Blocks built bonus (20/block)</span><span style="color:#5BAA3F;">+${breakdown.buildBonus}</span>
+      <span>Blocks built bonus (20/block)</span><span style="color:#3EE08F;">+${breakdown.buildBonus}</span>
     </div>
     <div style="display:flex; justify-content:space-between; padding:6px 0; font-family:'Inter',sans-serif; font-size:12px; color:#cbd5e1;">
-      <span>Time remaining bonus (10/s)</span><span style="color:#5BAA3F;">+${breakdown.timeBonus}</span>
+      <span>Time remaining bonus (10/s)</span><span style="color:#3EE08F;">+${breakdown.timeBonus}</span>
     </div>
     <div style="display:flex; justify-content:space-between; padding:6px 0; font-family:'Inter',sans-serif; font-size:12px; color:#cbd5e1;">
-      <span>Combo peak bonus (100×)</span><span style="color:#5BAA3F;">+${breakdown.comboBonus}</span>
+      <span>Combo peak bonus (100×)</span><span style="color:#3EE08F;">+${breakdown.comboBonus}</span>
     </div>
     <div style="display:flex; justify-content:space-between; padding:6px 0; font-family:'Inter',sans-serif; font-size:12px; color:#cbd5e1;">
-      <span>Completion bonus</span><span style="color:#5BAA3F;">+${breakdown.completionBonus}</span>
+      <span>Completion bonus</span><span style="color:#3EE08F;">+${breakdown.completionBonus}</span>
     </div>
     <div style="display:flex; justify-content:space-between; padding:8px 0; margin-top:6px; border-top:1px solid rgba(255,255,255,0.1); font-family:'Inter',sans-serif; font-size:14px; font-weight:700; color:#fff;">
       <span>Total score</span><span>${score}</span>
@@ -5758,7 +6188,7 @@ function showLevelResults(level, score, stars, breakdown) {
   if (kicker) {
     if (breakdown.passed) {
       kicker.textContent = 'Level Complete';
-      kicker.style.color = '#5BAA3F';
+      kicker.style.color = '#3EE08F';
     } else {
       kicker.textContent = (breakdown.reason || '').toLowerCase().includes('time') ? 'Time Up!' : 'Level Failed';
       kicker.style.color = '#ef4444';
@@ -5932,5 +6362,313 @@ function enterSandbox() {
     }
   });
 })();
-</script></body>
+</script><script>
+/* ============ MINT STUDIO hook layer ============ */
+/* ============================================================
+   MINT STUDIO — hook layer
+   Wraps existing game functions (never replaces game logic):
+   • sliding tool indicator        • block search + recents
+   • 3D particle bursts            • HUD score tick-up / low-time
+   • results confetti + star pops  • level-card stagger entrances
+   • camera reset on level start   • everything fails safe
+   ============================================================ */
+(function () {
+    'use strict';
+
+    /* ---------- safe wrapper ---------- */
+    function wrapFn(name, after) {
+        try {
+            const orig = window[name];
+            if (typeof orig !== 'function') { console.warn('[mint] missing fn:', name); return; }
+            window[name] = function () {
+                const result = orig.apply(this, arguments);
+                try { after.apply(this, arguments); } catch (e) { console.warn('[mint]', name, e); }
+                return result;
+            };
+        } catch (e) { console.warn('[mint] wrap failed:', name, e); }
+    }
+    function $(id) { return document.getElementById(id); }
+
+    /* ============================================================
+       1. TOOL SEGMENTED CONTROL — sliding indicator
+       ============================================================ */
+    function moveToolInd() {
+        const ind = $('tool-pill-ind');
+        const active = document.querySelector('.tool-pill-btn.active');
+        if (!ind || !active) return;
+        ind.style.left = active.offsetLeft + 'px';
+        ind.style.width = active.offsetWidth + 'px';
+    }
+    wrapFn('setTool', function () { setTimeout(moveToolInd, 0); });
+    window.addEventListener('resize', moveToolInd);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(moveToolInd);
+
+    /* ============================================================
+       2. BLOCK SEARCH — filters blocks inside the active panel
+       ============================================================ */
+    function clearSearch() {
+        const input = $('mint-search-input');
+        const box = $('mint-search');
+        if (!input) return;
+        input.value = '';
+        if (box) box.classList.remove('has-query');
+        applySearch('');
+    }
+    function applySearch(raw) {
+        const q = (raw || '').toLowerCase().trim();
+        const note = $('mint-results-note');
+        const sections = document.querySelectorAll('.panel-section');
+        let visible = 0;
+        sections.forEach(function (section) {
+            if (!section.classList.contains('active')) return;
+            section.querySelectorAll(':scope > .scroll-row > div').forEach(function (group) {
+                let groupVisible = 0;
+                group.querySelectorAll('.block-btn').forEach(function (btn) {
+                    const label = btn.querySelector('.label');
+                    const hit = !q || (label && label.textContent.toLowerCase().includes(q));
+                    btn.classList.toggle('mint-hidden', !hit);
+                    if (hit) groupVisible++;
+                });
+                group.classList.toggle('mint-hidden', q !== '' && groupVisible === 0);
+                visible += groupVisible;
+            });
+        });
+        if (note) {
+            note.style.display = q ? 'block' : 'none';
+            if (q) note.textContent = visible ? visible + ' block' + (visible > 1 ? 's' : '') + ' found' : 'No blocks match "' + raw + '"';
+        }
+    }
+    function bindSearch() {
+        const input = $('mint-search-input');
+        if (!input || input.dataset.mintBound) return;
+        input.dataset.mintBound = '1';
+        input.addEventListener('input', function () {
+            const box = $('mint-search');
+            if (box) box.classList.toggle('has-query', !!input.value);
+            applySearch(input.value);
+        });
+        input.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') { clearSearch(); input.blur(); e.stopPropagation(); }
+        });
+        const clearBtn = $('mint-search-clear');
+        if (clearBtn) clearBtn.addEventListener('click', clearSearch);
+    }
+    wrapFn('switchTab', function () { setTimeout(function () { bindSearch(); const i = $('mint-search-input'); if (i && i.value) applySearch(i.value); }, 0); });
+
+    /* ============================================================
+       3. RECENTLY USED BLOCKS
+       ============================================================ */
+    let recents = [];
+    try { recents = JSON.parse(localStorage.getItem('bf_mint_recents') || '[]'); } catch (e) { recents = []; }
+    function findSourceBtn(type) {
+        return document.querySelector('.block-btn[oncontextmenu*="addToFavorites(\'' + type + '\'"]');
+    }
+    function renderRecents() {
+        const row = $('mint-recents-row');
+        if (!row) return;
+        row.innerHTML = '';
+        recents.forEach(function (type, idx) {
+            const src = findSourceBtn(type);
+            const icon = src ? src.querySelector('.icon') : null;
+            const btn = document.createElement('div');
+            btn.className = 'mint-recent-btn';
+            btn.style.animationDelay = (idx * 40) + 'ms';
+            btn.title = type.charAt(0).toUpperCase() + type.slice(1);
+            if (icon) btn.appendChild(icon.cloneNode(true));
+            else btn.textContent = type.charAt(0).toUpperCase();
+            btn.addEventListener('click', function () {
+                const source = findSourceBtn(type);
+                if (source) {
+                    const section = source.closest('.panel-section');
+                    if (section && !section.classList.contains('active')) {
+                        const tabName = section.id.replace('panel-', '');
+                        const tabBtn = document.querySelector('#left-panel .tab-btn[onclick*="switchTab(\'' + tabName + '\'"]');
+                        if (tabBtn) window.switchTab(tabName, { currentTarget: tabBtn });
+                        else window.switchTab(tabName, null);
+                    }
+                    window.pickBlock(type, source);
+                } else {
+                    window.pickBlock(type, document.createElement('div'));
+                }
+            });
+            row.appendChild(btn);
+        });
+    }
+    wrapFn('pickBlock', function (type) {
+        if (!type) return;
+        recents = [type].concat(recents.filter(function (t) { return t !== type; })).slice(0, 8);
+        try { localStorage.setItem('bf_mint_recents', JSON.stringify(recents)); } catch (e) { /* private mode */ }
+        renderRecents();
+    });
+
+    /* ============================================================
+       4. 3D PARTICLE BURSTS (place / erase juice)
+       ============================================================ */
+    const bursts = [];
+    function spawnBurst(pos, colorHex, count, spread, up) {
+        if (typeof THREE === 'undefined' || !window.scene) return;
+        try {
+            const geo = new THREE.BufferGeometry();
+            const n = count || 18;
+            const positions = new Float32Array(n * 3);
+            const vel = [];
+            for (let i = 0; i < n; i++) {
+                positions[i * 3] = pos.x; positions[i * 3 + 1] = pos.y; positions[i * 3 + 2] = pos.z;
+                const theta = Math.random() * Math.PI * 2;
+                const phi = Math.random() * Math.PI;
+                const speed = spread * (0.4 + Math.random() * 0.6);
+                vel.push(new THREE.Vector3(
+                    Math.sin(phi) * Math.cos(theta) * speed,
+                    Math.abs(Math.cos(phi)) * speed * (up || 1) + 0.02,
+                    Math.sin(phi) * Math.sin(theta) * speed
+                ));
+            }
+            geo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+            const mat = new THREE.PointsMaterial({
+                color: new THREE.Color(colorHex), size: 0.14, transparent: true,
+                opacity: 0.95, depthWrite: false, sizeAttenuation: true
+            });
+            const pts = new THREE.Points(geo, mat);
+            scene.add(pts);
+            bursts.push({ pts: pts, vel: vel, life: 0, max: 0.65 });
+        } catch (e) { console.warn('[mint] burst failed', e); }
+    }
+    function tickBursts() {
+        for (let i = bursts.length - 1; i >= 0; i--) {
+            const b = bursts[i];
+            b.life += 1 / 60;
+            const arr = b.pts.geometry.attributes.position.array;
+            for (let j = 0; j < b.vel.length; j++) {
+                b.vel[j].y -= 0.012; /* gravity */
+                arr[j * 3] += b.vel[j].x;
+                arr[j * 3 + 1] += b.vel[j].y;
+                arr[j * 3 + 2] += b.vel[j].z;
+            }
+            b.pts.geometry.attributes.position.needsUpdate = true;
+            b.pts.material.opacity = Math.max(0, 0.95 * (1 - b.life / b.max));
+            if (b.life >= b.max) {
+                scene.remove(b.pts);
+                b.pts.geometry.dispose(); b.pts.material.dispose();
+                bursts.splice(i, 1);
+            }
+        }
+    }
+    (function burstLoop() { tickBursts(); requestAnimationFrame(burstLoop); })();
+
+    /* placement juice — animateBlockDrop runs for every player-placed block */
+    wrapFn('animateBlockDrop', function (mesh, targetY) {
+        const s = (mesh.userData && mesh.userData.size) || 1;
+        const col = (mesh.userData && mesh.userData.color) || 0xffffff;
+        spawnBurst(new THREE.Vector3(mesh.position.x, targetY + s * 0.4, mesh.position.z), 0xB9F7D4, 14, 0.09, 1.4);
+        if (window.playSound) { /* keep original audio untouched */ }
+    });
+    /* erase juice — capture position/color BEFORE removal */
+    wrapFn('eraseBlock', function (target) {
+        try {
+            if (target && target.position) {
+                const s = (target.userData && target.userData.size) || 1;
+                let hex = (target.userData && target.userData.color) || 0xaaaaaa;
+                if (typeof hex === 'string') hex = hex.replace('#', '0x');
+                spawnBurst(target.position.clone(), hex, 24, 0.14, 1);
+            }
+        } catch (e) { /* non-fatal */ }
+    });
+
+    /* ============================================================
+       5. HUD — score tick-up, low-time blink, combo pulse
+       ============================================================ */
+    let lastScore = 0;
+    wrapFn('updateLevelHUD', function () {
+        const scoreEl = $('hud-score');
+        if (scoreEl && typeof levelState !== 'undefined' && levelState) {
+            const v = levelState.score || 0;
+            if (v > lastScore) {
+                scoreEl.classList.remove('mint-tick'); void scoreEl.offsetWidth; scoreEl.classList.add('mint-tick');
+            }
+            lastScore = v;
+        }
+        const timeEl = $('hud-time');
+        if (timeEl && typeof levelState !== 'undefined' && levelState) {
+            timeEl.classList.toggle('low-time', levelState.timeRemaining <= 10 && levelState.timeRemaining > 0);
+        }
+    });
+
+    /* ============================================================
+       6. RESULTS — animated stars + confetti on 3★
+       ============================================================ */
+    function confetti() {
+        const colors = ['#3EE08F', '#FFB84D', '#FFFFFF', '#8AE8FF', '#2FCB82'];
+        for (let i = 0; i < 90; i++) {
+            const p = document.createElement('div');
+            p.className = 'mint-confetti';
+            p.style.left = (4 + Math.random() * 92) + 'vw';
+            p.style.background = colors[Math.floor(Math.random() * colors.length)];
+            p.style.width = (6 + Math.random() * 6) + 'px';
+            p.style.height = (10 + Math.random() * 8) + 'px';
+            p.style.animationDuration = (2.3 + Math.random() * 1.4) + 's';
+            p.style.animationDelay = (Math.random() * 0.7) + 's';
+            p.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+            document.body.appendChild(p);
+            p.addEventListener('animationend', function () { p.remove(); });
+        }
+    }
+    wrapFn('showLevelResults', function (level, score, stars) {
+        const el = $('results-stars');
+        if (el) {
+            const color = el.style.color;
+            el.innerHTML = Array.from({ length: 3 }, function (_, i) {
+                return '<span class="rstar">' + (i < stars ? '★' : '☆') + '</span>';
+            }).join('');
+            el.style.color = color;
+        }
+        if (stars >= 3) setTimeout(confetti, 350);
+        else if (stars >= 1) setTimeout(confetti, 350); /* small celebration too */
+    });
+
+    /* ============================================================
+       7. LEVEL FLOW — camera reset on start, HUD re-entrance
+       ============================================================ */
+    wrapFn('dismissLevelIntro', function () {
+        setTimeout(function () {
+            if (typeof window.smoothResetCamera === 'function') window.smoothResetCamera();
+            moveToolInd();
+        }, 120);
+    });
+
+    /* ============================================================
+       8. LEVEL SELECT — staggered card entrances
+       ============================================================ */
+    wrapFn('renderLevelSelect', function () {
+        const grid = $('level-grid');
+        if (!grid) return;
+        let idx = 0;
+        grid.querySelectorAll(':scope > div').forEach(function (chapterRow) {
+            const lvlGrid = chapterRow.lastElementChild;
+            if (!lvlGrid) return;
+            Array.prototype.forEach.call(lvlGrid.children, function (card) {
+                card.classList.add('mint-lvl-card');
+                card.style.animationDelay = Math.min(idx * 45, 900) + 'ms';
+                idx++;
+            });
+        });
+    });
+
+    /* ============================================================
+       9. INIT
+       ============================================================ */
+    function init() {
+        moveToolInd();
+        bindSearch();
+        renderRecents();
+        /* splash particles → mint (they may carry inline colors) */
+        document.querySelectorAll('.splash-particle').forEach(function (p) {
+            p.style.background = Math.random() > 0.75 ? '#FFB84D' : '#3EE08F';
+        });
+    }
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+    else init();
+})();
+
+</script>
+</body>
 </html>
